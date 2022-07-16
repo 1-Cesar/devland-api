@@ -106,6 +106,43 @@ public class ContatoRepository {
         return contatos;
     }
 
+    public List<Contato> listarContatoUsuario(Integer id) throws RegraDeNegocioException {
+        List<Contato> contatos = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = connection.getConnection();
+            //Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM CONTATO WHERE ID_USUARIO = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            ResultSet res = stmt.executeQuery();
+
+            while (res.next()) {
+                Contato contato = new Contato();
+                contato.setIdContato(res.getInt("id_contato"));
+                contato.setIdUsuario(res.getInt("id_usuario"));
+                contato.setTipo(TipoClassificacao.ofTipo(res.getInt("tipo")));
+                contato.setNumero(res.getString("numero"));
+                contato.setDescricao(res.getString("descricao"));
+                contatos.add(contato);
+            }
+        } catch (SQLException e) {
+            throw new RegraDeNegocioException(e.getMessage());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return contatos;
+    }
+
     public List<Contato> listar() throws RegraDeNegocioException {
         List<Contato> contatos = new ArrayList<>();
         Connection con = null;

@@ -44,6 +44,14 @@ public class ContatoService {
                 .collect(Collectors.toList());
     }
 
+    public List<ContatoDTO> listarContatoUsuario(Integer id) throws RegraDeNegocioException {
+        usuarioService.localizarUsuario(id);
+        return contatoRepository.listarContatoUsuario(id).stream()
+                .filter(contato -> contato.getIdUsuario().equals(id))
+                .map(contato -> objectMapper.convertValue(contato, ContatoDTO.class))
+                .collect(Collectors.toList());
+    }
+
     public ContatoCreateDTO adicionar(Integer id, ContatoCreateDTO contato) throws RegraDeNegocioException {
         usuarioService.localizarUsuario(id);
         Contato idContato = contatoRepository.adicionar(id, objectMapper.convertValue(contato, Contato.class));

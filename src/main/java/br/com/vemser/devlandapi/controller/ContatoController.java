@@ -33,6 +33,11 @@ public class ContatoController {
         return ResponseEntity.ok(contatoService.listarContato(id));
     }
 
+    @GetMapping("usuario/{idUsuario}")
+    public ResponseEntity<List<ContatoDTO>> listarContatoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
+        return ResponseEntity.ok(contatoService.listarContatoUsuario(id));
+    }
+
     @PostMapping("/{idPessoa}")
     public ResponseEntity<ContatoCreateDTO> adicionar(@PathVariable("idPessoa") Integer id, @Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
         return ResponseEntity.ok(contatoService.adicionar(id, contato));
