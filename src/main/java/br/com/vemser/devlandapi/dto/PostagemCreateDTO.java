@@ -14,10 +14,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class PostagemCreateDTO {
 
-    @Schema(description = "Id do Usuário")
-    @NotNull
-    private Integer idUsuario;
-
     @Schema(description = "Tipo da Postagem")
     @NotNull
     private TipoPostagem tipoPostagem;

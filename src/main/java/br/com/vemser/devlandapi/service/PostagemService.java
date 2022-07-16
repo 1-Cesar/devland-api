@@ -26,8 +26,7 @@ public class PostagemService {
 
 
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
-        log.info("Criando postagem...");
-        //validar se usuário existe
+        log.info("Adicionando postagem...");
 
         Postagem postagemEntity =  convertToEntity(postagemCreateDTO);
         postagemEntity.setIdUsuario(idUsuario);
@@ -42,6 +41,26 @@ public class PostagemService {
 
         return convertToDTO(postagemEntity);
 
+    }
+
+    public PostagemDTO update(Integer idPostagem, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
+        log.info("Atualizando postagem...");
+
+        Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
+
+        Postagem postagemEntity = convertToEntity(postagemCreateDTO);
+        postagemEntity.setIdPostagem(postagemRecuperada.getIdPostagem());
+        postagemEntity.setIdUsuario(postagemRecuperada.getIdUsuario());
+        postagemEntity.setUps(postagemRecuperada.getUps());
+        postagemEntity.setDowns(postagemRecuperada.getViews());
+        postagemEntity.setViews(postagemRecuperada.getViews());
+        postagemEntity.setData(postagemRecuperada.getData());
+
+        postagemRepository.update(idPostagem, postagemEntity);
+
+        log.info("Postagem atualizada...");
+
+        return convertToDTO(postagemEntity);
     }
 
     public Postagem convertToEntity(PostagemCreateDTO postagemCreateDTO) {

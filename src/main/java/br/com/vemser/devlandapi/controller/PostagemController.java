@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.PostagemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @Validated
 public class PostagemController {
 
+    @Autowired
     private PostagemService postagemService;
 
     public PostagemController(){
@@ -28,5 +30,10 @@ public class PostagemController {
         return new ResponseEntity<>(postagemService.post(idUsuario, postagemCreateDTO), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{idPostagem}")
+    public ResponseEntity<PostagemDTO> update(@PathVariable() Integer idPostagem,
+                                           @RequestBody @Valid PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(postagemService.update(idPostagem, postagemCreateDTO), HttpStatus.OK);
+    }
 
 }
