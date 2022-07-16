@@ -2,7 +2,9 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
+import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.Endereco;
+import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.EnderecoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,9 +59,11 @@ public class EnderecoService {
     }
 
     public EnderecoDTO editar(Integer id, EnderecoDTO enderecoDTO) throws RegraDeNegocioException {
-        localizarEndereco(id);
-        Endereco endereco = enderecoRepository.editar(id, objectMapper.convertValue(enderecoDTO, Endereco.class));
-        enderecoDTO =  objectMapper.convertValue(endereco, EnderecoDTO.class);
+        Endereco enderecoRecuperado = localizarEndereco(id);
+        enderecoDTO.setIdUsuario(enderecoRecuperado.getIdUsuario());
+
+        enderecoRecuperado = enderecoRepository.editar(id, objectMapper.convertValue(enderecoDTO, Endereco.class));
+        enderecoDTO =  objectMapper.convertValue(enderecoRecuperado, EnderecoDTO.class);
         return enderecoDTO;
     }
 
