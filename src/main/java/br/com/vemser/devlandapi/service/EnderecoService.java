@@ -32,6 +32,17 @@ public class EnderecoService {
         }
     }
 
+    public List<EnderecoDTO> listarEndereco(Integer id) throws RegraDeNegocioException {
+        try {
+            return enderecoRepository.listarEndereco(id).stream()
+                    .filter(endereco -> endereco.getIdEndereco().equals(id))
+                    .map(endereco -> objectMapper.convertValue(endereco, EnderecoDTO.class))
+                    .collect(Collectors.toList());
+        } catch (RegraDeNegocioException e) {
+            throw new RegraDeNegocioException("Nenhum endereço encontrado");
+        }
+    }
+
     public void delete(Integer id) throws RegraDeNegocioException {
         enderecoRepository.remover(id);
     }

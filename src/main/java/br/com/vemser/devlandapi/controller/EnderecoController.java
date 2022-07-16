@@ -22,11 +22,16 @@ import java.util.List;
 public class EnderecoController {
 
     @Autowired
-    EnderecoService enderecoService;
+    private EnderecoService enderecoService;
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<EnderecoDTO>> listarTodos() throws RegraDeNegocioException {
         return ResponseEntity.ok(enderecoService.listar());
+    }
+
+    @GetMapping("/{idEndereco}")
+    public ResponseEntity<List<EnderecoDTO>> listarEndereco(@PathVariable("idEndereco") Integer id) throws RegraDeNegocioException {
+        return ResponseEntity.ok(enderecoService.listarEndereco(id));
     }
 
     @PostMapping("/{idUsuario}")

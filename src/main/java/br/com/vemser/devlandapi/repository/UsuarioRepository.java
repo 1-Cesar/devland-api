@@ -72,6 +72,44 @@ public class UsuarioRepository {
         }
     }
 
+    public List<Usuario> listarUsuario(Integer id) throws RegraDeNegocioException {
+        List<Usuario> usuarios = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = connection.getConnection();
+            //Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM USUARIO WHERE ID_USUARIO = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            ResultSet res = stmt.executeQuery();
+
+            while (res.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(res.getInt("id_usuario"));
+                usuario.setNome(res.getString("nome"));
+                usuario.setTipoUsuario(TipoUsuario.ofTipo(res.getInt("tipo")));
+                usuario.setAreaAtuacao(res.getString("area_atuacao"));
+                usuario.setEmail(res.getString("email"));
+                usuario.setCpfCnpj(res.getString("cpf_cnpj"));
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            throw new RegraDeNegocioException(e.getMessage());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return usuarios;
+    }
+
     public List<Usuario> listar() throws RegraDeNegocioException {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;

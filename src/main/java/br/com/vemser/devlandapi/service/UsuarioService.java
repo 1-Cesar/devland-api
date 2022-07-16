@@ -34,6 +34,17 @@ public class UsuarioService {
         }
     }
 
+    public List<UsuarioDTO> listarUsuario(Integer id) throws RegraDeNegocioException {
+        try {
+            return usuarioRepository.listarUsuario(id).stream()
+                    .filter(usuario -> usuario.getIdUsuario().equals(id))
+                    .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
+                    .collect(Collectors.toList());
+        } catch (RegraDeNegocioException e) {
+            throw new RegraDeNegocioException("Nenhum usuario encontrado");
+        }
+    }
+
     public void delete(Integer id) throws RegraDeNegocioException {
         usuarioRepository.remover(id);
     }
