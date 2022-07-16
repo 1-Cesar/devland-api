@@ -2,11 +2,10 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.Contato;
-import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ContatoRepository;
+import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,9 @@ public class ContatoService {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     public List<ContatoDTO> listar() throws RegraDeNegocioException {
         if (contatoRepository.listar().size() == 0) {
@@ -44,6 +46,7 @@ public class ContatoService {
     }
 
     public ContatoCreateDTO adicionar(Integer id, ContatoCreateDTO contato) throws RegraDeNegocioException {
+        usuarioService.localizarUsuario(id);
         Contato idContato = contatoRepository.adicionar(id, objectMapper.convertValue(contato, Contato.class));
         return objectMapper.convertValue(idContato, ContatoDTO.class);
     }
