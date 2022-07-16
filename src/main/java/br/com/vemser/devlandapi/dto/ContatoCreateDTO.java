@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,16 +16,16 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class ContatoCreateDTO {
 
-    @Schema(description = "id da pessoa", example = "1")
+    @Schema(description = "id do desenvolvedor ou empresa", example = "1")
     private Integer idUsuario;
 
     @Schema(description = "numero do contato", example = "11111111")
-    @NotBlank
+    @NotEmpty
     @Size(min = 8, max = 13, message = "número inválido")
     private String numero;
 
     @Schema(description = "whatsapp, telegram, etc.", example = "Whatsapp")
-    @NotBlank(message = "Descrição deve ser preencida (ex: whatsapp, telegram, observações, etc.)")
+    @NotEmpty(message = "Descrição deve ser preencida (ex: whatsapp, telegram, observações, etc.)")
     private String descricao;
 
     @Schema(description = "RESIDENCIAL OU COMERCIAL", example = "RESIDENCIAL")
