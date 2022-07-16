@@ -1,7 +1,7 @@
 package br.com.vemser.devlandapi.repository;
 
 import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
+
 import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 @Repository
 public class UsuarioRepository {

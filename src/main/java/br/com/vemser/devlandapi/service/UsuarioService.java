@@ -35,8 +35,6 @@ public class UsuarioService {
     }
 
     public void delete(Integer id) throws RegraDeNegocioException {
-        //Usu pessoaRecuperada = localizarPessoa(id);
-        //objectMapper.convertValue(pessoaRecuperada, PessoaDTO.class),EnumEmail.DELETE);
         usuarioRepository.remover(id);
     }
 
