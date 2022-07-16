@@ -2,6 +2,7 @@ package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
+import br.com.vemser.devlandapi.dto.EnderecoDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.ContatoService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,11 @@ public class ContatoController {
     @GetMapping
     public ResponseEntity<List<ContatoDTO>> listar() throws RegraDeNegocioException {
         return ResponseEntity.ok(contatoService.listar());
+    }
+
+    @GetMapping("/{idContato}")
+    public ResponseEntity<List<ContatoDTO>> listarContato(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {
+        return ResponseEntity.ok(contatoService.listarContato(id));
     }
 
     @PostMapping("/{idPessoa}")

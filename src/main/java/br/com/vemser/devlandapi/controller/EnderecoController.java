@@ -3,7 +3,6 @@ package br.com.vemser.devlandapi.controller;
 import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
 
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
 
@@ -23,7 +22,7 @@ import java.util.List;
 public class EnderecoController {
 
     @Autowired
-    EnderecoService enderecoService;
+    private EnderecoService enderecoService;
 
     @GetMapping
     public ResponseEntity<List<EnderecoDTO>> listarTodos() throws RegraDeNegocioException {

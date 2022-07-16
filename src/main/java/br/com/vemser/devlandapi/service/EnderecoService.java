@@ -2,7 +2,6 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.Endereco;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.EnderecoRepository;
@@ -40,7 +39,7 @@ public class EnderecoService {
                     .map(endereco -> objectMapper.convertValue(endereco, EnderecoDTO.class))
                     .collect(Collectors.toList());
         } catch (RegraDeNegocioException e) {
-            throw new RegraDeNegocioException("Nenhum usuario encontrado");
+            throw new RegraDeNegocioException("Nenhum endereço encontrado");
         }
     }
 

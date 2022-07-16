@@ -33,6 +33,17 @@ public class ContatoService {
         }
     }
 
+    public List<ContatoDTO> listarContato(Integer id) throws RegraDeNegocioException {
+        try {
+            return contatoRepository.listarContato(id).stream()
+                    .filter(contato -> contato.getIdContato().equals(id))
+                    .map(contato -> objectMapper.convertValue(contato, ContatoDTO.class))
+                    .collect(Collectors.toList());
+        } catch (RegraDeNegocioException e) {
+            throw new RegraDeNegocioException("Nenhum contato encontrado");
+        }
+    }
+
     public ContatoCreateDTO adicionar(Integer id, ContatoCreateDTO contato) throws RegraDeNegocioException {
         Contato idContato = contatoRepository.adicionar(id, objectMapper.convertValue(contato, Contato.class));
         return objectMapper.convertValue(idContato, ContatoDTO.class);
