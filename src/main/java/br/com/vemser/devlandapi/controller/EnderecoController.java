@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.controller;
 import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
 
+import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
 
@@ -24,9 +25,14 @@ public class EnderecoController {
     @Autowired
     EnderecoService enderecoService;
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<EnderecoDTO>> listarTodos() throws RegraDeNegocioException {
         return ResponseEntity.ok(enderecoService.listar());
+    }
+
+    @GetMapping("/{idEndereco}")
+    public ResponseEntity<List<EnderecoDTO>> listarEndereco(@PathVariable("idEndereco") Integer id) throws RegraDeNegocioException {
+        return ResponseEntity.ok(enderecoService.listarEndereco(id));
     }
 
     @PostMapping("/{idUsuario}")

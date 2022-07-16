@@ -2,7 +2,9 @@ package br.com.vemser.devlandapi.repository;
 
 import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
 import br.com.vemser.devlandapi.entity.Endereco;
+import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.enums.TipoClassificacao;
+import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -71,6 +73,48 @@ public class EnderecoRepository {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<Endereco> listarEndereco(Integer id) throws RegraDeNegocioException {
+        List<Endereco> enderecos = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = connection.getConnection();
+            //Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM ENDERECO WHERE ID_ENDERECO = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            ResultSet res = stmt.executeQuery();
+
+            while (res.next()) {
+                Endereco endereco = new Endereco();
+                endereco.setIdEndereco(res.getInt("id_endereco"));
+                endereco.setIdUsuario(res.getInt("id_usuario"));
+                endereco.setTipo(TipoClassificacao.ofTipo(res.getInt("tipo")));
+                endereco.setLogradouro(res.getString("logradouro"));
+                endereco.setNumero(res.getString("numero"));
+                endereco.setComplemento(res.getString("complemento"));
+                endereco.setCep(res.getString("cep"));
+                endereco.setCidade(res.getString("cidade"));
+                endereco.setEstado(res.getString("estado"));
+                endereco.setPais(res.getString("pais"));
+                enderecos.add(endereco);
+            }
+        } catch (SQLException e) {
+            throw new RegraDeNegocioException(e.getMessage());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return enderecos;
     }
 
     public List<Endereco> listar() throws RegraDeNegocioException {
