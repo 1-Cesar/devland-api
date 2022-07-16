@@ -13,7 +13,6 @@ import java.sql.Date;
 public class Postagem {
 
     private Integer idPostagem;
-    private Integer idUsuario;
     private TipoPostagem tipoPostagem;
     private String titulo;
     private String descricao;
@@ -21,5 +20,6 @@ public class Postagem {
     private Integer downs;
     private Integer views;
     private Date data;
+    private Usuario usuario;
 
 }
