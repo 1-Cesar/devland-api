@@ -37,6 +37,6 @@ public class PostagemDTO {
     @Schema(description = "Data da Postagem")
     private Date data;
 
-    //@Schema(description = "Usuário da Postagem")
-    //private UsuarioPostagemDTO usuarioPostagemDTO;
+    @Schema(description = "Id do Usuário")
+    private Integer idUsuario;
 }

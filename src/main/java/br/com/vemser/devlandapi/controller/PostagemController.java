@@ -4,9 +4,6 @@ import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.PostagemService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,18 +26,13 @@ public class PostagemController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostagemDTO>> getAll() throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{idPostagem}")
-    public ResponseEntity<PostagemDTO> getByIdPostagem(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.getByIdPostagem(idPostagem), HttpStatus.OK);
+    public ResponseEntity<List<PostagemDTO>> list() throws RegraDeNegocioException {
+        return new ResponseEntity<>(postagemService.list(), HttpStatus.OK);
     }
 
     @GetMapping("/{tipoPostagem}/tipo")
-    public ResponseEntity<List<PostagemDTO>> getByTipo(@PathVariable("tipoPostagem") Integer tipoPostagem) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.getByTipo(tipoPostagem), HttpStatus.OK);
+    public ResponseEntity<List<PostagemDTO>> litByTipo(@PathVariable("tipoPostagem") Integer tipoPostagem) throws RegraDeNegocioException {
+        return new ResponseEntity<>(postagemService.listByTipo(tipoPostagem), HttpStatus.OK);
     }
 
     @PostMapping("/{idUsuario}")

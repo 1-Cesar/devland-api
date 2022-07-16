@@ -1,7 +1,6 @@
 package br.com.vemser.devlandapi.repository;
 
 import br.com.vemser.devlandapi.entity.Postagem;
-import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,31 +16,32 @@ public class PostagemRepository {
     @Autowired
     private Connection con;
 
-    public Integer getProximoId(Connection connection) throws SQLException {
-        String sql = "SELECT seq_postagem.nextval mysequence from DUAL";
+    public Integer getProximoId(Connection connection) throws SQLException, RegraDeNegocioException {
+        try {
+            String sql = " SELECT seq_postagem.nextval mysequence from DUAL ";
 
-        Statement stmt = connection.createStatement();
-        ResultSet res = stmt.executeQuery(sql);
+            Statement stmt = connection.createStatement();
+            ResultSet res = stmt.executeQuery(sql);
 
-        if (res.next()) {
-            return res.getInt("mysequence");
+            if (res.next()) {
+                return res.getInt("mysequence");
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         }
-        return null;
     }
 
-    public List<Postagem> getAll() throws RegraDeNegocioException {
+    public List<Postagem> list() throws RegraDeNegocioException {
         List<Postagem> postagens = new ArrayList<>();
         try {
             Statement stmt = con.createStatement();
 
-            String sql = " SELECT P.*, " +
-                    "            U.NOME AS NOME_USUARIO " +
-                    "       FROM POSTAGEM P " +
-                    " INNER JOIN USUARIO U ON (P.ID_USUARIO = U.ID_USUARIO) ";
+            String sql = " SELECT * FROM POSTAGEM ";
 
             ResultSet res = stmt.executeQuery(sql);
 
-            while(res.next()) {
+            while (res.next()) {
                 Postagem postagem = getPostagemFromResultSet(res);
                 postagens.add(postagem);
             }
@@ -59,7 +59,7 @@ public class PostagemRepository {
         }
     }
 
-    public List<Postagem> getByTipo(Integer tipoPostagem) throws RegraDeNegocioException {
+    public List<Postagem> listByTipo(Integer tipoPostagem) throws RegraDeNegocioException {
         List<Postagem> postagens = new ArrayList<>();
         try {
 
@@ -104,7 +104,7 @@ public class PostagemRepository {
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setInt(1, postagem.getIdPostagem());
-            stmt.setInt(2, postagem.getUsuario().getIdUsuario());
+            stmt.setInt(2, postagem.getIdUsuario());
             stmt.setInt(3, postagem.getTipoPostagem().getTipo());
             stmt.setString(4, postagem.getTitulo());
             stmt.setString(5, postagem.getDescricao());
@@ -203,11 +203,12 @@ public class PostagemRepository {
         Postagem postagem = new Postagem();
         postagem.setIdPostagem(result.getInt("id_postagem"));
 
-        Usuario usuario = new Usuario();
-        usuario.setIdUsuario(result.getInt("id_usuario"));
-        usuario.setNome(result.getString("nome"));
-        postagem.setUsuario(usuario);
+//        Usuario usuario = new Usuario();
+//        usuario.setIdUsuario(result.getInt("id_usuario"));
+//        usuario.setNome(result.getString("nome"));
+//        postagem.setUsuario(usuario);
 
+        postagem.setIdUsuario(result.getInt("id_usuario"));
         postagem.setTipoPostagem(TipoPostagem.ofTema(result.getInt("tipo")));
         postagem.setTitulo(result.getString("titulo"));
         postagem.setDescricao(result.getString("descricao"));

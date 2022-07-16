@@ -3,8 +3,10 @@ package br.com.vemser.devlandapi.service;
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
 import br.com.vemser.devlandapi.entity.Postagem;
+import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
+import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,61 +24,60 @@ public class PostagemService {
     private PostagemRepository postagemRepository;
 
     @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     private Date data = new java.sql.Date(System.currentTimeMillis());
 
 
-    public List<PostagemDTO> getAll() throws RegraDeNegocioException {
-        return postagemRepository.getAll().stream()
+    public List<PostagemDTO> list() throws RegraDeNegocioException {
+        return postagemRepository.list().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public PostagemDTO getByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
-        Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
-
-        if (postagemRecuperada != null) {
-            return convertToDTO(postagemRecuperada);
-        } else {
-            throw new RegraDeNegocioException("Postagem não encontrada");
-        }
-    }
-
-    public List<PostagemDTO> getByTipo(Integer tipoPostagem) throws RegraDeNegocioException {
-        return postagemRepository.getByTipo(tipoPostagem).stream()
+    public List<PostagemDTO> listByTipo(Integer tipoPostagem) throws RegraDeNegocioException {
+        return postagemRepository.listByTipo(tipoPostagem).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
-        //verificar o idUsuario
-        
-        log.info("Adicionando postagem...");
-        Postagem postagemEntity =  convertToEntity(postagemCreateDTO);
-        postagemEntity.getUsuario().setIdUsuario(idUsuario);
-        postagemEntity.setUps(0);
-        postagemEntity.setDowns(0);
-        postagemEntity.setViews(0);
-        postagemEntity.setData(data);
 
-        postagemRepository.post(postagemEntity);
+        if (usuarioRepository.listarUsuario(idUsuario).isEmpty()) {
+            throw new RegraDeNegocioException("Usuário não encontrado");
+        }
+        else  {
+            log.info("Adicionando postagem...");
 
-        log.info("Postagem criada...");
+            Postagem postagemEntity = convertToEntity(postagemCreateDTO);
+            postagemEntity.setIdUsuario(idUsuario);
+            postagemEntity.setUps(0);
+            postagemEntity.setDowns(0);
+            postagemEntity.setViews(0);
+            postagemEntity.setData(data);
 
-        return convertToDTO(postagemEntity);
+            postagemRepository.post(postagemEntity);
 
+            log.info("Postagem criada...");
+
+            PostagemDTO postagemDTO = convertToDTO(postagemEntity);
+            return postagemDTO;
+        }
     }
 
     public PostagemDTO update(Integer idPostagem, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
-        log.info("Atualizando postagem...");
 
         Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
+
         if(postagemRecuperada != null) {
+            log.info("Atualizando postagem...");
 
             Postagem postagemEntity = convertToEntity(postagemCreateDTO);
             postagemEntity.setIdPostagem(postagemRecuperada.getIdPostagem());
-            postagemEntity.getUsuario().setIdUsuario(postagemRecuperada.getUsuario().getIdUsuario());
+            postagemEntity.setIdUsuario(postagemRecuperada.getIdUsuario());
             postagemEntity.setUps(postagemRecuperada.getUps());
             postagemEntity.setDowns(postagemRecuperada.getViews());
             postagemEntity.setViews(postagemRecuperada.getViews());
@@ -94,10 +95,12 @@ public class PostagemService {
     }
 
     public void delete(Integer idPostagem) throws RegraDeNegocioException {
-        log.info("Deletando postagem...");
 
         if (postagemRepository.findByIdPostagem(idPostagem) != null) {
+            log.info("Deletando postagem...");
+
             postagemRepository.delete(idPostagem);
+
             log.info("Postagem removida...");
         }
         else {
@@ -112,4 +115,5 @@ public class PostagemService {
     public PostagemDTO convertToDTO(Postagem postagem) {
         return objectMapper.convertValue(postagem, PostagemDTO.class);
     }
+
 }
