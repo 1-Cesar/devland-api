@@ -1,12 +1,17 @@
 package br.com.vemser.devlandapi.repository;
 
 import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
+
 import br.com.vemser.devlandapi.entity.Usuario;
+import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Repository
 public class UsuarioRepository {
@@ -54,6 +59,122 @@ public class UsuarioRepository {
 
             return usuario;
 
+        } catch (SQLException e) {
+            throw new RegraDeNegocioException(e.getMessage());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public List<Usuario> listar() throws RegraDeNegocioException {
+        List<Usuario> usuarios = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = connection.getConnection();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM USUARIO";
+
+            // Executa-se a consulta
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(res.getInt("id_usuario"));
+                usuario.setNome(res.getString("nome"));
+                usuario.setTipoUsuario(TipoUsuario.ofTipo(res.getInt("tipo")));
+                usuario.setAreaAtuacao(res.getString("area_atuacao"));
+                usuario.setEmail(res.getString("email"));
+                usuario.setCpfCnpj(res.getString("cpf_cnpj"));
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            throw new RegraDeNegocioException(e.getMessage());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return usuarios;
+    }
+
+    public Usuario editar(Integer id, Usuario usuario) throws RegraDeNegocioException {
+        Connection con = null;
+        try {
+            con = connection.getConnection();
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("UPDATE USUARIO SET ");
+            sql.append(" nome = ?,");
+            sql.append(" cpf_cnpj = ?,");
+            sql.append(" area_atuacao = ?,");
+            sql.append(" email = ?");
+            sql.append(" WHERE id_usuario = ? ");
+
+            PreparedStatement stmt = con.prepareStatement(sql.toString());
+
+            stmt.setString(1, usuario.getNome());
+            stmt.setString(2, usuario.getCpfCnpj());
+            stmt.setString(3, usuario.getAreaAtuacao());
+            stmt.setString(4, usuario.getEmail());
+            stmt.setInt(5, id);
+
+            usuario.setIdUsuario(id);
+            // Executa-se a consulta
+            int res = stmt.executeUpdate();
+
+            return usuario;
+        } catch (SQLException e) {
+            throw new RegraDeNegocioException(e.getMessage());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean remover(Integer id) throws RegraDeNegocioException {
+        Connection con = null;
+        try {
+            con = connection.getConnection();
+
+            String sql1 = "DELETE FROM POSTAGEM WHERE id_usuario = ?";
+            String sql2 = "DELETE FROM ENDERECO WHERE id_usuario = ?";
+            String sql3 = "DELETE FROM CONTATO WHERE id_usuario = ?";
+            String sql4 = "DELETE FROM USUARIO WHERE id_usuario = ?";
+
+            PreparedStatement stmt1 = con.prepareStatement(sql1);
+            PreparedStatement stmt2 = con.prepareStatement(sql2);
+            PreparedStatement stmt3 = con.prepareStatement(sql3);
+            PreparedStatement stmt4 = con.prepareStatement(sql4);
+
+
+            stmt1.setInt(1, id);
+            stmt2.setInt(1, id);
+            stmt3.setInt(1, id);
+            stmt4.setInt(1, id);
+
+            // Executa-se a consulta
+            int res1 = stmt1.executeUpdate();
+            int res2 = stmt2.executeUpdate();
+            int res3 = stmt3.executeUpdate();
+            int res4 = stmt4.executeUpdate();
+
+            return res4 > 0;
         } catch (SQLException e) {
             throw new RegraDeNegocioException(e.getMessage());
         } finally {
