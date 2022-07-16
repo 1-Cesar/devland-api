@@ -22,9 +22,14 @@ public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listarTodos() throws RegraDeNegocioException {
         return ResponseEntity.ok(usuarioService.listar());
+    }
+
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<List<UsuarioDTO>> listarUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
+        return ResponseEntity.ok(usuarioService.listarUsuario(id));
     }
 
     @PostMapping
