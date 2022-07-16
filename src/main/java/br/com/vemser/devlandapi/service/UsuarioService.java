@@ -25,31 +25,30 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public List<UsuarioDTO> listar() throws RegraDeNegocioException {
-        try {
+        if (usuarioRepository.listar().size() == 0) {
+            throw new RegraDeNegocioException("Nenhum usuario encontrado");
+        } else {
             return usuarioRepository.listar().stream()
                     .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
                     .collect(Collectors.toList());
-        } catch (RegraDeNegocioException e) {
-            throw new RegraDeNegocioException("Nenhum usuario encontrado");
         }
     }
 
     public List<UsuarioDTO> listarUsuario(Integer id) throws RegraDeNegocioException {
-        try {
-            return usuarioRepository.listarUsuario(id).stream()
-                    .filter(usuario -> usuario.getIdUsuario().equals(id))
-                    .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
-                    .collect(Collectors.toList());
-        } catch (RegraDeNegocioException e) {
-            throw new RegraDeNegocioException("Nenhum usuario encontrado");
-        }
+        localizarUsuario(id);
+        return usuarioRepository.listarUsuario(id).stream()
+                .filter(usuario -> usuario.getIdUsuario().equals(id))
+                .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
+                .collect(Collectors.toList());
     }
 
     public void delete(Integer id) throws RegraDeNegocioException {
+        localizarUsuario(id);
         usuarioRepository.remover(id);
     }
 
     public UsuarioDTO editar(Integer id, UsuarioDTO usuarioDTO) throws RegraDeNegocioException {
+        localizarUsuario(id);
         Usuario usuario = usuarioRepository.editar(id, objectMapper.convertValue(usuarioDTO, Usuario.class));
         usuarioDTO =  objectMapper.convertValue(usuario, UsuarioDTO.class);
         return usuarioDTO;
@@ -205,4 +204,12 @@ public class UsuarioService {
                     CNPJ.substring(12, 14));
         }
     }
+
+   public Usuario localizarUsuario (Integer idUsuario) throws RegraDeNegocioException {
+        Usuario usuarioRecuperado = usuarioRepository.listar().stream()
+                .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+        return usuarioRecuperado;
+   }
 }
