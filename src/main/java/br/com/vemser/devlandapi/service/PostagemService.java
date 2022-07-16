@@ -3,7 +3,6 @@ package br.com.vemser.devlandapi.service;
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
 import br.com.vemser.devlandapi.entity.Postagem;
-import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
@@ -31,7 +30,6 @@ public class PostagemService {
 
     private Date data = new java.sql.Date(System.currentTimeMillis());
 
-
     public List<PostagemDTO> list() throws RegraDeNegocioException {
         return postagemRepository.list().stream()
                 .map(this::convertToDTO)
@@ -46,10 +44,10 @@ public class PostagemService {
 
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
 
-        if (usuarioRepository.listarUsuario(idUsuario).isEmpty()) {
+        if (usuarioRepository.listarUsuario(idUsuario).isEmpty()){
             throw new RegraDeNegocioException("Usuário não encontrado");
         }
-        else  {
+        else {
             log.info("Adicionando postagem...");
 
             Postagem postagemEntity = convertToEntity(postagemCreateDTO);
@@ -63,8 +61,7 @@ public class PostagemService {
 
             log.info("Postagem criada...");
 
-            PostagemDTO postagemDTO = convertToDTO(postagemEntity);
-            return postagemDTO;
+            return convertToDTO(postagemEntity);
         }
     }
 
