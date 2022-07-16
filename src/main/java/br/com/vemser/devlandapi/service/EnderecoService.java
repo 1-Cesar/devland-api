@@ -26,7 +26,7 @@ public class EnderecoService {
     private EnderecoRepository enderecoRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
     public List<EnderecoDTO> listar() throws RegraDeNegocioException {
         if (enderecoRepository.listar().size() == 0) {
@@ -59,7 +59,7 @@ public class EnderecoService {
     }
 
     public EnderecoCreateDTO adicionar(Integer id, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
-
+        usuarioService.localizarUsuario(id);
         Endereco endereco = enderecoRepository.adicionar(id, objectMapper.convertValue(enderecoCreateDTO, Endereco.class));
 
         return objectMapper.convertValue(endereco, EnderecoDTO.class);
