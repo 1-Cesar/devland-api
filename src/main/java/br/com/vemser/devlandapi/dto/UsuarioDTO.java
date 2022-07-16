@@ -16,8 +16,5 @@ import javax.validation.constraints.Size;
 public class UsuarioDTO extends UsuarioCreateDTO {
 
     @Schema(description = "id do desenvolvedor ou empresa", example = "1")
-    @NotNull
-    @Size(min = 1)
     private Integer idUsuario;
-
 }
