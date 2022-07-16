@@ -2,7 +2,9 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
+import br.com.vemser.devlandapi.dto.EnderecoDTO;
 import br.com.vemser.devlandapi.entity.Contato;
+import br.com.vemser.devlandapi.entity.Endereco;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ContatoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,9 +62,11 @@ public class ContatoService {
 
     public ContatoDTO editar(Integer id,
                              ContatoDTO contatoDTO) throws RegraDeNegocioException {
-        listarContato(id);
-        Contato contato = contatoRepository.editar(id, objectMapper.convertValue(contatoDTO, Contato.class));
-        contatoDTO =  objectMapper.convertValue(contato, ContatoDTO.class);
+        Contato contatoRecuperado = localizarContato(id);
+        contatoDTO.setIdUsuario(contatoRecuperado.getIdUsuario());
+
+        contatoRecuperado = contatoRepository.editar(id, objectMapper.convertValue(contatoDTO, Contato.class));
+        contatoDTO =  objectMapper.convertValue(contatoRecuperado, ContatoDTO.class);
         return contatoDTO;
     }
 
