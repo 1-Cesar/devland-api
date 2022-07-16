@@ -34,6 +34,11 @@ public class EnderecoController {
         return ResponseEntity.ok(enderecoService.listarEndereco(id));
     }
 
+    @GetMapping("usuario/{idUsuario}")
+    public ResponseEntity<List<EnderecoDTO>> listarEnderecoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
+        return ResponseEntity.ok(enderecoService.listarEnderecoUsuario(id));
+    }
+
     @PostMapping("/{idUsuario}")
     public ResponseEntity<EnderecoCreateDTO> adicionar(@PathVariable("idUsuario") Integer id,
                                                        @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {

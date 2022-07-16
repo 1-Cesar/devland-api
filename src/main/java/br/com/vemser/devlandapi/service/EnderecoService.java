@@ -2,12 +2,9 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.Endereco;
-import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.EnderecoRepository;
-import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +39,14 @@ public class EnderecoService {
         localizarEndereco(id);
         return enderecoRepository.listarEndereco(id).stream()
                 .filter(endereco -> endereco.getIdEndereco().equals(id))
+                .map(endereco -> objectMapper.convertValue(endereco, EnderecoDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<EnderecoDTO> listarEnderecoUsuario(Integer id) throws RegraDeNegocioException {
+        usuarioService.localizarUsuario(id);
+        return enderecoRepository.listarEnderecoUsuario(id).stream()
+                .filter(endereco -> endereco.getIdUsuario().equals(id))
                 .map(endereco -> objectMapper.convertValue(endereco, EnderecoDTO.class))
                 .collect(Collectors.toList());
     }
