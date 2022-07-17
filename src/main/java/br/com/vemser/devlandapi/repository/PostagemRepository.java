@@ -264,12 +264,6 @@ public class PostagemRepository {
     private Postagem getPostagemFromResultSet(ResultSet result) throws SQLException {
         Postagem postagem = new Postagem();
         postagem.setIdPostagem(result.getInt("id_postagem"));
-
-//        Usuario usuario = new Usuario();
-//        usuario.setIdUsuario(result.getInt("id_usuario"));
-//        usuario.setNome(result.getString("nome"));
-//        postagem.setUsuario(usuario);
-
         postagem.setIdUsuario(result.getInt("id_usuario"));
         postagem.setTipoPostagem(TipoPostagem.ofTema(result.getInt("tipo")));
         postagem.setTitulo(result.getString("titulo"));
