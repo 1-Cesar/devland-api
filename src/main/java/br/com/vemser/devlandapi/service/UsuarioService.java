@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.service;
 import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.Usuario;
+import br.com.vemser.devlandapi.enums.TipoMensagem;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
@@ -24,6 +25,9 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public List<UsuarioDTO> listar() throws RegraDeNegocioException {
         if (usuarioRepository.listar().size() == 0) {
             throw new RegraDeNegocioException("Nenhum usuario encontrado");
@@ -43,13 +47,17 @@ public class UsuarioService {
     }
 
     public void delete(Integer id) throws RegraDeNegocioException {
-        localizarUsuario(id);
+        Usuario usuarioRecuperado = localizarUsuario(id);
         usuarioRepository.remover(id);
+        String tipoMensagem = TipoMensagem.DELETE.getTipo();
+        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
 
     public UsuarioDTO editar(Integer id, UsuarioDTO usuarioDTO) throws RegraDeNegocioException {
         localizarUsuario(id);
         Usuario usuario = usuarioRepository.editar(id, objectMapper.convertValue(usuarioDTO, Usuario.class));
+        String tipoMensagem = TipoMensagem.UPDATE.getTipo();
+        emailService.sendEmailUsuario(usuario, tipoMensagem);
         usuarioDTO =  objectMapper.convertValue(usuario, UsuarioDTO.class);
         return usuarioDTO;
     }
@@ -59,6 +67,8 @@ public class UsuarioService {
         if (usuarioCreateDTO.getTipoUsuario() == TipoUsuario.DEV) {
             if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
                 Usuario usuario = usuarioRepository.adicionar(objectMapper.convertValue(usuarioCreateDTO, Usuario.class));
+                String tipoMensagem = TipoMensagem.CREATE.getTipo();
+                emailService.sendEmailUsuario(usuario, tipoMensagem);
                 return objectMapper.convertValue(usuario, UsuarioDTO.class);
             } else {
                 throw new RegraDeNegocioException("CPF Inválido");
@@ -67,6 +77,8 @@ public class UsuarioService {
 
         if (usuarioCreateDTO.getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(usuarioCreateDTO.getCpfCnpj())) {
             Usuario usuarioEmpresa = usuarioRepository.adicionar(objectMapper.convertValue(usuarioCreateDTO, Usuario.class));
+            String tipoMensagem = TipoMensagem.CREATE.getTipo();
+            emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);
             return objectMapper.convertValue(usuarioEmpresa, UsuarioDTO.class);
         } else {
             throw new RegraDeNegocioException("CNPJ Inválido");

@@ -1,6 +1,7 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -28,14 +29,14 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
 
-    public void sendEmailUsuario(UsuarioDTO usuarioDTO, String tipo) {
+    public void sendEmailUsuario(Usuario usuario, String tipo) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(usuarioDTO.getEmail());
+            mimeMessageHelper.setTo(usuario.getEmail());
             if (tipo.equals(TipoMensagem.CREATE.getTipo())){
                 mimeMessageHelper.setSubject("Cadastro realizado");
             } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
@@ -43,17 +44,17 @@ public class EmailService {
             } else {
                 mimeMessageHelper.setSubject("Cadastro deletado");
             }
-            mimeMessageHelper.setText(getContentFromTemplatePessoa(usuarioDTO, tipo), true);
+            mimeMessageHelper.setText(getContentFromTemplatePessoa(usuario, tipo), true);
             emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | IOException | TemplateException e) {
             e.printStackTrace();
         }
     }
 
-    public String getContentFromTemplatePessoa(UsuarioDTO usuarioDTO, String tipo) throws IOException, TemplateException {
+    public String getContentFromTemplatePessoa(Usuario usuario, String tipo) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", usuarioDTO.getNome());
-        dados.put("id", usuarioDTO.getIdUsuario());
+        dados.put("nome", usuario.getNome());
+        dados.put("id", usuario.getIdUsuario());
         dados.put("email", this.from);
 
         Template template;
