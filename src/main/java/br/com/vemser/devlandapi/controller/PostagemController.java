@@ -41,6 +41,17 @@ public class PostagemController {
         return new ResponseEntity<>(postagemService.post(idUsuario, postagemCreateDTO), HttpStatus.CREATED);
     }
 
+    // curtir
+    @PostMapping("/{idPostagem}/like")
+    public ResponseEntity<PostagemDTO> like(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
+        return new ResponseEntity<>(postagemService.like(idPostagem), HttpStatus.OK);
+    }
+
+    @PostMapping("/{idPostagem}/deslike")
+    public ResponseEntity<PostagemDTO> deslike(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
+        return new ResponseEntity<>(postagemService.deslike(idPostagem), HttpStatus.OK);
+    }
+
     @PutMapping("/{idPostagem}")
     public ResponseEntity<PostagemDTO> update(@PathVariable() Integer idPostagem,
                                            @RequestBody @Valid PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {

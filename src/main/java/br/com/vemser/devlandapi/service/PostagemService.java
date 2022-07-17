@@ -65,8 +65,8 @@ public class PostagemService {
 
             Postagem postagemEntity = convertToEntity(postagemCreateDTO);
             postagemEntity.setIdUsuario(idUsuario);
-            postagemEntity.setUps(0);
-            postagemEntity.setDowns(0);
+            postagemEntity.setLikes(0);
+            postagemEntity.setDeslikes(0);
             postagemEntity.setData(strLocalDateTime);
 
             postagemRepository.post(postagemEntity);
@@ -76,6 +76,33 @@ public class PostagemService {
             return convertToDTO(postagemEntity);
         }
     }
+
+    public PostagemDTO like(Integer idPostagem) throws RegraDeNegocioException {
+
+        Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
+
+        postagemRecuperada.setLikes(postagemRecuperada.getLikes() + 1);
+
+        String tipo = "like";
+
+        postagemRepository.likeOuDeslike(postagemRecuperada, tipo);
+
+        return convertToDTO(postagemRecuperada);
+    }
+
+    public PostagemDTO deslike(Integer idPostagem) throws RegraDeNegocioException {
+
+        Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
+
+        postagemRecuperada.setDeslikes(postagemRecuperada.getDeslikes() + 1);
+
+        String tipo = "deslike";
+
+        postagemRepository.likeOuDeslike(postagemRecuperada, tipo);
+
+        return convertToDTO(postagemRecuperada);
+    }
+
 
     public PostagemDTO update(Integer idPostagem, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
 
@@ -87,8 +114,8 @@ public class PostagemService {
             Postagem postagemEntity = convertToEntity(postagemCreateDTO);
             postagemEntity.setIdPostagem(postagemRecuperada.getIdPostagem());
             postagemEntity.setIdUsuario(postagemRecuperada.getIdUsuario());
-            postagemEntity.setUps(postagemRecuperada.getUps());
-            postagemEntity.setDowns(postagemRecuperada.getDowns());
+            postagemEntity.setLikes(postagemRecuperada.getLikes());
+            postagemEntity.setDeslikes(postagemRecuperada.getDeslikes());
             postagemEntity.setData(postagemRecuperada.getData());
 
             postagemRepository.update(idPostagem, postagemEntity);

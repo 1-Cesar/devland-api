@@ -119,8 +119,8 @@ public class PostagemRepository {
             stmt.setString(4, postagem.getTitulo());
             stmt.setString(5, postagem.getDescricao());
             stmt.setString(6, postagem.getFoto());
-            stmt.setInt(7, postagem.getUps());
-            stmt.setInt(8, postagem.getDowns());
+            stmt.setInt(7, postagem.getLikes());
+            stmt.setInt(8, postagem.getDeslikes());
             stmt.setString(9, postagem.getData());
 
             stmt.executeUpdate();
@@ -139,6 +139,47 @@ public class PostagemRepository {
         }
     }
 
+    public Postagem likeOuDeslike(Postagem postagem, String tipo) throws RegraDeNegocioException {
+        Connection con = null;
+        try {
+            con = connection.getConnection();
+
+            if (tipo.equalsIgnoreCase("like")) {
+                StringBuilder sql = new StringBuilder();
+                sql.append(" UPDATE POSTAGEM SET ");
+                sql.append(" ups = ? ");
+                sql.append(" WHERE id_postagem = ? ");
+
+                PreparedStatement stmt = con.prepareStatement(sql.toString());
+                stmt.setInt(1, postagem.getLikes());
+                stmt.setInt(2, postagem.getIdPostagem());
+
+                stmt.executeUpdate();
+            } else {
+                StringBuilder sql = new StringBuilder();
+                sql.append(" UPDATE POSTAGEM SET ");
+                sql.append(" downs = ? ");
+                sql.append(" WHERE id_postagem = ? ");
+
+                PreparedStatement stmt = con.prepareStatement(sql.toString());
+                stmt.setInt(1, postagem.getDeslikes());
+                stmt.setInt(2, postagem.getIdPostagem());
+
+                stmt.executeUpdate();
+            }
+            return postagem;
+        } catch (SQLException e) {
+            throw new RegraDeNegocioException(e.getMessage());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public Postagem update(Integer idPostagem, Postagem postagem) throws RegraDeNegocioException {
         Connection con = null;
@@ -233,8 +274,8 @@ public class PostagemRepository {
         postagem.setTipoPostagem(TipoPostagem.ofTema(result.getInt("tipo")));
         postagem.setTitulo(result.getString("titulo"));
         postagem.setDescricao(result.getString("descricao"));
-        postagem.setUps(result.getInt("ups"));
-        postagem.setDowns(result.getInt("downs"));
+        postagem.setLikes(result.getInt("ups"));
+        postagem.setDeslikes(result.getInt("downs"));
         postagem.setFoto(result.getString("foto"));
         postagem.setData(result.getString("data_postagem"));
 

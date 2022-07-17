@@ -18,7 +18,7 @@ public class Postagem {
     private String titulo;
     private String descricao;
     private String foto;
-    private Integer ups;
-    private Integer downs;
+    private Integer likes;
+    private Integer deslikes;
     private String data;
 }
