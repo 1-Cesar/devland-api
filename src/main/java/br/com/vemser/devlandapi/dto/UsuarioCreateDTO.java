@@ -35,6 +35,11 @@ public class UsuarioCreateDTO {
     @Size(min = 11, max = 14)
     private String cpfCnpj;
 
+    @Schema(description = "foto do desenvolvedor ou empresa", example = "https://i.imgur.com/3zry15Q.jpg")
+    @NotEmpty
+    @Size(min = 1, max = 1000)
+    private String foto;
+
     @Schema(description = "senha do desenvolvedor ou empresa", example = "abc1d")
     @NotNull
     private TipoUsuario tipoUsuario;

@@ -4,7 +4,8 @@ CREATE TABLE Usuario (
 	  email 			VARCHAR2(100) 	NOT NULL,	  	  
 	  area_atuacao 		VARCHAR2(100) 	NOT NULL,
 	  cpf_cnpj			VARCHAR2(14) 	NOT NULL UNIQUE,
-	  tipo 				VARCHAR2(15)	NOT NULL,	  
+	  tipo 				VARCHAR2(15)	NOT NULL,
+	  foto 				VARCHAR2(1000)	NOT NULL,
 	  PRIMARY KEY (id_usuario)	  
 );
 

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Usuario {
 
-    private String nome, email, areaAtuacao, cpfCnpj;
+    private String nome, email, areaAtuacao, cpfCnpj, foto;
 
     private TipoUsuario tipoUsuario;
 
