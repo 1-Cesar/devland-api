@@ -11,7 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,21 +29,33 @@ public class PostagemService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Date data = new java.sql.Date(System.currentTimeMillis());
+    private LocalDateTime localDateTime;
 
     public List<PostagemDTO> list() throws RegraDeNegocioException {
-        return postagemRepository.list().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        if (postagemRepository.list().isEmpty()){
+            throw new RegraDeNegocioException("Nenhuma postagem encontrada");
+        }
+        else {
+            return postagemRepository.list().stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        }
     }
 
     public List<PostagemDTO> listByTipo(Integer tipoPostagem) throws RegraDeNegocioException {
-        return postagemRepository.listByTipo(tipoPostagem).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        if (postagemRepository.listByTipo(tipoPostagem).isEmpty()){
+            throw new RegraDeNegocioException("Nenhuma postagem encontrada");
+        }
+        else {
+            return postagemRepository.listByTipo(tipoPostagem).stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        }
     }
 
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
+
+        String strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
         if (usuarioRepository.listarUsuario(idUsuario).isEmpty()){
             throw new RegraDeNegocioException("Usuário não encontrado");
@@ -54,8 +67,7 @@ public class PostagemService {
             postagemEntity.setIdUsuario(idUsuario);
             postagemEntity.setUps(0);
             postagemEntity.setDowns(0);
-            postagemEntity.setViews(0);
-            postagemEntity.setData(data);
+            postagemEntity.setData(strLocalDateTime);
 
             postagemRepository.post(postagemEntity);
 
@@ -76,8 +88,7 @@ public class PostagemService {
             postagemEntity.setIdPostagem(postagemRecuperada.getIdPostagem());
             postagemEntity.setIdUsuario(postagemRecuperada.getIdUsuario());
             postagemEntity.setUps(postagemRecuperada.getUps());
-            postagemEntity.setDowns(postagemRecuperada.getViews());
-            postagemEntity.setViews(postagemRecuperada.getViews());
+            postagemEntity.setDowns(postagemRecuperada.getDowns());
             postagemEntity.setData(postagemRecuperada.getData());
 
             postagemRepository.update(idPostagem, postagemEntity);

@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.repository;
 
+import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
 import br.com.vemser.devlandapi.entity.Postagem;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -14,7 +15,7 @@ import java.util.List;
 public class PostagemRepository {
 
     @Autowired
-    private Connection con;
+    private ConexaoBancoDeDados connection;
 
     public Integer getProximoId(Connection connection) throws SQLException, RegraDeNegocioException {
         try {
@@ -34,7 +35,10 @@ public class PostagemRepository {
 
     public List<Postagem> list() throws RegraDeNegocioException {
         List<Postagem> postagens = new ArrayList<>();
+        Connection con = null;
         try {
+            con = connection.getConnection();
+
             Statement stmt = con.createStatement();
 
             String sql = " SELECT * FROM POSTAGEM ";
@@ -61,7 +65,9 @@ public class PostagemRepository {
 
     public List<Postagem> listByTipo(Integer tipoPostagem) throws RegraDeNegocioException {
         List<Postagem> postagens = new ArrayList<>();
+        Connection con = null;
         try {
+            con = connection.getConnection();
 
             String sql = "SELECT P.*, " +
                     "            U.NOME AS NOME_USUARIO " +
@@ -93,12 +99,16 @@ public class PostagemRepository {
     }
 
     public Postagem post(Postagem postagem) throws RegraDeNegocioException {
+        Connection con = null;
         try {
+            con = connection.getConnection();
+
             Integer proximoId = getProximoId(con);
+
             postagem.setIdPostagem(proximoId);
 
             String sql = " INSERT INTO POSTAGEM\n " +
-                    " (ID_POSTAGEM, ID_USUARIO, TIPO, TITULO, DESCRICAO, UPS, DOWNS, VIEWS, DATA_POSTAGEM)\n " +
+                    " (ID_POSTAGEM, ID_USUARIO, TIPO, TITULO, DESCRICAO, FOTO, UPS, DOWNS, DATA_POSTAGEM)\n " +
                     " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)\n ";
 
             PreparedStatement stmt = con.prepareStatement(sql);
@@ -108,10 +118,10 @@ public class PostagemRepository {
             stmt.setInt(3, postagem.getTipoPostagem().getTipo());
             stmt.setString(4, postagem.getTitulo());
             stmt.setString(5, postagem.getDescricao());
-            stmt.setInt(6, postagem.getUps());
-            stmt.setInt(7, postagem.getDowns());
-            stmt.setInt(8, postagem.getViews());
-            stmt.setDate(9, postagem.getData());
+            stmt.setString(6, postagem.getFoto());
+            stmt.setInt(7, postagem.getUps());
+            stmt.setInt(8, postagem.getDowns());
+            stmt.setString(9, postagem.getData());
 
             stmt.executeUpdate();
 
@@ -131,12 +141,16 @@ public class PostagemRepository {
 
 
     public Postagem update(Integer idPostagem, Postagem postagem) throws RegraDeNegocioException {
+        Connection con = null;
         try {
+            con = connection.getConnection();
+
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE POSTAGEM SET ");
             sql.append(" tipo = ?, ");
             sql.append(" titulo = ?, ");
-            sql.append(" descricao = ? ");
+            sql.append(" descricao = ?, ");
+            sql.append(" foto = ? ");
             sql.append(" WHERE id_postagem = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
@@ -144,7 +158,8 @@ public class PostagemRepository {
             stmt.setInt(1, postagem.getTipoPostagem().getTipo());
             stmt.setString(2, postagem.getTitulo());
             stmt.setString(3, postagem.getDescricao());
-            stmt.setInt(4, idPostagem);
+            stmt.setString(4, postagem.getFoto());
+            stmt.setInt(5, idPostagem);
 
             stmt.executeUpdate();
             return postagem;
@@ -162,7 +177,10 @@ public class PostagemRepository {
     }
 
     public void delete(Integer idPostagem) throws RegraDeNegocioException {
+        Connection con = null;
         try {
+            con = connection.getConnection();
+
             String sql = " DELETE FROM POSTAGEM WHERE id_postagem = ? ";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, idPostagem);
@@ -182,7 +200,10 @@ public class PostagemRepository {
     }
 
     public Postagem findByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
+        Connection con = null;
         try {
+            con = connection.getConnection();
+
             String sql = " SELECT * FROM POSTAGEM WHERE id_postagem = ? ";
 
             PreparedStatement stmt = con.prepareStatement(sql);
@@ -214,8 +235,8 @@ public class PostagemRepository {
         postagem.setDescricao(result.getString("descricao"));
         postagem.setUps(result.getInt("ups"));
         postagem.setDowns(result.getInt("downs"));
-        postagem.setViews(result.getInt("views"));
-        postagem.setData(result.getDate("data_postagem"));
+        postagem.setFoto(result.getString("foto"));
+        postagem.setData(result.getString("data_postagem"));
 
         return postagem;
     }

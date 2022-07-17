@@ -26,4 +26,6 @@ public class PostagemCreateDTO {
     @NotBlank
     private String descricao;
 
+    @Schema(description = "Descrição da Postagem")
+    private String foto;
 }

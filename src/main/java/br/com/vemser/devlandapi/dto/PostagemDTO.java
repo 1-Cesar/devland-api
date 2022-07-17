@@ -25,17 +25,17 @@ public class PostagemDTO {
     @Schema(description = "Descrição da Postagem")
     private String descricao;
 
+    @Schema(description = "Foto da Postagem")
+    private String foto;
+
     @Schema(description = "Número de Curtidas")
     private Integer ups;
 
     @Schema(description = "Número de Descurtidas")
     private Integer downs;
 
-    @Schema(description = "Número de Visualizações")
-    private Integer views;
-
     @Schema(description = "Data da Postagem")
-    private Date data;
+    private String data;
 
     @Schema(description = "Id do Usuário")
     private Integer idUsuario;

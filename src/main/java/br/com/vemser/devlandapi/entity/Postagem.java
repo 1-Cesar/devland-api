@@ -17,8 +17,8 @@ public class Postagem {
     private TipoPostagem tipoPostagem;
     private String titulo;
     private String descricao;
+    private String foto;
     private Integer ups;
     private Integer downs;
-    private Integer views;
-    private Date data;
+    private String data;
 }
