@@ -39,7 +39,7 @@ public class EnderecoCreateDTO {
 
     @Schema(description = "CEP com 8 digitos sem pontos ou traços", example = "12345678")
     @NotEmpty
-    @Size(min = 9,max = 9)
+    @Size(min = 8,max = 8)
     private String cep;
 
     @Schema(description = "cidade do endereco", example = "Cidade do Java")

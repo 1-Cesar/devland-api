@@ -1,12 +1,23 @@
 CREATE TABLE Usuario (
 	  id_usuario 		NUMBER 			NOT NULL,
 	  nome 				VARCHAR2(100) 	NOT NULL,
-	  email 			VARCHAR2(100) 	NOT NULL,
-	  senha 			VARCHAR2(255) 	NOT NULL,	  
+	  email 			VARCHAR2(100) 	NOT NULL,	  	  
 	  area_atuacao 		VARCHAR2(100) 	NOT NULL,
-	  cpf_cnpj			VARCHAR2(14) 	NOT NULL,
-	  tipo 				VARCHAR2(15)	NOT NULL,	  
+	  cpf_cnpj			VARCHAR2(14) 	NOT NULL UNIQUE,
+	  tipo 				VARCHAR2(15)	NOT NULL,
+	  foto 				VARCHAR2(1000)	NOT NULL,
 	  PRIMARY KEY (id_usuario)	  
+);
+
+CREATE TABLE Seguidor (
+	  id 				NUMBER 			NOT NULL,
+	  id_seguidor 		NUMBER 			NOT NULL,
+	  nome_seguidor		VARCHAR2(100) 	NOT NULL,
+	  id_usuario 		NUMBER 			NOT NULL,	  
+	  PRIMARY KEY (id),
+	  CONSTRAINT FK_Seguidor_id_seguidor
+	    FOREIGN KEY (id_usuario)
+	      REFERENCES Usuario(id_usuario)
 );
 
 CREATE TABLE Endereco (
@@ -72,6 +83,11 @@ CREATE TABLE Comentario (
 );
 
 CREATE SEQUENCE SEQ_USUARIO
+START WITH 1
+INCREMENT BY 1
+NOCACHE NOCYCLE;
+
+CREATE SEQUENCE SEQ_SEGUIDOR
 START WITH 1
 INCREMENT BY 1
 NOCACHE NOCYCLE;

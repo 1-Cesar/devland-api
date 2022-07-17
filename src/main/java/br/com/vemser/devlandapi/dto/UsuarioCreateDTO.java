@@ -25,11 +25,6 @@ public class UsuarioCreateDTO {
     @Size(min = 10, max = 100)
     private String email;
 
-    @Schema(description = "senha do desenvolvedor ou empresa", example = "abc1d")
-    @NotEmpty
-    @Size(min = 5, max = 255)
-    private String senha;
-
     @Schema(description = "area de atuação do desenvolvedor ou empresa", example = "Java")
     @NotEmpty
     @Size(min = 4, max = 100)
@@ -39,6 +34,11 @@ public class UsuarioCreateDTO {
     @NotEmpty
     @Size(min = 11, max = 14)
     private String cpfCnpj;
+
+    @Schema(description = "foto do desenvolvedor ou empresa", example = "https://i.imgur.com/3zry15Q.jpg")
+    @NotEmpty
+    @Size(min = 1, max = 1000)
+    private String foto;
 
     @Schema(description = "senha do desenvolvedor ou empresa", example = "abc1d")
     @NotNull

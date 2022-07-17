@@ -42,7 +42,7 @@ public class UsuarioRepository {
             usuario.setIdUsuario(proximoId);
 
             String sql = "INSERT INTO USUARIO\n" +
-                    "(ID_USUARIO, NOME, EMAIL, SENHA, AREA_ATUACAO, CPF_CNPJ, TIPO)\n" +
+                    "(ID_USUARIO, NOME, EMAIL, AREA_ATUACAO, CPF_CNPJ, TIPO, FOTO)\n" +
                     "VALUES(?, ?, ?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
@@ -50,10 +50,10 @@ public class UsuarioRepository {
             stmt.setInt(1, usuario.getIdUsuario());
             stmt.setString(2, usuario.getNome());
             stmt.setString(3, usuario.getEmail());
-            stmt.setString(4, usuario.getSenha());
-            stmt.setString(5, usuario.getAreaAtuacao());
-            stmt.setString(6, usuario.getCpfCnpj());
-            stmt.setInt(7, usuario.getTipoUsuario().getTipo());
+            stmt.setString(4, usuario.getAreaAtuacao());
+            stmt.setString(5, usuario.getCpfCnpj());
+            stmt.setInt(6, usuario.getTipoUsuario().getTipo());
+            stmt.setString(7, usuario.getFoto());
 
             stmt.executeUpdate();
 
@@ -94,6 +94,7 @@ public class UsuarioRepository {
                 usuario.setAreaAtuacao(res.getString("area_atuacao"));
                 usuario.setEmail(res.getString("email"));
                 usuario.setCpfCnpj(res.getString("cpf_cnpj"));
+                usuario.setFoto(res.getString("foto"));
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
@@ -130,6 +131,7 @@ public class UsuarioRepository {
                 usuario.setAreaAtuacao(res.getString("area_atuacao"));
                 usuario.setEmail(res.getString("email"));
                 usuario.setCpfCnpj(res.getString("cpf_cnpj"));
+                usuario.setFoto(res.getString("foto"));
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
@@ -156,6 +158,7 @@ public class UsuarioRepository {
             sql.append(" nome = ?,");
             sql.append(" cpf_cnpj = ?,");
             sql.append(" area_atuacao = ?,");
+            sql.append(" foto = ?,");
             sql.append(" email = ?");
             sql.append(" WHERE id_usuario = ? ");
 
@@ -164,8 +167,9 @@ public class UsuarioRepository {
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getCpfCnpj());
             stmt.setString(3, usuario.getAreaAtuacao());
-            stmt.setString(4, usuario.getEmail());
-            stmt.setInt(5, id);
+            stmt.setString(4, usuario.getFoto());
+            stmt.setString(5, usuario.getEmail());
+            stmt.setInt(6, id);
 
             usuario.setIdUsuario(id);
             // Executa-se a consulta
