@@ -37,6 +37,7 @@ public class EnderecoController {
     )
     @GetMapping
     public ResponseEntity<List<EnderecoDTO>> listarTodos() throws RegraDeNegocioException {
+        log.info("Listando todos os endereços");
         return ResponseEntity.ok(enderecoService.listar());
     }
 
@@ -50,6 +51,7 @@ public class EnderecoController {
     )
     @GetMapping("/{idEndereco}")
     public ResponseEntity<List<EnderecoDTO>> listarEndereco(@PathVariable("idEndereco") Integer id) throws RegraDeNegocioException {
+        log.info("Recuperando um endereço com base em seu id");
         return ResponseEntity.ok(enderecoService.listarEndereco(id));
     }
 
@@ -63,6 +65,7 @@ public class EnderecoController {
     )
     @GetMapping("usuario/{idUsuario}")
     public ResponseEntity<List<EnderecoDTO>> listarEnderecoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
+        log.info("Recuperando um endereço com base no id do usuário");
         return ResponseEntity.ok(enderecoService.listarEnderecoUsuario(id));
     }
 
@@ -77,6 +80,7 @@ public class EnderecoController {
     @PostMapping("/{idUsuario}")
     public ResponseEntity<EnderecoCreateDTO> adicionar(@PathVariable("idUsuario") Integer id,
                                                        @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+        log.info("Criando um endereço com base no id do usuário");
         return ResponseEntity.ok(enderecoService.adicionar(id, enderecoCreateDTO));
     }
 
@@ -91,6 +95,7 @@ public class EnderecoController {
     @PutMapping("/{idEndereco}")
     public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id,
                                               @Valid @RequestBody EnderecoDTO enderecoAtualizar) throws RegraDeNegocioException {
+        log.info("Modificando um endereço com base em seu id");
         return ResponseEntity.ok(enderecoService.editar(id, enderecoAtualizar));
     }
 
@@ -104,6 +109,7 @@ public class EnderecoController {
     )
     @DeleteMapping("/{idEndereco}")
     public void delete(@PathVariable("idEndereco") Integer id) throws RegraDeNegocioException {
+        log.info("Excluindo um endereço com base em seu id");
         enderecoService.delete(id);
     }
 
