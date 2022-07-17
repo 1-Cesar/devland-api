@@ -26,18 +26,21 @@ public class UsuarioController {
     @Operation(summary = "listar usuarios", description = "recupera todas os usuarios do banco de dados")
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listarTodos() throws RegraDeNegocioException {
+        log.info("Listando todos os usuários");
         return ResponseEntity.ok(usuarioService.listar());
     }
 
     @Operation(summary = "listar usuario por id", description = "recupera um usuario do banco de dados atraves de seu id")
     @GetMapping("/{idUsuario}")
     public ResponseEntity<List<UsuarioDTO>> listarUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
+        log.info("Recuperando um usuário com base em seu id");
         return ResponseEntity.ok(usuarioService.listarUsuario(id));
     }
 
     @Operation(summary = "criar usuario", description = "cria um usuario dentro do banco de dados")
     @PostMapping
     public ResponseEntity<UsuarioCreateDTO> adicionar(@Valid @RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        log.info("Criando um usuário");
         return ResponseEntity.ok(usuarioService.adicionar(usuarioCreateDTO));
     }
 
@@ -45,12 +48,14 @@ public class UsuarioController {
     @PutMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id,
                                             @Valid @RequestBody UsuarioDTO usuarioAtualizar) throws RegraDeNegocioException {
+        log.info("Alterando um usuário com base em seu id");
         return ResponseEntity.ok(usuarioService.editar(id, usuarioAtualizar));
     }
 
     @Operation(summary = "deleta um usuario", description = "deleta um usuario do banco de dados atraves de seu id")
     @DeleteMapping("/{idUsuario}")
     public void delete(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
+        log.info("Deletando um usuário com base em seu id");
         usuarioService.delete(id);
     }
 }
