@@ -1,9 +1,7 @@
 package br.com.vemser.devlandapi.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.RequestScope;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,8 +22,6 @@ public class ConexaoBancoDeDados {
     @Value("${jdbc-schema}")
     private String schema;
 
-    @Bean
-    @RequestScope // sempre cria uma nova instancia
     public Connection getConnection() throws SQLException {
         Connection con = DriverManager.getConnection(jdbcString, user, pass);
 

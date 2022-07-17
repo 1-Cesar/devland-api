@@ -200,7 +200,7 @@ public class PostagemRepository {
     }
 
     public Postagem findByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
-        Connection con = null;
+        Connection con;
         try {
             con = connection.getConnection();
 
