@@ -43,7 +43,8 @@ public class ContatoController {
 
     @Operation(summary = "criar contato atraves do id do usuario", description = "cria um contato dentro do banco de dados com base no id do usuario")
     @PostMapping("/{idPessoa}")
-    public ResponseEntity<ContatoCreateDTO> adicionar(@PathVariable("idPessoa") Integer id, @Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
+    public ResponseEntity<ContatoCreateDTO> adicionar(@PathVariable("idPessoa") Integer id,
+                                                      @Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
         return ResponseEntity.ok(contatoService.adicionar(id, contato));
     }
 

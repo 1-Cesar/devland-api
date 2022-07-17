@@ -25,11 +25,6 @@ public class UsuarioCreateDTO {
     @Size(min = 10, max = 100)
     private String email;
 
-    @Schema(description = "senha do desenvolvedor ou empresa", example = "abc1d")
-    @NotEmpty
-    @Size(min = 5, max = 255)
-    private String senha;
-
     @Schema(description = "area de atuação do desenvolvedor ou empresa", example = "Java")
     @NotEmpty
     @Size(min = 4, max = 100)

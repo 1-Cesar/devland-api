@@ -42,18 +42,17 @@ public class UsuarioRepository {
             usuario.setIdUsuario(proximoId);
 
             String sql = "INSERT INTO USUARIO\n" +
-                    "(ID_USUARIO, NOME, EMAIL, SENHA, AREA_ATUACAO, CPF_CNPJ, TIPO)\n" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?)\n";
+                    "(ID_USUARIO, NOME, EMAIL, AREA_ATUACAO, CPF_CNPJ, TIPO)\n" +
+                    "VALUES(?, ?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setInt(1, usuario.getIdUsuario());
             stmt.setString(2, usuario.getNome());
             stmt.setString(3, usuario.getEmail());
-            stmt.setString(4, usuario.getSenha());
-            stmt.setString(5, usuario.getAreaAtuacao());
-            stmt.setString(6, usuario.getCpfCnpj());
-            stmt.setInt(7, usuario.getTipoUsuario().getTipo());
+            stmt.setString(4, usuario.getAreaAtuacao());
+            stmt.setString(5, usuario.getCpfCnpj());
+            stmt.setInt(6, usuario.getTipoUsuario().getTipo());
 
             stmt.executeUpdate();
 

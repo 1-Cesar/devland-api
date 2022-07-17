@@ -1,6 +1,5 @@
 package br.com.vemser.devlandapi.entity;
 
-import br.com.vemser.devlandapi.enums.TipoUsuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,11 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Seguidor {
 
-    private String nome, email, areaAtuacao, cpfCnpj;
+    private Integer id;
 
-    private TipoUsuario tipoUsuario;
+    private String nomeSeguidor;
+
+    private Integer idSeguidor;
 
     private Integer idUsuario;
 }

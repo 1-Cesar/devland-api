@@ -53,7 +53,7 @@ public class EnderecoController {
     @Operation(summary = "altera um endereço por id", description = "altera os registros de um endereço no banco de dados atraves de seu id")
     @PutMapping("/{idEndereco}")
     public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id,
-                                                  @Valid @RequestBody EnderecoDTO enderecoAtualizar) throws RegraDeNegocioException {
+                                              @Valid @RequestBody EnderecoDTO enderecoAtualizar) throws RegraDeNegocioException {
         return ResponseEntity.ok(enderecoService.editar(id, enderecoAtualizar));
     }
 
