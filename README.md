@@ -17,8 +17,13 @@
 Clique no nome dos desenvolvedores para enviar um e-mail <br><br><a href="mailto:alyson.siqueiracampos@gmail.com">Alyson</a><br><br>
   <a href="mailto:cesar.desenvolvedor@gmail.com">Cesar</a> 
 </address>
+<h2>Clonando este Projeto</h2>
+<p>Para clonar este projeto basta digitar o seguinte comando em seu terminal git<p>
+<ul>
+  <li> git clone https://github.com/alysoncampos/devland-api
+</ul>
 <h2>Instalando</h2>  
-<p>Para melhor explorar, alterar, incrementar, este projeto, sugerimos a instalação do próprio <a href="https://www.jetbrains.com/pt-br/idea/download/#section=windows">IntelliJ</a>. IDE utilizada
+<p>Para melhor explorar, alterar, incrementar este projeto, sugerimos a instalação do próprio <a href="https://www.jetbrains.com/pt-br/idea/download/#section=windows">IntelliJ</a> para abrir os arquivos. IDE utilizada
   para construção deste sistema. Nela você encontra-ra diversas ferramentas e recursos para explorar e evoluir ainda mais essa aplicação</p>
 <hr>
 <h4 align="center">Agradecemos sua Visita ! 😀</h4>
