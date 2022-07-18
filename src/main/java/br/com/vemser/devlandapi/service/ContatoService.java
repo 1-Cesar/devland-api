@@ -2,9 +2,7 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
-import br.com.vemser.devlandapi.dto.EnderecoDTO;
 import br.com.vemser.devlandapi.entity.Contato;
-import br.com.vemser.devlandapi.entity.Endereco;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ContatoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
