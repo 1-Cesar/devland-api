@@ -2,6 +2,7 @@ package br.com.vemser.devlandapi.repository;
 
 import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
 import br.com.vemser.devlandapi.entity.Comentario;
+import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,9 @@ public class ComentarioRepository {
 
     @Autowired
     private ConexaoBancoDeDados dbconnection;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public Integer getProximoId(Connection connection) throws SQLException {
         Connection con = dbconnection.getConnection();
@@ -36,7 +40,10 @@ public class ComentarioRepository {
         try {
             con = dbconnection.getConnection();
 
-            String sql = " SELECT * FROM COMENTARIO WHERE id_postagem = ? ";
+            String sql = " SELECT * " +
+                    "      FROM COMENTARIO C " +
+                    "      JOIN USUARIO U ON (C.ID_USUARIO = U.ID_USUARIO)" +
+                    "      WHERE id_postagem = ? ";
 
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, idPostagem);
@@ -45,6 +52,8 @@ public class ComentarioRepository {
 
             while (res.next()) {
                 Comentario comentario = getComentarioFromResultSet(res);
+                Usuario usuario = usuarioRepository.getUsuario(res);
+                comentario.setUsuario(usuario);
                 comentarios.add(comentario);
             }
         } catch (SQLException e) {

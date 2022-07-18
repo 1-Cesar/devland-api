@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,5 +20,5 @@ public class Postagem {
     private String descricao;
     private String foto;
     private Integer curtidas;
-    private String data;
+    private LocalDateTime data;
 }

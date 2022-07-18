@@ -5,6 +5,7 @@ import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
 import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -87,14 +88,7 @@ public class UsuarioRepository {
             ResultSet res = stmt.executeQuery();
 
             while (res.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setIdUsuario(res.getInt("id_usuario"));
-                usuario.setNome(res.getString("nome"));
-                usuario.setTipoUsuario(TipoUsuario.ofTipo(res.getInt("tipo")));
-                usuario.setAreaAtuacao(res.getString("area_atuacao"));
-                usuario.setEmail(res.getString("email"));
-                usuario.setCpfCnpj(res.getString("cpf_cnpj"));
-                usuario.setFoto(res.getString("foto"));
+                Usuario usuario = getUsuario(res);
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
@@ -124,14 +118,7 @@ public class UsuarioRepository {
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setIdUsuario(res.getInt("id_usuario"));
-                usuario.setNome(res.getString("nome"));
-                usuario.setTipoUsuario(TipoUsuario.ofTipo(res.getInt("tipo")));
-                usuario.setAreaAtuacao(res.getString("area_atuacao"));
-                usuario.setEmail(res.getString("email"));
-                usuario.setCpfCnpj(res.getString("cpf_cnpj"));
-                usuario.setFoto(res.getString("foto"));
+                Usuario usuario = getUsuario(res);
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
@@ -146,6 +133,18 @@ public class UsuarioRepository {
             }
         }
         return usuarios;
+    }
+
+    public Usuario getUsuario(ResultSet res) throws SQLException {
+        Usuario usuario = new Usuario();
+        usuario.setIdUsuario(res.getInt("id_usuario"));
+        usuario.setNome(res.getString("nome"));
+        usuario.setTipoUsuario(TipoUsuario.ofTipo(res.getInt("tipo")));
+        usuario.setAreaAtuacao(res.getString("area_atuacao"));
+        usuario.setEmail(res.getString("email"));
+        usuario.setCpfCnpj(res.getString("cpf_cnpj"));
+        usuario.setFoto(res.getString("foto"));
+        return usuario;
     }
 
     public Usuario editar(Integer id, Usuario usuario) throws RegraDeNegocioException {

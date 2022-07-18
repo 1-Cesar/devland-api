@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,7 +121,8 @@ public class PostagemRepository {
             stmt.setString(5, postagem.getDescricao());
             stmt.setString(6, postagem.getFoto());
             stmt.setInt(7, postagem.getCurtidas());
-            stmt.setString(8, postagem.getData());
+            java.util.Date data = Date.from(postagem.getData().atZone(ZoneId.systemDefault()).toInstant());
+            stmt.setDate(8, new java.sql.Date(data.getTime()));
 
             stmt.executeUpdate();
 
@@ -257,8 +259,10 @@ public class PostagemRepository {
         postagem.setDescricao(result.getString("descricao"));
         postagem.setCurtidas(result.getInt("likes"));
         postagem.setFoto(result.getString("foto"));
-        postagem.setData(result.getString("data_postagem"));
-
+        Timestamp dataPostagem = result.getTimestamp("data_postagem");
+        if(dataPostagem != null) {
+            postagem.setData(dataPostagem.toLocalDateTime());
+        }
         return postagem;
     }
 
