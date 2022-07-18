@@ -3,7 +3,7 @@
 <img src="https://user-images.githubusercontent.com/92181625/174544191-09485209-4752-4143-b750-688e5cbabe91.png">
 
 <h2>Seja Bem Vindo</h2>
-<h1>💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨💻</h1>
+<h1>💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨💻⌨</h1>
 
 <h2> Sobre este Projeto </h2>
 <p>Este projeto foi construído com Java e Spring boot, trata-se de uma Rede Social baseada em API Rest, documentação feita com Swagger e deploy no Heroku. Esta Rede Social foi elaborada com o objetivo de fomentar o mercado de tecnologia brasileiro, permitindo que empresas e desenvolvedores de software encontrem-se.</p>
