@@ -23,6 +23,6 @@ public class ComentarioRespDTO {
     private String data;
 
     @Schema(description = "Usuário que comentou a postagem")
-    private Integer idUsuario;
+    private UsuarioDTO usuario;
 
 }

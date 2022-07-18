@@ -85,8 +85,6 @@ public class PostagemService {
 
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
 
-        strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-
         if (usuarioRepository.listarUsuario(idUsuario).isEmpty()){
             throw new RegraDeNegocioException("Usuário não encontrado");
         }
@@ -96,7 +94,7 @@ public class PostagemService {
             Postagem postagemEntity = convertToEntity(postagemCreateDTO);
             postagemEntity.setIdUsuario(idUsuario);
             postagemEntity.setCurtidas(0);
-            postagemEntity.setData(strLocalDateTime);
+            postagemEntity.setData(LocalDateTime.now());
 
             postagemRepository.post(postagemEntity);
 
