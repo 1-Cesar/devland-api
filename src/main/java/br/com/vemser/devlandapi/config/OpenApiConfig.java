@@ -2,7 +2,9 @@ package br.com.vemser.devlandapi.config;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -29,10 +31,16 @@ public class OpenApiConfig {
     public OpenAPI springShopOpenAPI() {
         String securitySchemeName = "bearerAuth";
         return new OpenAPI()
-                .info(new Info().title("DevLand API")
-                        .description("DevLand API documentação")
+                .info(new Info()
+                        .title("DevLand API  - Documentação")
+                        .description("9º Vem Ser")
                         .version("v1.0.0")
-                        .license(new License().name("Apache 2.0").url("http://springdoc.org")))
+                        .license(new License()
+                                .name("DBC Company")
+                                .url("https://www.dbccompany.com.br/"))
+                        .contact(new Contact()
+                                .name("Github da API")
+                                .url("https://github.com/alysoncampos/devland-api")))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(
                         new Components()
@@ -41,9 +49,10 @@ public class OpenApiConfig {
                                                 .name(securitySchemeName)
                                                 .type(SecurityScheme.Type.HTTP)
                                                 .scheme("bearer")
-                                                .bearerFormat("JWT")
-                                )
-                );
+                                                .bearerFormat("JWT")))
+                .externalDocs(new ExternalDocumentation()
+                        .description("Clique aqui para ver nosso Diagrama de Entidade Relacionamento")
+                        .url("https://i.imgur.com/89vxpMV.png"));
     }
-
 }
+
