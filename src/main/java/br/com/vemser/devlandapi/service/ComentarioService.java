@@ -2,7 +2,9 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.ComentarioCreateDTO;
 import br.com.vemser.devlandapi.dto.ComentarioRespDTO;
+import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.Comentario;
+import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
@@ -40,7 +42,7 @@ public class ComentarioService {
         } else {
             log.info("Adicionando comentário...");
 
-            //Usuario usuario = usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).get(0);
+            Usuario usuario = usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).get(0);
 
             String strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 
@@ -53,11 +55,11 @@ public class ComentarioService {
 
             log.info("Comentário criado...");
 
-            //ComentarioUserDTO usuarioDTO = convertToComentUsuarioDTO(usuario);
+            UsuarioDTO usuarioDTO = convertUsuarioDTO(usuario);
 
             ComentarioRespDTO comentarioDTO = convertToDTO(comentarioEntity);
 
-            //comentarioDTO.setUsuario(usuarioDTO);
+            comentarioDTO.setUsuario(usuarioDTO);
 
             return comentarioDTO;
         }
@@ -83,6 +85,10 @@ public class ComentarioService {
 
     public ComentarioRespDTO convertToDTO(Comentario comentario) {
         return objectMapper.convertValue(comentario, ComentarioRespDTO.class);
+    }
+
+    public UsuarioDTO convertUsuarioDTO(Usuario usuario) {
+        return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
 
 }
