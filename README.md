@@ -7,8 +7,8 @@
 
 <h2> Sobre este Projeto </h2>
 <p>Este projeto foi construído com Java e Spring boot, trata-se de uma Rede Social baseada em API Rest, documentação feita com Swagger e deploy no Heroku. Esta Rede Social foi elaborada com o objetivo de fomentar o mercado de tecnologia brasileiro, permitindo que empresas e desenvolvedores de software encontrem-se.</p>
-<p>Realizamos o desenvolvimento do CRUD (Create-Read-Update-Delete) de usuários, postagens, comentarios, seguidores, etc., onde informações ficam dentro de uma base de dados Oracle.  
-<p>Esta API trabalha com chaves primarias e estrangeiras, garantindo assim a integridade de toda a aplicação</p>
+<p>Realizamos o desenvolvimento do CRUD (Create-Read-Update-Delete) de usuários, postagens, comentarios, contato, etc., onde informações ficam dentro de uma base de dados Oracle.  
+<p>Esta API trabalha com chaves primarias e estrangeiras, garantindo assim a integridade de toda a aplicação.</p>
 <p>Por tratar-se de uma API Rest ela estabelece uma comunicação stateless entre cliente e servidor. Isso significa que nenhuma informação do cliente é armazenada entre solicitações GET e toda as solicitações são separadas e desconectadas.</p>
 <h2>Diagram de Entidade Relacionamento</h2>
 <img src="https://user-images.githubusercontent.com/92181625/179437925-40785f2a-71f1-438c-9796-5eba4037fc14.png">
