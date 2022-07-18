@@ -1,9 +1,13 @@
 package br.com.vemser.devlandapi.service;
 
+import br.com.vemser.devlandapi.dto.ComentarioRespDTO;
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
+import br.com.vemser.devlandapi.dto.PostagemComentDTO;
+import br.com.vemser.devlandapi.entity.Comentario;
 import br.com.vemser.devlandapi.entity.Postagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
+import br.com.vemser.devlandapi.repository.ComentarioRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,9 +31,15 @@ public class PostagemService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private ComentarioService comentarioService;
+
+    @Autowired
+    private ComentarioRepository comentarioRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
-    private LocalDateTime localDateTime;
+    private String strLocalDateTime;
 
     public List<PostagemDTO> list() throws RegraDeNegocioException {
         if (postagemRepository.list().isEmpty()){
@@ -53,9 +63,29 @@ public class PostagemService {
         }
     }
 
+    public PostagemComentDTO listById(Integer idPostagem) throws RegraDeNegocioException {
+        Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
+
+        if (postagemRecuperada == null) {
+            throw new RegraDeNegocioException("Postagem não encontrada");
+        } else {
+
+            List<Comentario> comentariosRecuperados = comentarioRepository.listByIdPostagem(idPostagem);
+
+            List<ComentarioRespDTO> comentarioRespDTO = comentariosRecuperados.stream()
+                    .map(comentario -> comentarioService.convertToDTO(comentario))
+                    .collect(Collectors.toList());
+
+            PostagemComentDTO postagemComentDTO = convertToComentDTO(postagemRecuperada);
+            postagemComentDTO.setComentarios(comentarioRespDTO);
+
+            return postagemComentDTO;
+        }
+    }
+
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
 
-        String strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+        strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
         if (usuarioRepository.listarUsuario(idUsuario).isEmpty()){
             throw new RegraDeNegocioException("Usuário não encontrado");
@@ -65,8 +95,7 @@ public class PostagemService {
 
             Postagem postagemEntity = convertToEntity(postagemCreateDTO);
             postagemEntity.setIdUsuario(idUsuario);
-            postagemEntity.setLikes(0);
-            postagemEntity.setDeslikes(0);
+            postagemEntity.setCurtidas(0);
             postagemEntity.setData(strLocalDateTime);
 
             postagemRepository.post(postagemEntity);
@@ -77,32 +106,22 @@ public class PostagemService {
         }
     }
 
-    public PostagemDTO like(Integer idPostagem) throws RegraDeNegocioException {
+    public PostagemDTO curtir(Integer idPostagem) throws RegraDeNegocioException {
 
         Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
 
-        postagemRecuperada.setLikes(postagemRecuperada.getLikes() + 1);
+        if(postagemRecuperada == null) {
+            throw new RegraDeNegocioException("Postagem não encontrada");
+        }
+        else {
 
-        String tipo = "like";
+            postagemRecuperada.setCurtidas(postagemRecuperada.getCurtidas() + 1);
 
-        postagemRepository.likeOuDeslike(postagemRecuperada, tipo);
+            postagemRepository.curtir(postagemRecuperada);
 
-        return convertToDTO(postagemRecuperada);
+            return convertToDTO(postagemRecuperada);
+        }
     }
-
-    public PostagemDTO deslike(Integer idPostagem) throws RegraDeNegocioException {
-
-        Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
-
-        postagemRecuperada.setDeslikes(postagemRecuperada.getDeslikes() + 1);
-
-        String tipo = "deslike";
-
-        postagemRepository.likeOuDeslike(postagemRecuperada, tipo);
-
-        return convertToDTO(postagemRecuperada);
-    }
-
 
     public PostagemDTO update(Integer idPostagem, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
 
@@ -114,8 +133,7 @@ public class PostagemService {
             Postagem postagemEntity = convertToEntity(postagemCreateDTO);
             postagemEntity.setIdPostagem(postagemRecuperada.getIdPostagem());
             postagemEntity.setIdUsuario(postagemRecuperada.getIdUsuario());
-            postagemEntity.setLikes(postagemRecuperada.getLikes());
-            postagemEntity.setDeslikes(postagemRecuperada.getDeslikes());
+            postagemEntity.setCurtidas(postagemRecuperada.getCurtidas());
             postagemEntity.setData(postagemRecuperada.getData());
 
             postagemRepository.update(idPostagem, postagemEntity);
@@ -151,4 +169,7 @@ public class PostagemService {
         return objectMapper.convertValue(postagem, PostagemDTO.class);
     }
 
+    public PostagemComentDTO convertToComentDTO(Postagem postagem) {
+        return objectMapper.convertValue(postagem, PostagemComentDTO.class);
+    }
 }

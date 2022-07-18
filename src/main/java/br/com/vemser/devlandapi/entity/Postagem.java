@@ -18,7 +18,6 @@ public class Postagem {
     private String titulo;
     private String descricao;
     private String foto;
-    private Integer likes;
-    private Integer deslikes;
+    private Integer curtidas;
     private String data;
 }

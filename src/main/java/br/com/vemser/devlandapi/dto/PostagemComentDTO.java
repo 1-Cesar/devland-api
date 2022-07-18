@@ -6,10 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PostagemDTO {
+public class PostagemComentDTO {
 
     @Schema(description = "Id da Postagem")
     private Integer idPostagem;
@@ -34,5 +36,8 @@ public class PostagemDTO {
 
     @Schema(description = "Id do Usuário")
     private Integer idUsuario;
+
+    @Schema(description = "Comentários da Postagem")
+    private List<ComentarioRespDTO> comentarios;
 
 }

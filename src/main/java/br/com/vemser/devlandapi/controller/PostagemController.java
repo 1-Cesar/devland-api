@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.controller;
 
+import br.com.vemser.devlandapi.dto.PostagemComentDTO;
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -50,6 +51,11 @@ public class PostagemController {
         return new ResponseEntity<>(postagemService.listByTipo(tipoPostagem), HttpStatus.OK);
     }
 
+    @GetMapping("/{idPostagem}/comentarios")
+    public ResponseEntity<PostagemComentDTO> listByIdPostagem(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
+        return new ResponseEntity<>(postagemService.listById(idPostagem), HttpStatus.OK);
+    }
+
     @Operation(summary = "Adicionar postagem", description = "Adicionará uma nova postagem ao banco de dados")
     @ApiResponses(
             value = {
@@ -64,7 +70,7 @@ public class PostagemController {
         return new ResponseEntity<>(postagemService.post(idUsuario, postagemCreateDTO), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Adicionar like à postagem", description = "Adicionará um like à postagem no banco de dados")
+    @Operation(summary = "Adicionar curtida à postagem", description = "Adicionará uma curtida à postagem no banco de dados")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Sucesso! Novo like adicionado à postagem com sucesso"),
@@ -72,22 +78,9 @@ public class PostagemController {
                     @ApiResponse(responseCode = "500", description = "Erro! Durante a execução, foi gerada uma exceção")
             }
     )
-    @PostMapping("/{idPostagem}/like")
-    public ResponseEntity<PostagemDTO> like(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.like(idPostagem), HttpStatus.OK);
-    }
-
-    @Operation(summary = "Adicionar deslike à postagem", description = "Adicionará um deslike à postagem no banco de dados")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Sucesso! Novo deslike adicionado à postagem com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Permissão negada! Você não possui permissão para utilizar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Erro! Durante a execução, foi gerada uma exceção")
-            }
-    )
-    @PostMapping("/{idPostagem}/deslike")
-    public ResponseEntity<PostagemDTO> deslike(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.deslike(idPostagem), HttpStatus.OK);
+    @PostMapping("/{idPostagem}/curtir")
+    public ResponseEntity<PostagemDTO> curtir(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
+        return new ResponseEntity<>(postagemService.curtir(idPostagem), HttpStatus.OK);
     }
 
     @Operation(summary = "Atualizar postagem", description = "Realizará a atualização da postagem no banco de dados")
