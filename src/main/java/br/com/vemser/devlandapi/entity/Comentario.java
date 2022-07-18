@@ -1,15 +1,19 @@
 package br.com.vemser.devlandapi.entity;
 
-import java.sql.Date;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Comentario {
 
     private Integer idComentario;
     private Integer idPostagem;
     private Integer idUsuario;
     private String descricao;
-    private Integer ups;
-    private Integer downs;
-    private Date data;
+    private Integer curtidas;
+    private String data;
 
 }

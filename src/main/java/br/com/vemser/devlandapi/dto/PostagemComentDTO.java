@@ -6,26 +6,38 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PostagemCreateDTO {
+public class PostagemComentDTO {
+
+    @Schema(description = "Id da Postagem")
+    private Integer idPostagem;
 
     @Schema(description = "Tipo da Postagem")
-    @NotNull
     private TipoPostagem tipoPostagem;
 
     @Schema(description = "Título da Postagem")
-    @NotBlank
     private String titulo;
 
     @Schema(description = "Descrição da Postagem")
-    @NotBlank
     private String descricao;
 
-    @Schema(description = "Descrição da Postagem")
+    @Schema(description = "Foto da Postagem")
     private String foto;
+
+    @Schema(description = "Número de Curtidas")
+    private Integer curtidas;
+
+    @Schema(description = "Data da Postagem")
+    private String data;
+
+    @Schema(description = "Id do Usuário")
+    private Integer idUsuario;
+
+    @Schema(description = "Comentários da Postagem")
+    private List<ComentarioRespDTO> comentarios;
+
 }
