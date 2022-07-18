@@ -145,7 +145,7 @@ public class PostagemRepository {
 
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE POSTAGEM SET ");
-            sql.append(" ups = ? ");
+            sql.append(" likes = ? ");
             sql.append(" WHERE id_postagem = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
