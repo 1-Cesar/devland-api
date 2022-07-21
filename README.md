@@ -14,8 +14,16 @@
 <img src="https://user-images.githubusercontent.com/92181625/179437925-40785f2a-71f1-438c-9796-5eba4037fc14.png">
 <h2>Gostaria de Falar Conosco?</h2>
 <address>
-Clique no nome dos desenvolvedores para enviar um e-mail <br><br><a href="mailto:alyson.siqueiracampos@gmail.com">Alyson</a><br><br>
-  <a href="mailto:cesar.desenvolvedor@gmail.com">Cesar</a> 
+Clique no nome dos desenvolvedores para enviar um e-mail
+<br>
+<br>
+<a href="mailto:cesar.desenvolvedor@gmail.com">Cesar</a>
+<br>
+<br>
+<a href="mailto:patricia.r.cam@gmail.com">Patricia</a> 
+<br>
+<br>
+<a href="mailto:#">Rafael</a> 
 </address>
 <h2>Clonando este Projeto</h2>
 <p>Para clonar este projeto basta digitar o seguinte comando em seu terminal git<p>
