@@ -10,16 +10,16 @@ import java.sql.SQLException;
 @Component //@Service ...
 public class ConexaoBancoDeDados {
 
-    @Value("${jdbc-string}")
+    //@Value("${jdbc-string}")
     private String jdbcString;
 
-    @Value("${jdbc-user}")
+    //@Value("${jdbc-user}")
     private String user;
 
-    @Value("${jdbc-pass}")
+    //@Value("${jdbc-pass}")
     private String pass;
 
-    @Value("${jdbc-schema}")
+    //@Value("${jdbc-schema}")
     private String schema;
 
     public Connection getConnection() throws SQLException {
