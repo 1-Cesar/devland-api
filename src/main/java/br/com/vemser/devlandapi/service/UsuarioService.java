@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.service;
 
+import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
@@ -10,6 +11,9 @@ import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.InputMismatchException;
@@ -272,4 +276,12 @@ public class UsuarioService {
         return usuarioEntity;
     }
 
+    public PageDTO<UsuarioDTO> paginacaoTipo(TipoUsuario tipoUsuario, Integer pagina, Integer quantidadeRegistros) {
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Page<UsuarioEntity> page = usuarioRepository.getUsuarioByTipo(tipoUsuario, pageable);
+        List<UsuarioDTO> enderecoDTOS = page.getContent().stream()
+                .map(this::retornarDTO)
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, enderecoDTOS);
+    }
 }

@@ -1,10 +1,13 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.UsuarioDocs;
+import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +55,11 @@ public class UsuarioController implements UsuarioDocs {
     public void delete(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
         log.info("Deletando um usuário com base em seu id");
         usuarioService.delete(id);
+    }
+
+    @Operation(summary = "filtra contatos de acordo com o seu tipo", description = "recupera contatos do banco de dados atraves de seu tipo")
+    @GetMapping("/contato-tipo")
+    public PageDTO<UsuarioDTO> getUsuarioByTipo(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) TipoUsuario tipoUsuario) {
+        return usuarioService.paginacaoTipo(tipoUsuario, pagina, quantidadeRegistros);
     }
 }
