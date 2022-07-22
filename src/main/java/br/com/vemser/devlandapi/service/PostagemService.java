@@ -1,6 +1,6 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.ComentarioRespDTO;
+import br.com.vemser.devlandapi.dto.ComentarioDTO;
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
 import br.com.vemser.devlandapi.dto.PostagemComentDTO;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,25 +62,25 @@ public class PostagemService {
         }
     }
 
-    public PostagemComentDTO listById(Integer idPostagem) throws RegraDeNegocioException {
-        Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
-
-        if (postagemRecuperada == null) {
-            throw new RegraDeNegocioException("Postagem não encontrada");
-        } else {
-
-            List<Comentario> comentariosRecuperados = comentarioRepository.listByIdPostagem(idPostagem);
-
-            List<ComentarioRespDTO> comentarioRespDTO = comentariosRecuperados.stream()
-                    .map(comentario -> comentarioService.convertToDTO(comentario))
-                    .collect(Collectors.toList());
-
-            PostagemComentDTO postagemComentDTO = convertToComentDTO(postagemRecuperada);
-            postagemComentDTO.setComentarios(comentarioRespDTO);
-
-            return postagemComentDTO;
-        }
-    }
+//    public PostagemComentDTO listById(Integer idPostagem) throws RegraDeNegocioException {
+//        Postagem postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
+//
+//        if (postagemRecuperada == null) {
+//            throw new RegraDeNegocioException("Postagem não encontrada");
+//        } else {
+//
+//            List<Comentario> comentariosRecuperados = comentarioRepository.listByIdPostagem(idPostagem);
+//
+//            List<ComentarioDTO> comentarioDTO = comentariosRecuperados.stream()
+//                    .map(comentario -> comentarioService.convertToDTO(comentario))
+//                    .collect(Collectors.toList());
+//
+//            PostagemComentDTO postagemComentDTO = convertToComentDTO(postagemRecuperada);
+//            postagemComentDTO.setComentarios(comentarioDTO);
+//
+//            return postagemComentDTO;
+//        }
+//    }
 
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
 

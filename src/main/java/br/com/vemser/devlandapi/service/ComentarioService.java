@@ -1,7 +1,7 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.ComentarioCreateDTO;
-import br.com.vemser.devlandapi.dto.ComentarioRespDTO;
+import br.com.vemser.devlandapi.dto.ComentarioDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.Comentario;
 import br.com.vemser.devlandapi.entity.Usuario;
@@ -13,9 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -33,58 +33,68 @@ public class ComentarioService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public ComentarioRespDTO post(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
-
-        if (postagemRepository.findByIdPostagem(idPostagem) == null) {
-            throw new RegraDeNegocioException("Postagem não encontrada");
-        } else if (usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).isEmpty()) {
-            throw new RegraDeNegocioException("Usuário não encontrado");
-        } else {
-            log.info("Adicionando comentário...");
-
-            Usuario usuario = usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).get(0);
-
-            String strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-
-            Comentario comentarioEntity = convertToEntity(comentarioCreateDTO);
-            comentarioEntity.setIdPostagem(idPostagem);
-            comentarioEntity.setCurtidas(0);
-            comentarioEntity.setData(strLocalDateTime);
-
-            comentarioRepository.post(comentarioEntity);
-
-            log.info("Comentário criado...");
-
-            UsuarioDTO usuarioDTO = convertUsuarioDTO(usuario);
-
-            ComentarioRespDTO comentarioDTO = convertToDTO(comentarioEntity);
-
-            comentarioDTO.setUsuario(usuarioDTO);
-
-            return comentarioDTO;
-        }
+    public List<ComentarioDTO> list() throws RegraDeNegocioException {
+        return comentarioRepository.findAll().stream()
+                .map(this::convertToDTO).toList();
     }
 
-    public void delete(Integer idComentario) throws RegraDeNegocioException {
 
-        if (comentarioRepository.findById(idComentario) != null) {
-            log.info("Deletando comentário...");
 
-            postagemRepository.delete(idComentario);
 
-            log.info("Postagem removida...");
-        }
-        else {
-            throw new RegraDeNegocioException("Comentário não encontrado");
-        }
-    }
+
+//    public ComentarioDTO post(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
+//
+//        if (postagemRepository.findByIdPostagem(idPostagem) == null) {
+//            throw new RegraDeNegocioException("Postagem não encontrada");
+//        } else if (usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).isEmpty()) {
+//            throw new RegraDeNegocioException("Usuário não encontrado");
+//        } else {
+//            log.info("Adicionando comentário...");
+//
+//            Usuario usuario = usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).get(0);
+//
+//            String strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+//
+//            Comentario comentarioEntity = convertToEntity(comentarioCreateDTO);
+//            comentarioEntity.setIdPostagem(idPostagem);
+//            comentarioEntity.setCurtidas(0);
+//            comentarioEntity.setData(strLocalDateTime);
+//
+//            comentarioRepository.post(comentarioEntity);
+//
+//            log.info("Comentário criado...");
+//
+//            UsuarioDTO usuarioDTO = convertUsuarioDTO(usuario);
+//
+//            ComentarioDTO comentarioDTO = convertToDTO(comentarioEntity);
+//
+//            comentarioDTO.setUsuario(usuarioDTO);
+//
+//            return comentarioDTO;
+//        }
+//    }
+//
+//    public void delete(Integer idComentario) throws RegraDeNegocioException {
+//
+//        if (comentarioRepository.findById(idComentario) != null) {
+//            log.info("Deletando comentário...");
+//
+//            postagemRepository.delete(idComentario);
+//
+//            log.info("Postagem removida...");
+//        }
+//        else {
+//            throw new RegraDeNegocioException("Comentário não encontrado");
+//        }
+//    }
+
 
     public Comentario convertToEntity(ComentarioCreateDTO comentarioCreateDTO) {
         return objectMapper.convertValue(comentarioCreateDTO, Comentario.class);
     }
 
-    public ComentarioRespDTO convertToDTO(Comentario comentario) {
-        return objectMapper.convertValue(comentario, ComentarioRespDTO.class);
+    public ComentarioDTO convertToDTO(Comentario comentario) {
+        return objectMapper.convertValue(comentario, ComentarioDTO.class);
     }
 
     public UsuarioDTO convertUsuarioDTO(Usuario usuario) {

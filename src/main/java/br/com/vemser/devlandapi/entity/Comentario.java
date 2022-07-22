@@ -1,22 +1,39 @@
 package br.com.vemser.devlandapi.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Entity(name = "comentario")
 public class Comentario {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comentario_seq")
+    @SequenceGenerator(name = "comentario_seq", sequenceName = "seq_comentario", allocationSize = 1)
+    @Column(name = "id_comentario")
     private Integer idComentario;
+
+    @Column(name = "id_postagem")
     private Integer idPostagem;
+
+    @Column(name = "id_usuario")
     private Integer idUsuario;
+
+    @Column(name = "descricao")
     private String descricao;
+
+    @Column(name = "ups")
     private Integer curtidas;
+
+
+    @Column(name = "data_comentario")
     private String data;
+
+
     private Usuario usuario;
 
 }

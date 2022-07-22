@@ -5,6 +5,7 @@ import br.com.vemser.devlandapi.entity.Comentario;
 import br.com.vemser.devlandapi.entity.Usuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -12,15 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ComentarioRepository {
+public interface ComentarioRepository extends JpaRepository<Comentario, Integer> {
 
-    @Autowired
-    private ConexaoBancoDeDados dbconnection;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    public Integer getProximoId(Connection connection) throws SQLException {
+/*    public Integer getProximoId(Connection connection) throws SQLException {
         Connection con = dbconnection.getConnection();
 
         String sql = " SELECT seq_comentario.nextval mysequence from DUAL ";
@@ -141,5 +137,5 @@ public class ComentarioRepository {
         comentario.setData(res.getString("data_comentario"));
 
         return comentario;
-    }
+    }*/
 }
