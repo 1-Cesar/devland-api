@@ -1,16 +1,8 @@
 package br.com.vemser.devlandapi.repository;
 
-import br.com.vemser.devlandapi.entity.Contato;
 import br.com.vemser.devlandapi.entity.ContatoEntity;
-import br.com.vemser.devlandapi.enums.TipoClassificacao;
-import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Repository
 public interface ContatoRepository extends JpaRepository<ContatoEntity, Integer> {

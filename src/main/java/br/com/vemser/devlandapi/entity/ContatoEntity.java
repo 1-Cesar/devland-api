@@ -38,8 +38,3 @@ public class ContatoEntity {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuario;
 }
-
-
-
-
-}

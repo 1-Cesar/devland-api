@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.service;
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
 import br.com.vemser.devlandapi.entity.Contato;
+import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ContatoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,21 +29,22 @@ public class ContatoService {
 
 
     //==================================================================================================================
-
     //LIST ALL
     public List<ContatoDTO> listar() throws RegraDeNegocioException {
-        if (contatoRepository.listar().size() == 0) {
+        if (contatoRepository.findAll().size() == 0) { // era .list, troquei para .findAll - precisa ver se está certo
             throw new RegraDeNegocioException("Nenhum contato encontrado");
         } else {
-            return contatoRepository.listar().stream()
+            return contatoRepository.findAll().stream() // era .list, troquei para .findAll - precisa ver se está certo
                     .map(contato -> objectMapper.convertValue(contato, ContatoDTO.class))
                     .collect(Collectors.toList());
         }
     }
 
+    //==================================================================================================================
+    //LIST BY ID
     public List<ContatoDTO> listarContato(Integer id) throws RegraDeNegocioException {
         localizarContato(id);
-        return contatoRepository.listarContato(id).stream()
+        return contatoRepository.(id).stream()
                 .filter(contato -> contato.getIdContato().equals(id))
                 .map(contato -> objectMapper.convertValue(contato, ContatoDTO.class))
                 .collect(Collectors.toList());
@@ -58,16 +60,16 @@ public class ContatoService {
 
     public ContatoCreateDTO adicionar(Integer id, ContatoCreateDTO contato) throws RegraDeNegocioException {
         usuarioService.localizarUsuario(id);
-        Contato idContato = contatoRepository.adicionar(id, objectMapper.convertValue(contato, Contato.class));
+        ContatoEntity idContato = contatoRepository.adicionar(id, objectMapper.convertValue(contato, ContatoEntity.class));
         return objectMapper.convertValue(idContato, ContatoDTO.class);
     }
 
     public ContatoDTO editar(Integer id,
                              ContatoDTO contatoDTO) throws RegraDeNegocioException {
-        Contato contatoRecuperado = localizarContato(id);
+        ContatoEntity contatoRecuperado = localizarContato(id);
         contatoDTO.setIdUsuario(contatoRecuperado.getIdUsuario());
 
-        contatoRecuperado = contatoRepository.editar(id, objectMapper.convertValue(contatoDTO, Contato.class));
+        contatoRecuperado = contatoRepository.editar(id, objectMapper.convertValue(contatoDTO, ContatoEntity.class));
         contatoDTO =  objectMapper.convertValue(contatoRecuperado, ContatoDTO.class);
         return contatoDTO;
     }
@@ -77,7 +79,7 @@ public class ContatoService {
         contatoRepository.remover(id);
     }
 
-    public Contato localizarContato (Integer idContato) throws RegraDeNegocioException {
+    public ContatoEntity localizarContato (Integer idContato) throws RegraDeNegocioException {
         Contato contatoRecuperado = contatoRepository.listar().stream()
                 .filter(contato -> contato.getIdContato().equals(idContato))
                 .findFirst()
