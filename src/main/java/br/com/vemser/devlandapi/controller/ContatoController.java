@@ -23,6 +23,7 @@ public class ContatoController implements ContatoDocs {
     @Autowired
     private ContatoService contatoService;
 
+    @GetMapping
     public ResponseEntity<List<ContatoDTO>> listar() throws RegraDeNegocioException {
         log.info("Listando todos os contatos");
         return ResponseEntity.ok(contatoService.listar());
@@ -30,7 +31,7 @@ public class ContatoController implements ContatoDocs {
 
     public ResponseEntity<List<ContatoDTO>> listarContato(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {
         log.info("Recuperando um contato através de seu id");
-        return ResponseEntity.ok(contatoService.listarContato(id));
+        return ResponseEntity.ok(contatoService.listarContatoPorId(id));
     }
 
 

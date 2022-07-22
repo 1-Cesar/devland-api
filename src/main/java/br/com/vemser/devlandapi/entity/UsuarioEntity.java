@@ -1,9 +1,11 @@
 package br.com.vemser.devlandapi.entity;
 
 import br.com.vemser.devlandapi.enums.TipoUsuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,4 +29,12 @@ public class UsuarioEntity {
     private String foto;
 
     private TipoUsuario tipoUsuario;
+
+    //RELACIONAMENTO um para muitos - Usuarios - Contatos
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "usuario",         //Indica o lado inverso do relacionamento
+            cascade = CascadeType.ALL,   //Faz a cascata para deletar
+            orphanRemoval = true)        //Deleta os órfãos
+    private Set<ContatoEntity> contatos;
 }
