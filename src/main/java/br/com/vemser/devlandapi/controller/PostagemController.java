@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.controller;
 
+import br.com.vemser.devlandapi.documentations.PostagemDocs;
 import br.com.vemser.devlandapi.dto.PostagemComentDTO;
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
@@ -20,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/postagem")
 @Validated
-public class PostagemController {
+public class PostagemController implements PostagemDocs {
 
     @Autowired
     private PostagemService postagemService;
@@ -60,14 +61,6 @@ public class PostagemController {
         return new ResponseEntity<>(postagemService.update(idPostagem, postagemCreateDTO), HttpStatus.OK);
     }
 
-    @Operation(summary = "Deletar postagem", description = "Deletará a postagem do banco de dados com base na sua identificação")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Sucesso! A postagem foi removida com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Permissão negada! Você não possui permissão para utilizar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Erro! Durante a execução, foi gerada uma exceção")
-            }
-    )
     @DeleteMapping("/{idPostagem}")
     public ResponseEntity<Void> delete(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
         postagemService.delete(idPostagem);
