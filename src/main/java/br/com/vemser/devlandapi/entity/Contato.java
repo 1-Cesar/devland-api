@@ -19,4 +19,7 @@ public class Contato {
     private String descricao;
 
     private TipoClassificacao tipo;
+
+    //Pat
+    //teste2
 }
