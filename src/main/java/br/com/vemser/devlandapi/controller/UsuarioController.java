@@ -5,7 +5,6 @@ import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.UsuarioService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
