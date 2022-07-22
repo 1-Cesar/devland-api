@@ -21,4 +21,5 @@ public class Contato {
     private TipoClassificacao tipo;
 
     //Pat
+    //teste2
 }
