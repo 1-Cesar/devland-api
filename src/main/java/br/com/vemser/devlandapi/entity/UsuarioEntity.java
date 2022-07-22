@@ -1,10 +1,14 @@
 package br.com.vemser.devlandapi.entity;
 
 import br.com.vemser.devlandapi.enums.TipoUsuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity(name = "usuario")
@@ -27,4 +31,11 @@ public class UsuarioEntity {
     private String foto;
 
     private TipoUsuario tipoUsuario;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "usuario_x_endereco",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_endereco"))
+    private List<EnderecoEntity> enderecos;
 }
