@@ -1,19 +1,11 @@
 package br.com.vemser.devlandapi.repository;
 
-import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
-import br.com.vemser.devlandapi.entity.Comentario;
-import br.com.vemser.devlandapi.entity.Usuario;
-import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.vemser.devlandapi.entity.ComentarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 @Repository
-public interface ComentarioRepository extends JpaRepository<Comentario, Integer> {
+public interface ComentarioRepository extends JpaRepository<ComentarioEntity, Integer> {
 
 
 /*    public Integer getProximoId(Connection connection) throws SQLException {
@@ -30,8 +22,8 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Integer>
         return null;
     }
 
-    public List<Comentario> listByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
-        List<Comentario> comentarios = new ArrayList<>();
+    public List<ComentarioEntity> listByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
+        List<ComentarioEntity> comentarios = new ArrayList<>();
         Connection con = null;
         try {
             con = dbconnection.getConnection();
@@ -47,7 +39,7 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Integer>
             ResultSet res = stmt.executeQuery();
 
             while (res.next()) {
-                Comentario comentario = getComentarioFromResultSet(res);
+                ComentarioEntity comentario = getComentarioFromResultSet(res);
                 Usuario usuario = usuarioRepository.getUsuario(res);
                 comentario.setUsuario(usuario);
                 comentarios.add(comentario);
@@ -66,7 +58,7 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Integer>
         return comentarios;
     }
 
-    public Comentario post(Comentario comentario) throws RegraDeNegocioException {
+    public ComentarioEntity post(ComentarioEntity comentario) throws RegraDeNegocioException {
         Connection con = null;
 
         try {
@@ -105,7 +97,7 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Integer>
         }
     }
 
-    public Comentario findById(Integer idComentario) throws RegraDeNegocioException {
+    public ComentarioEntity findById(Integer idComentario) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = dbconnection.getConnection();
@@ -126,8 +118,8 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Integer>
         return null;
     }
 
-    private Comentario getComentarioFromResultSet(ResultSet res) throws SQLException {
-        Comentario comentario = new Comentario();
+    private ComentarioEntity getComentarioFromResultSet(ResultSet res) throws SQLException {
+        ComentarioEntity comentario = new ComentarioEntity();
 
         comentario.setIdComentario(res.getInt("id_comentario"));
         comentario.setIdUsuario(res.getInt("id_usuario"));

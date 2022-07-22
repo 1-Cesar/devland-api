@@ -3,14 +3,13 @@ package br.com.vemser.devlandapi.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "comentario")
-public class Comentario {
+public class ComentarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comentario_seq")
     @SequenceGenerator(name = "comentario_seq", sequenceName = "seq_comentario", allocationSize = 1)
@@ -34,6 +33,6 @@ public class Comentario {
     private String data;
 
 
-    private Usuario usuario;
+    private UsuarioEntity usuarioEntity;
 
 }

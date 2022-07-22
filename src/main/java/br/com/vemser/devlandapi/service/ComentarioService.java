@@ -3,17 +3,14 @@ package br.com.vemser.devlandapi.service;
 import br.com.vemser.devlandapi.dto.ComentarioCreateDTO;
 import br.com.vemser.devlandapi.dto.ComentarioDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
-import br.com.vemser.devlandapi.entity.Comentario;
-import br.com.vemser.devlandapi.entity.Usuario;
+import br.com.vemser.devlandapi.entity.ComentarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
-import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -24,8 +21,8 @@ public class ComentarioService {
     @Autowired
     private PostagemRepository postagemRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+//    @Autowired
+//    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private ComentarioRepository comentarioRepository;
@@ -55,7 +52,7 @@ public class ComentarioService {
 //
 //            String strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 //
-//            Comentario comentarioEntity = convertToEntity(comentarioCreateDTO);
+//            ComentarioEntity comentarioEntity = convertToEntity(comentarioCreateDTO);
 //            comentarioEntity.setIdPostagem(idPostagem);
 //            comentarioEntity.setCurtidas(0);
 //            comentarioEntity.setData(strLocalDateTime);
@@ -89,12 +86,12 @@ public class ComentarioService {
 //    }
 
 
-    public Comentario convertToEntity(ComentarioCreateDTO comentarioCreateDTO) {
-        return objectMapper.convertValue(comentarioCreateDTO, Comentario.class);
+    public ComentarioEntity convertToEntity(ComentarioCreateDTO comentarioCreateDTO) {
+        return objectMapper.convertValue(comentarioCreateDTO, ComentarioEntity.class);
     }
 
-    public ComentarioDTO convertToDTO(Comentario comentario) {
-        return objectMapper.convertValue(comentario, ComentarioDTO.class);
+    public ComentarioDTO convertToDTO(ComentarioEntity comentarioEntity) {
+        return objectMapper.convertValue(comentarioEntity, ComentarioDTO.class);
     }
 
     public UsuarioDTO convertUsuarioDTO(Usuario usuario) {

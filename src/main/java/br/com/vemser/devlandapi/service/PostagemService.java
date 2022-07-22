@@ -1,10 +1,8 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.ComentarioDTO;
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
 import br.com.vemser.devlandapi.dto.PostagemComentDTO;
-import br.com.vemser.devlandapi.entity.Comentario;
 import br.com.vemser.devlandapi.entity.Postagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
@@ -26,8 +24,7 @@ public class PostagemService {
     @Autowired
     private PostagemRepository postagemRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+//    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private ComentarioService comentarioService;
@@ -69,7 +66,7 @@ public class PostagemService {
 //            throw new RegraDeNegocioException("Postagem não encontrada");
 //        } else {
 //
-//            List<Comentario> comentariosRecuperados = comentarioRepository.listByIdPostagem(idPostagem);
+//            List<ComentarioEntity> comentariosRecuperados = comentarioRepository.listByIdPostagem(idPostagem);
 //
 //            List<ComentarioDTO> comentarioDTO = comentariosRecuperados.stream()
 //                    .map(comentario -> comentarioService.convertToDTO(comentario))

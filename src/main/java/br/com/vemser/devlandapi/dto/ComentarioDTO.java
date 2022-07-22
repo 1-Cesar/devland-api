@@ -10,7 +10,7 @@ public class ComentarioDTO extends ComentarioCreateDTO{
     @Schema(description = "Id do Comentário")
     private Integer idComentario;
 
-    @Schema(description = "Número de Curtidas do Comentario")
+    @Schema(description = "Número de Curtidas do ComentarioEntity")
     private Integer curtidas;
 
     @Schema(description = "Data do comentario")
