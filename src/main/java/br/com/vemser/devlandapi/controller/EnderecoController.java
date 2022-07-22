@@ -4,14 +4,17 @@ import br.com.vemser.devlandapi.documentations.EnderecoDocs;
 import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
 
+import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.entity.EnderecoEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +36,6 @@ public class EnderecoController implements EnderecoDocs {
         log.info("Listando todos os endereços");
         return ResponseEntity.ok(enderecoService.listar());
     }
-
     @GetMapping("/{idEndereco}")
     public ResponseEntity<List<EnderecoDTO>> listarEndereco(@PathVariable("idEndereco") Integer id) throws RegraDeNegocioException {
         log.info("Recuperando um endereço com base em seu id");
@@ -66,4 +68,8 @@ public class EnderecoController implements EnderecoDocs {
         enderecoService.delete(id);
     }
 
+    @GetMapping("/relatorio-paginado-pais")
+    public PageDTO<EnderecoDTO> getRelatorioPaginadoPais(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String pais){
+        return enderecoService.paginacaoPais(pais, pagina, quantidadeRegistros);
+    }
 }
