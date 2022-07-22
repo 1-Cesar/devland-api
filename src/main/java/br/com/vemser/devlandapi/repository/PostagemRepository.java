@@ -1,6 +1,5 @@
 package br.com.vemser.devlandapi.repository;
 
-import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
 import br.com.vemser.devlandapi.entity.Postagem;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;

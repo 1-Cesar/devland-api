@@ -1,6 +1,5 @@
 package br.com.vemser.devlandapi.repository;
 
-import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
 import br.com.vemser.devlandapi.entity.Endereco;
 import br.com.vemser.devlandapi.enums.TipoClassificacao;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;

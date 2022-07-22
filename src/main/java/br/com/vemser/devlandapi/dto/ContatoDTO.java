@@ -6,10 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ContatoDTO extends ContatoCreateDTO {
 
-    @Schema(description = "id do contato do desenvolvedor ou empresa", example = "1")
+    @Schema(description = "Id do contato do desenvolvedor ou empresa", example = "1")
     private Integer idContato;
 }

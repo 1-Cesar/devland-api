@@ -26,6 +26,10 @@ public class ContatoService {
     @Autowired
     private UsuarioService usuarioService;
 
+
+    //==================================================================================================================
+
+    //LIST ALL
     public List<ContatoDTO> listar() throws RegraDeNegocioException {
         if (contatoRepository.listar().size() == 0) {
             throw new RegraDeNegocioException("Nenhum contato encontrado");
