@@ -26,18 +26,18 @@ public class PostagemController implements PostagemDocs {
     @Autowired
     private PostagemService postagemService;
 
-
+//TODO -- PAGINAÇÃO
     @GetMapping
     public ResponseEntity<List<PostagemDTO>> list() throws RegraDeNegocioException {
         return new ResponseEntity<>(postagemService.list(), HttpStatus.OK);
     }
 
-
+//TODO -- PAGINAÇÃO
     @GetMapping("/{tipoPostagem}/tipo")
     public ResponseEntity<List<PostagemDTO>> litByTipo(@PathVariable("tipoPostagem") Integer tipoPostagem) throws RegraDeNegocioException {
         return new ResponseEntity<>(postagemService.listByTipo(tipoPostagem), HttpStatus.OK);
     }
-
+//TODO -- PAGINAÇÃO
     @GetMapping("/{idPostagem}/comentarios")
     public ResponseEntity<PostagemComentDTO> listByIdPostagem(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
         return new ResponseEntity<>(postagemService.listById(idPostagem), HttpStatus.OK);

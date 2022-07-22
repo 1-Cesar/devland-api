@@ -15,6 +15,10 @@ import javax.validation.Valid;
 import java.util.List;
 
 public interface PostagemDocs {
+
+    @PostagemNotas
+    @Operation(summary = "Listar todas as postagens")
+    public ResponseEntity<List<PostagemDTO>> list() throws RegraDeNegocioException;
     @PostagemNotas
     @Operation(summary = "Listar postagens por tipo", description = "Realizará a listagem de todas as postagens do banco de dados pelo tipo")
     public ResponseEntity<List<PostagemDTO>> litByTipo(@PathVariable("tipoPostagem") Integer tipoPostagem) throws RegraDeNegocioException;

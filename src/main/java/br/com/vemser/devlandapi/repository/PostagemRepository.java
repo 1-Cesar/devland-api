@@ -34,6 +34,16 @@ public class PostagemRepository {
         }
     }
 
+    private void closeConnection(Connection con) {
+        try {
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Postagem> list() throws RegraDeNegocioException {
         List<Postagem> postagens = new ArrayList<>();
         Connection con = null;
@@ -54,15 +64,10 @@ public class PostagemRepository {
         } catch (SQLException e) {
             throw new RegraDeNegocioException(e.getMessage());
         } finally {
-            try {
-                if(con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeConnection(con);
         }
     }
+
 
     public List<Postagem> listByTipo(Integer tipoPostagem) throws RegraDeNegocioException {
         List<Postagem> postagens = new ArrayList<>();
@@ -81,7 +86,7 @@ public class PostagemRepository {
 
             ResultSet res = stmt.executeQuery();
 
-            while(res.next()) {
+            while (res.next()) {
                 Postagem postagem = getPostagemFromResultSet(res);
                 postagens.add(postagem);
             }
@@ -89,13 +94,7 @@ public class PostagemRepository {
         } catch (SQLException e) {
             throw new RegraDeNegocioException(e.getMessage());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeConnection(con);
         }
     }
 
@@ -130,13 +129,7 @@ public class PostagemRepository {
         } catch (SQLException e) {
             throw new RegraDeNegocioException(e.getMessage());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeConnection(con);
         }
     }
 
@@ -160,13 +153,7 @@ public class PostagemRepository {
         } catch (SQLException e) {
             throw new RegraDeNegocioException(e.getMessage());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeConnection(con);
         }
     }
 
@@ -196,13 +183,7 @@ public class PostagemRepository {
         } catch (SQLException e) {
             throw new RegraDeNegocioException(e.getMessage());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeConnection(con);
         }
     }
 
@@ -219,13 +200,7 @@ public class PostagemRepository {
         } catch (SQLException e) {
             throw new RegraDeNegocioException(e.getMessage());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeConnection(con);
         }
     }
 
@@ -260,7 +235,7 @@ public class PostagemRepository {
         postagem.setCurtidas(result.getInt("likes"));
         postagem.setFoto(result.getString("foto"));
         Timestamp dataPostagem = result.getTimestamp("data_postagem");
-        if(dataPostagem != null) {
+        if (dataPostagem != null) {
             postagem.setData(dataPostagem.toLocalDateTime());
         }
         return postagem;
