@@ -29,35 +29,37 @@ public class ContatoController implements ContatoDocs {
         return ResponseEntity.ok(contatoService.listar());
     }
 
-    @GetMapping
+    @GetMapping("/{idContato}") //voloquei aqui
     public ResponseEntity<List<ContatoDTO>> listarContato(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {
         log.info("Recuperando um contato através de seu id");
         return ResponseEntity.ok(contatoService.listarContatoPorId(id));
     }
 
-    @GetMapping
+    @GetMapping("/{idUsuario}")
     public ResponseEntity<List<ContatoDTO>> listarContatoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
         log.info("Recuperando um contato com base no id do usuário");
         return ResponseEntity.ok(contatoService.listarContatoUsuario(id));
     }
 
-    @PostMapping
-    public ResponseEntity<ContatoCreateDTO> adicionar(@PathVariable("idPessoa") Integer id,
+    @PostMapping("/{idUsuario}")
+    public ResponseEntity<ContatoCreateDTO> adicionar(@PathVariable("idUsuario") Integer id,
                                                       @Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
         log.info("Criando um contato com base no id do usuário");
         return ResponseEntity.ok(contatoService.adicionar(id, contato));
     }
 
-    @PutMapping
+    @PutMapping("/{idContato}")
     public ResponseEntity<ContatoDTO> editar(@PathVariable("idContato") Integer id,
                                              @Valid @RequestBody ContatoDTO contatoAtualizar) throws RegraDeNegocioException {
         log.info("Alterando um contato com base em seu id");
         return ResponseEntity.ok(contatoService.editar(id, contatoAtualizar));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{idContato}")
     public void remover(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {
         log.info("Removendo um contato com base em seu id");
         contatoService.remover(id);
     }
+
+
 }

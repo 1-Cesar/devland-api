@@ -1,10 +1,7 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
-import br.com.vemser.devlandapi.dto.ContatoDTO;
 import br.com.vemser.devlandapi.dto.SeguidorCreateDTO;
 import br.com.vemser.devlandapi.dto.SeguidorDTO;
-import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.SeguidorEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -54,17 +51,14 @@ public class SeguidorService {
         if (!seguidorCreateDTO.getIdSeguidor().equals(id)) {
             localizarUsuario(seguidorCreateDTO.getIdSeguidor());
 
+           // SeguidorEntity seguidorJaSegue = verificaSeguidor(id); todo verificar regras de negócio
 
-            SeguidorEntity seguidorJaSegue = verificaSeguidor(id);
-
-            if ( usuarioLocalizado.getIdUsuario() .equals(seguidorJaSegue.getIdSeguidor())) {
-                throw new RegraDeNegocioException("Este seguidor já está seguindo");
-            }
-
-
-           // if (verificaSeguidor(seguidorCreateDTO.getIdSeguidor(), id))   {
+            //if ( usuarioLocalizado.getIdUsuario() .equals(seguidorJaSegue.getIdSeguidor())) {
             //    throw new RegraDeNegocioException("Este seguidor já está seguindo");
-           // }
+            //}
+            // if (verificaSeguidor(seguidorCreateDTO.getIdSeguidor(), id))   {
+            //    throw new RegraDeNegocioException("Este seguidor já está seguindo");
+            // }
 
         } else {
             throw new RegraDeNegocioException("Você não pode seguir você mesmo");
@@ -74,7 +68,7 @@ public class SeguidorService {
         //return objectMapper.convertValue(seguidor, SeguidorCreateDTO.class);
 
         SeguidorEntity seguidorEntity = retornarSeguidorEntity(seguidorCreateDTO);
-
+        seguidorEntity.setUsuario(usuarioLocalizado);
         SeguidorEntity seguidorCriado = seguidorRepository.save(seguidorEntity);
 
         return retornarSeguidorDTO(seguidorCriado);
@@ -97,9 +91,9 @@ public class SeguidorService {
 
     public SeguidorEntity seguidorQueSeraDeletado (Integer id, Integer idSeguidor) throws RegraDeNegocioException {
         SeguidorEntity seguidorRecuperado = seguidorRepository.findAll().stream()
-                .filter(seguidor -> seguidor.getIdUsuario().equals(id) && seguidor.getId().equals(idSeguidor))
+                .filter(seguidor -> seguidor.getId().equals(id) && seguidor.getIdSeguidor().equals(idSeguidor))
                 .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Seguidor não encontrado"));
+                .orElseThrow(() -> new RegraDeNegocioException("Seguidor não encontrado para deixar de seguir"));
 
         return seguidorRecuperado;
 
@@ -120,7 +114,7 @@ public class SeguidorService {
         SeguidorEntity seguidorRecuperado = seguidorRepository.findAll().stream()
                 .filter(seguidor -> seguidor.getId().equals(idUsuario))
                 .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+                .orElseThrow(() -> new RegraDeNegocioException("Seguidor não encontrado"));
         return seguidorRecuperado;
     }
 
@@ -129,6 +123,7 @@ public class SeguidorService {
     public SeguidorEntity retornarSeguidorEntity(SeguidorCreateDTO seguidorCreateDTO) {
         return objectMapper.convertValue(seguidorCreateDTO, SeguidorEntity.class);
     }
+
 
     //ENTITY PARA DTO
     public SeguidorDTO retornarSeguidorDTO(SeguidorEntity seguidor) {

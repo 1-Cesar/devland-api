@@ -88,8 +88,8 @@ public class ContatoService {
                              ContatoDTO contatoDTO) throws RegraDeNegocioException {
         ContatoEntity contatoRecuperado = localizarContato(id);
 
-        UsuarioEntity usuarioEntity = contatoRecuperado.getUsuario();
-        usuarioEntity.setContatos(null);
+        //UsuarioEntity usuarioEntity = contatoRecuperado.getUsuario();
+        //usuarioEntity.setContatos(null);
 
 
         UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoDTO.getIdUsuario());
@@ -98,17 +98,16 @@ public class ContatoService {
         contatoRecuperado.setNumero(contatoDTO.getNumero());
         contatoRecuperado.setDescricao(contatoDTO.getDescricao());
         contatoRecuperado.setUsuario(usuarioRecuperado);
-        usuarioRecuperado.setContatos(Set.of(contatoRecuperado));
-        usuarioService.adicionar(retornarUsuarioDTO(usuarioRecuperado));
+       // usuarioRecuperado.setContatos(Set.of(contatoRecuperado));
+        //usuarioService.adicionar(retornarUsuarioDTO(usuarioRecuperado));
 
 
-        if (! usuarioRecuperado.getIdUsuario() .equals(usuarioEntity.getIdUsuario())) {
-            usuarioService.adicionar(retornarUsuarioDTO(usuarioEntity));
-        }
+       // if (! usuarioRecuperado.getIdUsuario() .equals(usuarioEntity.getIdUsuario())) {
+       //     usuarioService.adicionar(retornarUsuarioDTO(usuarioEntity));
+       // }
 
 
         return retornarContatoDTO(contatoRepository.save(contatoRecuperado));
-
 
     }
 
