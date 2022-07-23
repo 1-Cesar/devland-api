@@ -43,25 +43,27 @@ public class ContatoService {
     }
 
     //==================================================================================================================
-    //LIST CONTATO todo revisar
+    //LIST CONTATO
     public List<ContatoDTO> listarContatoPorId(Integer id) throws RegraDeNegocioException {
         localizarContato(id);
-        return contatoRepository.findById(id).stream()
+        return contatoRepository.findAll().stream()
                 .filter(contato -> contato.getIdContato().equals(id))
                 .map(this::retornarContatoDTO)//converte dto através de método
                 .collect(Collectors.toList());
     }
 
     //==================================================================================================================
-    //LIST CONTATO USUÁRIO todo revisar
+    //LIST CONTATO USUÁRIO
 
     public List<ContatoDTO> listarContatoUsuario(Integer id) throws RegraDeNegocioException {
         usuarioService.localizarUsuario(id);
-        return contatoRepository.findById(id).stream()
+        return contatoRepository.findAll().stream()
                 .filter(contato -> contato.getIdUsuario().equals(id))
                 .map(this::retornarContatoDTO)
                 .collect(Collectors.toList());
     }
+
+
 
     //==================================================================================================================
     //ADICIONAR
