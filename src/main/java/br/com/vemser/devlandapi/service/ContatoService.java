@@ -2,9 +2,7 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
-import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
-import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -69,13 +67,13 @@ public class ContatoService {
     //ADICIONAR
 
     public ContatoCreateDTO adicionar(Integer id, ContatoCreateDTO contatoDTO) throws RegraDeNegocioException {
-        //recupera usuãrio
+        //recupera usuário
         UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(id);
 
         //converte
         ContatoEntity contatoEntity = retornarContatoEntity(contatoDTO);
 
-        //seta no usuario
+        //seta no usuário
         contatoEntity.setUsuario(usuarioRecuperado);
 
         ContatoEntity contatoCriado = contatoRepository.save(contatoEntity);
