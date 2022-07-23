@@ -4,7 +4,7 @@ import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.Endereco;
-import br.com.vemser.devlandapi.entity.Usuario;
+import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.EnderecoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -75,10 +75,9 @@ public class EnderecoService {
     }
 
     public Endereco localizarEndereco (Integer idEndereco) throws RegraDeNegocioException {
-        Endereco enderecoRecuperado = enderecoRepository.listar().stream()
+        return enderecoRepository.listar().stream()
                 .filter(endereco -> endereco.getIdEndereco().equals(idEndereco))
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Endereco não encontrado"));
-        return enderecoRecuperado;
     }
 }

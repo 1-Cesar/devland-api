@@ -4,7 +4,6 @@ import br.com.vemser.devlandapi.enums.TipoPostagem;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "postagem")
-public class Postagem {
+public class PostagemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "postagem_seq")
     @SequenceGenerator(name = "postagem_seq", sequenceName = "seq_postagem", allocationSize = 1)

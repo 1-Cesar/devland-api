@@ -1,7 +1,7 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
-import br.com.vemser.devlandapi.entity.Usuario;
+import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -29,7 +29,7 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
 
-    public void sendEmailUsuario(Usuario usuario, String tipo) {
+    public void sendEmailUsuario(UsuarioEntity usuario, String tipo) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
@@ -51,7 +51,7 @@ public class EmailService {
         }
     }
 
-    public String getContentFromTemplatePessoa(Usuario usuario, String tipo) throws IOException, TemplateException {
+    public String getContentFromTemplatePessoa(UsuarioEntity usuario, String tipo) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", usuario.getNome());
         dados.put("id", usuario.getIdUsuario());

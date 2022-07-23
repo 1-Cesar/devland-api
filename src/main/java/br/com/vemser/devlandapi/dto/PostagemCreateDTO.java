@@ -12,18 +12,18 @@ import javax.validation.constraints.NotNull;
 @Data
 public class PostagemCreateDTO {
 
-    @Schema(description = "Tipo da Postagem")
+    @Schema(description = "Tipo da PostagemEntity")
     @NotNull
     private TipoPostagem tipoPostagem;
 
-    @Schema(description = "Título da Postagem")
+    @Schema(description = "Título da PostagemEntity")
     @NotBlank
     private String titulo;
 
-    @Schema(description = "Descrição da Postagem")
+    @Schema(description = "Descrição da PostagemEntity")
     @NotBlank
     private String descricao;
 
-    @Schema(description = "Descrição da Postagem")
+    @Schema(description = "Descrição da PostagemEntity")
     private String foto;
 }

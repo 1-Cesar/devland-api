@@ -4,9 +4,11 @@ import br.com.vemser.devlandapi.dto.ComentarioCreateDTO;
 import br.com.vemser.devlandapi.dto.ComentarioDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.ComentarioEntity;
+import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
+import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class ComentarioService {
     private PostagemRepository postagemRepository;
 
 //    @Autowired
-//    private UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private ComentarioRepository comentarioRepository;
@@ -35,14 +37,10 @@ public class ComentarioService {
                 .map(this::convertToDTO).toList();
     }
 
-
-
-
-
 //    public ComentarioDTO post(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
 //
 //        if (postagemRepository.findByIdPostagem(idPostagem) == null) {
-//            throw new RegraDeNegocioException("Postagem não encontrada");
+//            throw new RegraDeNegocioException("PostagemEntity não encontrada");
 //        } else if (usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).isEmpty()) {
 //            throw new RegraDeNegocioException("Usuário não encontrado");
 //        } else {
@@ -78,7 +76,7 @@ public class ComentarioService {
 //
 //            postagemRepository.delete(idComentario);
 //
-//            log.info("Postagem removida...");
+//            log.info("PostagemEntity removida...");
 //        }
 //        else {
 //            throw new RegraDeNegocioException("Comentário não encontrado");
@@ -94,7 +92,7 @@ public class ComentarioService {
         return objectMapper.convertValue(comentarioEntity, ComentarioDTO.class);
     }
 
-    public UsuarioDTO convertUsuarioDTO(Usuario usuario) {
+    public UsuarioDTO convertUsuarioDTO(UsuarioEntity usuario) {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
 
