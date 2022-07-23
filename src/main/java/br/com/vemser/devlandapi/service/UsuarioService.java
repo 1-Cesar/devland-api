@@ -68,8 +68,8 @@ public class UsuarioService {
                 usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
                 usuarioRepository.save(usuarioEntity);
 
-                String tipoMensagem = TipoMensagem.CREATE.getTipo();
-                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
+//                String tipoMensagem = TipoMensagem.CREATE.getTipo();
+//                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
 
                 return retornarDTO(usuarioEntity);
             } else {

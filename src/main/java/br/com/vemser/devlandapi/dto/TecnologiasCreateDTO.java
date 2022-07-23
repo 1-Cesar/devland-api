@@ -20,7 +20,7 @@ public class TecnologiasCreateDTO {
     @Size(min = 1, max = 100)
     private String nomeTecnologia;
 
-    private Integer idPessoa;
+    //private Integer idTecnologia;
 
     //private UsuarioEntity usuario;
 

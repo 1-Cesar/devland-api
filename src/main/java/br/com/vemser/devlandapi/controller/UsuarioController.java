@@ -47,7 +47,7 @@ public class UsuarioController implements UsuarioDocs {
 
     @PutMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id,
-                                            @Valid @RequestBody UsuarioDTO usuarioAtualizar) throws RegraDeNegocioException {
+                                            @Valid @RequestBody UsuarioCreateDTO usuarioAtualizar) throws RegraDeNegocioException {
         log.info("Alterando um usuário com base em seu id");
         return ResponseEntity.ok(usuarioService.editar(id, usuarioAtualizar));
     }

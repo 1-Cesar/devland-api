@@ -23,11 +23,11 @@ public class TecnologiasController {
         return ResponseEntity.ok(tecnologiasService.create(idUsuario, tecnologiasCreateDTO));
     }
 
-    @PutMapping("/{idUsuario}")
+    /*@PutMapping("/{idUsuario}")
     public ResponseEntity<TecnologiasDTO> editar(@PathVariable ("idUsuario") Integer idUsuario,
                                                     @Valid @RequestBody TecnologiasCreateDTO tecnologiasCreateDTO) throws RegraDeNegocioException {
         return ResponseEntity.ok(tecnologiasService.editar(idUsuario, tecnologiasCreateDTO));
-    }
+    }*/
 
     @DeleteMapping("/{nomeTecnologia}")
     public void delete(@PathVariable("nomeTecnologia") String nomeTecnologia) throws RegraDeNegocioException {
