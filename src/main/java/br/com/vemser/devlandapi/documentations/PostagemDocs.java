@@ -30,7 +30,7 @@ public interface PostagemDocs {
 
     @PostagemNotas
     @Operation(summary = "Adicionar postagem", description = "Adicionará uma nova postagem ao banco de dados")
-    public ResponseEntity<PostagemDTO> post(@PathVariable("idUsuario") Integer idUsuario, @RequestBody @Valid PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException;
+    public ResponseEntity<PostagemDTO> criar(@PathVariable("idUsuario") Integer idUsuario, @RequestBody @Valid PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException;
 
 
     @PostagemNotas

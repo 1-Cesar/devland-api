@@ -10,14 +10,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.util.List;
 
 public interface ComentarioDocs {
     @ComentarioNotas
-    @Operation(summary = "Adicionar comentário", description = "Adicionará um novo comentário à banco de dados")
-    public ResponseEntity<ComentarioDTO> post(@PathVariable("idPostagem") Integer idPostagem, @RequestBody @Valid ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException;
+    @Operation(summary = "Listar todos os comentários", description = "Listar todos os comentários sem filtro.")
+    public List<ComentarioDTO> list() throws RegraDeNegocioException;
 
     @ComentarioNotas
-    @Operation(summary = "Deletar comentário", description = "Deletará o comentário do banco de dados com base na sua identificação")
-    public ResponseEntity<Void> delete(@PathVariable("idComentario") Integer idComenatario) throws RegraDeNegocioException;
+    @Operation(summary = "Adicionar um comentário", description = "Adicionará um novo comentário ao banco de dados.")
+    public ResponseEntity<ComentarioDTO> create(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException;
+
+    @ComentarioNotas
+    @Operation(summary = "Editar um comentário", description = "Edita um comentário especificado por seu id.")
+    public ResponseEntity<ComentarioDTO> update(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException;
+
+    @ComentarioNotas
+    @Operation(summary = "Deletar comentário", description = "Deletará do banco de dados um comentário especificado pelo id.")
+    public ResponseEntity<Void> delete(Integer idComenatario) throws RegraDeNegocioException;
 
 }

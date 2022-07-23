@@ -38,23 +38,28 @@ public class PostagemController implements PostagemDocs {
         return new ResponseEntity<>(postagemService.findByIdPostagem(idPostagem),HttpStatus.OK);
     }
 
+    // fazer igual a USUARIO post - inserir exemple
     @Override
-    public ResponseEntity<PostagemDTO> post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
+    @PostMapping("/criar/{idUsuario}")
+    public ResponseEntity<PostagemDTO> criar(@PathVariable("idUsuario") Integer idUsuario, @RequestBody PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(postagemService.post(idUsuario,postagemCreateDTO),HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<PostagemDTO> curtir(Integer idPostagem) throws RegraDeNegocioException {
+    @PutMapping("/curtir/{idPostagem}")
+    public ResponseEntity<PostagemDTO> curtir(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
         return new ResponseEntity<>(postagemService.curtir(idPostagem),HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<PostagemDTO> update(Integer idPostagem, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
+    @PutMapping("/editar/{idPostagem}")
+    public ResponseEntity<PostagemDTO> update(@PathVariable("idPostagem") Integer idPostagem,@RequestBody PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(postagemService.update(idPostagem, postagemCreateDTO),HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Void> delete(Integer idPostagem) throws RegraDeNegocioException {
+    @DeleteMapping("/deletar/{idPostagem}")
+    public ResponseEntity<Void> delete(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
         postagemService.delete(idPostagem);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

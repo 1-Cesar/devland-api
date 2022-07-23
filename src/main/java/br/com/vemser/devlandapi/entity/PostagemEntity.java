@@ -18,10 +18,12 @@ public class PostagemEntity {
     @Column(name = "id_postagem")
     private Integer idPostagem;
 
-    @Column(name = "id_usuario", insertable = false, updatable = false)
+//    , insertable = false, updatable = false
+    @Column(name = "id_usuario")
     private Integer idUsuario;
 
     @Column(name = "tipo")
+    @Enumerated(EnumType.STRING)
     private TipoPostagem tipoPostagem;
 
     @Column(name = "titulo")
@@ -38,4 +40,7 @@ public class PostagemEntity {
 
     @Column(name = "data_postagem")
     private LocalDateTime data;
+
+
+    //TODO verificar Script - conferir ON DELETE CASCADE - nas filhas
 }

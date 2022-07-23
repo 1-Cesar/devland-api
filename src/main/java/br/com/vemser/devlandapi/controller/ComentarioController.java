@@ -26,26 +26,21 @@ public class ComentarioController implements ComentarioDocs {
     public List<ComentarioDTO> list() throws RegraDeNegocioException {
         return comentarioService.list();
     }
-
+//TODO - completar os return
     @Override
-    public ResponseEntity<ComentarioDTO> post(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
+    @PostMapping("/criar/{idPostagem}")
+    public ResponseEntity<ComentarioDTO> create(@PathVariable("idPostagem") Integer idPostagem, @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
+        return null;
+    }
+
+    @PutMapping("/editar/{idComentario}")
+    public ResponseEntity<ComentarioDTO> update(@PathVariable("idPostagem") Integer idPostagem, @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
         return null;
     }
 
     @Override
-    public ResponseEntity<Void> delete(Integer idComenatario) throws RegraDeNegocioException {
+    @DeleteMapping("/delete/{idComentario}")
+    public ResponseEntity<Void> delete(@PathVariable("idComentario") Integer idComentario) throws RegraDeNegocioException {
         return null;
     }
-
-//    @PostMapping("/{idPostagem}")
-//    public ResponseEntity<ComentarioDTO> post(@PathVariable("idPostagem") Integer idPostagem,
-//                                              @RequestBody @Valid ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
-//        return new ResponseEntity<ComentarioDTO>(comentarioService.post(idPostagem, comentarioCreateDTO), HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("/{idComentario}")
-//    public ResponseEntity<Void> delete(@PathVariable("idComentario") Integer idComenatario) throws RegraDeNegocioException {
-//        comentarioService.delete(idComenatario);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
 }
