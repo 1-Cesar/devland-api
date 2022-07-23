@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.dto;
 
+import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class UsuarioCreateDTO {
     @Size(min = 4, max = 100)
     private String areaAtuacao;
 
-    @Schema(description = "senha do desenvolvedor ou empresa", example = "abc1d")
+    @Schema(description = "numero de registro (CPF ou CNPJ) sem pontos ou traços", example = "xxxxxxxxxxx")
     @NotEmpty
     @Size(min = 11, max = 14)
     private String cpfCnpj;
@@ -40,7 +41,11 @@ public class UsuarioCreateDTO {
     @Size(min = 1, max = 1000)
     private String foto;
 
-    @Schema(description = "senha do desenvolvedor ou empresa", example = "abc1d")
+    @Schema(description = "Genero do usuário", example = "MASCULINO ou FEMININO")
+    @NotNull
+    private Genero genero;
+
+    @Schema(description = "perfil de usuário", example = "DEV ou EMPRESA")
     @NotNull
     private TipoUsuario tipoUsuario;
 }

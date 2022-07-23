@@ -49,7 +49,7 @@ public class EnderecoController implements EnderecoDocs {
     }
 
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<EnderecoCreateDTO> adicionar(@PathVariable("idUsuario") Integer id,
+    public ResponseEntity<EnderecoDTO> adicionar(@PathVariable("idUsuario") Integer id,
                                                        @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando um endereço com base no id do usuário");
         return ResponseEntity.ok(enderecoService.adicionar(id, enderecoCreateDTO));
@@ -57,7 +57,7 @@ public class EnderecoController implements EnderecoDocs {
 
     @PutMapping("/{idEndereco}")
     public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id,
-                                              @Valid @RequestBody EnderecoDTO enderecoAtualizar) throws RegraDeNegocioException {
+                                              @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException {
         log.info("Modificando um endereço com base em seu id");
         return ResponseEntity.ok(enderecoService.editar(id, enderecoAtualizar));
     }

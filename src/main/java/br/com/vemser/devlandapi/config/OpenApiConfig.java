@@ -40,7 +40,7 @@ public class OpenApiConfig {
                                 .url("https://www.dbccompany.com.br/"))
                         .contact(new Contact()
                                 .name("Github da API")
-                                .url("https://github.com/alysoncampos/devland-api")))
+                                .url("https://github.com/1-Cesar/devland-api")))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(
                         new Components()
@@ -52,7 +52,7 @@ public class OpenApiConfig {
                                                 .bearerFormat("JWT")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Clique aqui para ver nosso Diagrama de Entidade Relacionamento")
-                        .url("https://i.imgur.com/89vxpMV.png"));
+                        .url("https://i.imgur.com/jbi75M9.png"));
     }
 }
 

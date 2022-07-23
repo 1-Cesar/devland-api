@@ -72,7 +72,7 @@ public class EnderecoService {
         return retornarDTO(enderecoEntity);
     }
 
-    public EnderecoCreateDTO adicionar(Integer id, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+    public EnderecoDTO adicionar(Integer id, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
 
         UsuarioEntity usuarioEntity = usuarioService.localizarUsuario(id);
 

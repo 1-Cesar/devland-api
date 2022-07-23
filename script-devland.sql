@@ -1,110 +1,131 @@
-create sequence DEVLAND
+create schema devland;
 
-CREATE TABLE Usuario (
-	  id_usuario 		NUMERIC 	NOT NULL,
-	  nome 				TEXT 		NOT NULL,
-	  email 			TEXT 		NOT NULL,	  	  
-	  area_atuacao 		TEXT 		NOT NULL,
-	  cpf_cnpj			TEXT 		NOT NULL UNIQUE,
-	  tipo 				TEXT		NOT NULL,
-	  foto 				TEXT		NOT NULL,
-	  PRIMARY KEY (id_usuario)	  
+create table usuario (
+	  id_usuario 		numeric 	not null,
+	  nome 				text 		not null,
+	  email 			text 		not null,	  	  
+	  area_atuacao 		text 		not null,
+	  cpf_cnpj			text 		not null unique,
+	  foto 				text		not null,
+	  genero		    text		not null,
+	  tipo  		    text		not null,
+	  primary key (id_usuario)	  
 );
 
-CREATE TABLE Seguidor (
-	  id 				NUMERIC 	NOT NULL,
-	  id_seguidor 		NUMERIC 	NOT NULL,
-	  nome_seguidor		TEXT 		NOT NULL,
-	  id_usuario 		NUMERIC 	NOT NULL,	  
-	  PRIMARY KEY (id),
-	  CONSTRAINT FK_Seguidor_id_seguidor
-	    FOREIGN KEY (id_usuario)
-	      REFERENCES Usuario(id_usuario)
+create table tecnologias (
+	  id_tecnologia		numeric 	not null,
+	  id_usuario		numeric		not null,
+	  nome_tecnologia	text 		not null, 
+	  primary key (id_tecnologia),
+	  constraint fk_tecnologias_usuario
+	  	foreign key (id_usuario)
+	  		references usuario(id_usuario)
 );
 
-CREATE TABLE Endereco (
-	  id_endereco 		NUMERIC 	NOT NULL,
-	  id_usuario 		NUMERIC 	NOT NULL,
-	  tipo 				TEXT 		NOT NULL,
-	  logradouro 		TEXT 		NOT NULL,
-	  numero 			TEXT 		NOT NULL,
-	  complemento 		TEXT 		NOT NULL,
-	  cep 				TEXT		NOT NULL,
-	  cidade 			TEXT 		NOT NULL,
-	  estado 			TEXT 		NOT NULL,
-	  pais 				TEXT 		NOT NULL,
-	  PRIMARY KEY (id_endereco),
-	  CONSTRAINT FK_Contato_id_endereco
-	    FOREIGN KEY (id_usuario)
-	      REFERENCES Usuario(id_usuario)
+create table endereco (
+	  id_endereco 		numeric 	not null,	  
+	  tipo 				text 		not null,
+	  logradouro 		text 		not null,
+	  numero 			text 		not null,
+	  complemento 		text 		not null,
+	  cep 				text		not null,
+	  cidade 			text 		not null,
+	  estado 			text 		not null,
+	  pais 				text 		not null,
+	  primary key (id_endereco)	  
 );
 
-CREATE TABLE Contato (
-	  id_contato 		NUMERIC 	NOT NULL,
-	  id_usuario 		NUMERIC 	NOT NULL,
-	  tipo 				TEXT 		NOT NULL,
-	  numero 			TEXT 		NOT NULL,	
-	  descricao 		TEXT		NOT NULL,
-	  PRIMARY KEY (id_contato),
-	  CONSTRAINT FK_Contato_id_contato
-	    FOREIGN KEY (id_usuario)
-	      REFERENCES Usuario(id_usuario)
+create table usuario_x_endereco (
+	  id_usuario 		numeric 	not null,
+	  id_endereco		numeric 	not null,
+	  primary key(id_usuario, id_endereco),
+	  constraint fk_x_usuario
+	  	foreign key(id_usuario)
+	  		references usuario(id_usuario),
+	  constraint fk_x_endereco
+	  	foreign key (id_endereco)
+	  		references endereco(id_endereco)
+	
 );
 
-CREATE TABLE Postagem (
-	  id_postagem 		NUMERIC 	NOT NULL,
-	  id_usuario 		NUMERIC 	NOT NULL,
-	  tipo 				TEXT 		NOT NULL,
-	  titulo 			TEXT 		NOT NULL,
-	  descricao			TEXT 		NOT NULL,	
-	  ups				NUMERIC		NOT NULL,
-	  downs				NUMERIC		NOT NULL,
-	  views				NUMERIC		NOT NULL,
-	  data_postagem		TIMESTAMP	NOT NULL,
-	  PRIMARY KEY (id_postagem),
-	  CONSTRAINT FK_Postagem_id_usuario
-	    FOREIGN KEY (id_usuario)
-	      REFERENCES Usuario(id_usuario)
+create table contato (
+	  id_contato 		numeric 	not null,
+	  id_usuario 		numeric 	not null,
+	  tipo 				text 		not null,
+	  numero 			text 		not null,	
+	  descricao 		text		not null,
+	  primary key (id_contato),
+	  constraint fk_contato_usuario
+	    foreign KEY (id_usuario)
+	      references usuario(id_usuario)
 );
 
-CREATE TABLE Comentario (
-	  id_comentario		NUMERIC		NOT NULL,	  
-	  id_usuario 		NUMERIC 	NOT NULL,	  
-	  id_postagem 		NUMERIC 	NOT NULL,
-	  descricao			TEXT 		NOT NULL,	
-	  ups				NUMERIC		NOT NULL,
-	  downs				NUMERIC		NOT NULL,	  
-	  data_comentario	TIMESTAMP	NOT NULL,
-	  PRIMARY KEY (id_comentario),
-	  CONSTRAINT FK_Comentario_id_usuario
-	    FOREIGN KEY (id_usuario)
-	      REFERENCES Usuario(id_usuario),
-	  CONSTRAINT FK_Comentario_id_postagem
-	    FOREIGN KEY (id_postagem)
-	      REFERENCES Postagem(id_postagem)
+create table seguidor (
+	  id 				numeric 	not null,
+	  id_seguidor 		numeric 	not null,
+	  nome_seguidor		text 		not null,
+	  id_usuario 		numeric 	not null,	  
+	  primary key (id),
+	  constraint fk_seguidor_usuario
+	    foreign KEY (id_usuario)
+	      references usuario(id_usuario)
 );
 
-CREATE SEQUENCE SEQ_USUARIO
-INCREMENT 1
-START 1;
+create table postagem (
+	  id_postagem 		numeric 	not null,
+	  id_usuario 		numeric 	not null,
+	  tipo 				text 		not null,
+	  titulo 			text 		not null,
+	  descricao			text 		not null,	
+	  foto				text 		not null,
+	  curtidas			numeric		not null,	  	  
+	  data_postagem		timestamp	not null,
+	  primary key (id_postagem),
+	  constraint fk_postagem_usuario
+	    foreign KEY (id_usuario)
+	      references usuario(id_usuario)
+);
 
+create table comentario (
+	  id_comentario		numeric		not null,	  
+	  id_usuario 		numeric 	not null,	  
+	  id_postagem 		numeric 	not null,
+	  descricao			text 		not null,	
+	  curtidas			numeric		not null,	    
+	  data_comentario	timestamp	not null,
+	  primary key (id_comentario),
+	  constraint fk_comentario_usuario
+	    foreign KEY (id_usuario)
+	      references usuario(id_usuario),
+	  constraint fk_comentario_postagem
+	    foreign KEY (id_postagem)
+	      references postagem(id_postagem)
+);
 
-CREATE SEQUENCE SEQ_SEGUIDOR
-INCREMENT 1
-START 1;
+create sequence seq_usuario
+increment 1
+start 1;
 
-CREATE SEQUENCE SEQ_ENDERECO
-INCREMENT 1
-START 1;
+create sequence seq_tecnologias
+increment 1
+start 1;
 
-CREATE SEQUENCE SEQ_CONTATO
-INCREMENT 1
-START 1;
+create sequence seq_endereco
+increment 1
+start 1;
 
-CREATE SEQUENCE SEQ_POSTAGEM
-INCREMENT 1
-START 1;
+create sequence seq_contato
+increment 1
+start 1;
 
-CREATE SEQUENCE SEQ_COMENTARIO
-INCREMENT 1
-START 1;
+create sequence seq_seguidor
+increment 1
+start 1;
+
+create sequence seq_postagem
+increment 1
+start 1;
+
+create sequence seq_comentario
+increment 1
+start 1;

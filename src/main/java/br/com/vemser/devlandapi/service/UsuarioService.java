@@ -1,9 +1,11 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO;
 import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
+import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -54,8 +56,8 @@ public class UsuarioService {
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
         usuarioRepository.delete(usuarioRecuperado);
 
-        String tipoMensagem = TipoMensagem.DELETE.getTipo();
-        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
+//        String tipoMensagem = TipoMensagem.DELETE.getTipo();
+//        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
 
     public UsuarioDTO editar(Integer id, UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
@@ -66,8 +68,8 @@ public class UsuarioService {
                 usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
                 usuarioRepository.save(usuarioEntity);
 
-                String tipoMensagem = TipoMensagem.CREATE.getTipo();
-                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
+//                String tipoMensagem = TipoMensagem.CREATE.getTipo();
+//                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
 
                 return retornarDTO(usuarioEntity);
             } else {
@@ -90,14 +92,14 @@ public class UsuarioService {
         }
     }
 
-    public UsuarioCreateDTO adicionar(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+    public UsuarioDTO adicionar(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
 
         if (usuarioCreateDTO.getTipoUsuario() == TipoUsuario.DEV) {
             if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
                 UsuarioEntity usuario = usuarioRepository.save(retornarUsuarioEntity(usuarioCreateDTO));
 
-                String tipoMensagem = TipoMensagem.CREATE.getTipo();
-                emailService.sendEmailUsuario(usuario, tipoMensagem);
+                /*String tipoMensagem = TipoMensagem.CREATE.getTipo();
+                emailService.sendEmailUsuario(usuario, tipoMensagem);*/
 
                 return retornarDTO(usuario);
             } else {
@@ -108,8 +110,8 @@ public class UsuarioService {
         if (usuarioCreateDTO.getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(usuarioCreateDTO.getCpfCnpj())) {
             UsuarioEntity usuarioEmpresa = usuarioRepository.save(retornarUsuarioEntity(usuarioCreateDTO));
 
-            String tipoMensagem = TipoMensagem.CREATE.getTipo();
-            emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);
+           /* String tipoMensagem = TipoMensagem.CREATE.getTipo();
+            emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);*/
 
             return retornarDTO(usuarioEmpresa);
         } else {
@@ -279,9 +281,25 @@ public class UsuarioService {
     public PageDTO<UsuarioDTO> paginacaoTipo(TipoUsuario tipoUsuario, Integer pagina, Integer quantidadeRegistros) {
         Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
         Page<UsuarioEntity> page = usuarioRepository.getUsuarioByTipo(tipoUsuario, pageable);
-        List<UsuarioDTO> enderecoDTOS = page.getContent().stream()
+        List<UsuarioDTO> usuarioDTOS = page.getContent().stream()
                 .map(this::retornarDTO)
                 .toList();
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, enderecoDTOS);
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, usuarioDTOS);
+    }
+
+    public PageDTO<RelatorioPersonalizadoDevDTO> paginacaoStack(String stack, Integer pagina, Integer quantidadeRegistros) {
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Page<RelatorioPersonalizadoDevDTO> page = usuarioRepository.relatorioPersonalizadoDevDTO(stack, pageable);
+        List<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevDTOS = page.getContent().stream()
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, relatorioPersonalizadoDevDTOS);
+    }
+
+    public PageDTO<RelatorioPersonalizadoDevDTO> paginacaoGenero(Genero genero, Integer pagina, Integer quantidadeRegistros) {
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Page<RelatorioPersonalizadoDevDTO> page = usuarioRepository.relatorioPersonalizadoDevGeneroDTO(genero, pageable);
+        List<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevDTOS = page.getContent().stream()
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, relatorioPersonalizadoDevDTOS);
     }
 }

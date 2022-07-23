@@ -28,11 +28,11 @@ public interface EnderecoDocs {
 
     @EnderecoNotas
     @Operation(summary = "criar endereço atraves do id do usuario", description = "cria um endereço dentro do banco de dados com base no id do usuario")
-    public ResponseEntity<EnderecoCreateDTO> adicionar(@PathVariable("idUsuario") Integer id, @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException;
+    public ResponseEntity<EnderecoDTO> adicionar(@PathVariable("idUsuario") Integer id, @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException;
 
     @EnderecoNotas
     @Operation(summary = "altera um endereço por id", description = "altera os registros de um endereço no banco de dados atraves de seu id")
-    public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id, @Valid @RequestBody EnderecoDTO enderecoAtualizar) throws RegraDeNegocioException;
+    public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id, @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException;
 
     @EnderecoNotas
     @Operation(summary = "deleta endereço", description = "deleta um endereço do banco de dados atraves de seu id")

@@ -1,6 +1,8 @@
 package br.com.vemser.devlandapi.repository;
 
+import br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
+import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import feign.Param;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,51 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
 
     @Query(" select c" +
             " from usuario c" +
-            " where c.tipoUsuario = :tipoUsuario")
+            " where :tipoUsuario is null OR c.tipoUsuario = :tipoUsuario")
     Page<UsuarioEntity> getUsuarioByTipo(@Param("tipoUsuario") TipoUsuario tipoUsuario, Pageable pageable);
+
+    @Query(value = " select new br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO(" +
+            " u.nome," +
+            " u.email," +
+            " u.areaAtuacao," +
+            " u.foto," +
+            " u.genero," +
+            " u.tipoUsuario," +
+            " c.tipo," +
+            " c.numero," +
+            " c.descricao," +
+            " e.cidade," +
+            " e.estado," +
+            " e.pais," +
+            " t.nomeTecnologia" +
+            ") " +
+            " from usuario u " +
+            " inner join u.contatos c " +
+            " inner join u.enderecos e " +
+            " inner join u.tecnologias t " +
+            " where (:areaAtuacao is null OR u.areaAtuacao = :areaAtuacao )")
+    Page<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevDTO(@Param("areaAtuacao") String areaAtuacao, Pageable pageable);
+
+    @Query(value = " select new br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO(" +
+            " u.nome," +
+            " u.email," +
+            " u.areaAtuacao," +
+            " u.foto," +
+            " u.genero," +
+            " u.tipoUsuario," +
+            " c.tipo," +
+            " c.numero," +
+            " c.descricao," +
+            " e.cidade," +
+            " e.estado," +
+            " e.pais," +
+            " t.nomeTecnologia" +
+            ") " +
+            " from usuario u " +
+            " inner join u.contatos c " +
+            " inner join u.enderecos e " +
+            " inner join u.tecnologias t " +
+            " where (:genero is null OR u.genero = :genero )")
+    Page<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevGeneroDTO(@Param("genero") Genero genero, Pageable pageable);
 
 }
