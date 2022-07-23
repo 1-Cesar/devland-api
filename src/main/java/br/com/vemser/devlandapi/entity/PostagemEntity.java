@@ -18,7 +18,7 @@ public class PostagemEntity {
     @Column(name = "id_postagem")
     private Integer idPostagem;
 
-    @Column(name = "id_usuario")
+    @Column(name = "id_usuario", insertable = false, updatable = false)
     private Integer idUsuario;
 
     @Column(name = "tipo")

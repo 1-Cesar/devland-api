@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.documentations.PostagemDocs;
 import br.com.vemser.devlandapi.dto.PostagemComentDTO;
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
+import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.PostagemService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +35,7 @@ public class PostagemController implements PostagemDocs {
 
 //TODO -- PAGINAÇÃO
     @GetMapping("/{tipoPostagem}/tipo")
-    public ResponseEntity<List<PostagemDTO>> litByTipo(@PathVariable("tipoPostagem") Integer tipoPostagem) throws RegraDeNegocioException {
+    public ResponseEntity<List<PostagemDTO>> listByTipo(@PathVariable("tipoPostagem") TipoPostagem tipoPostagem) throws RegraDeNegocioException {
         return new ResponseEntity<>(postagemService.listByTipo(tipoPostagem), HttpStatus.OK);
     }
 

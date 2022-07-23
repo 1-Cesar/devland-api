@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ public class ComentarioEntity {
     @Column(name = "id_postagem")
     private Integer idPostagem;
 
-    @Column(name = "id_usuario")
+    @Column(name = "id_usuario", insertable = false, updatable = false)
     private Integer idUsuario;
 
     @Column(name = "descricao")
@@ -32,7 +33,9 @@ public class ComentarioEntity {
     @Column(name = "data_comentario")
     private String data;
 
-
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuarioEntity;
 
 }

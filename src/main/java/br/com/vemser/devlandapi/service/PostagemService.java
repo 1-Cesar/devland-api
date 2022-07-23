@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
 import br.com.vemser.devlandapi.dto.PostagemComentDTO;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
+import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
@@ -84,6 +85,11 @@ public class PostagemService {
 //            return postagemComentDTO;
 //        }
 //    }
+    public List<PostagemDTO> listByTipo(TipoPostagem tipoPostagem){
+         return postagemRepository.filtrarPorTipo(tipoPostagem).stream()
+                 .map(this::convertToDTO)
+                 .toList();
+    }
 
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
 

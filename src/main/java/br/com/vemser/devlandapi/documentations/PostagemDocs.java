@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.annotations.PostagemNotas;
 import br.com.vemser.devlandapi.dto.PostagemComentDTO;
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
+import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +22,7 @@ public interface PostagemDocs {
     public ResponseEntity<List<PostagemDTO>> list() throws RegraDeNegocioException;
     @PostagemNotas
     @Operation(summary = "Listar postagens por tipo", description = "Realizará a listagem de todas as postagens do banco de dados pelo tipo")
-    public ResponseEntity<List<PostagemDTO>> litByTipo(@PathVariable("tipoPostagem") Integer tipoPostagem) throws RegraDeNegocioException;
+    public ResponseEntity<List<PostagemDTO>> listByTipo(@PathVariable("tipoPostagem") TipoPostagem tipoPostagem) throws RegraDeNegocioException;
 
     @PostagemNotas
     @Operation(summary = "listagem por IdPostagem")
