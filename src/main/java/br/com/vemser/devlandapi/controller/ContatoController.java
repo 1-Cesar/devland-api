@@ -29,7 +29,7 @@ public class ContatoController implements ContatoDocs {
         return ResponseEntity.ok(contatoService.listar());
     }
 
-    @GetMapping("/{idContato}") //voloquei aqui
+    @GetMapping("/contato/{idContato}")
     public ResponseEntity<List<ContatoDTO>> listarContato(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {
         log.info("Recuperando um contato através de seu id");
         return ResponseEntity.ok(contatoService.listarContatoPorId(id));

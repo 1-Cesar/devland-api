@@ -19,8 +19,8 @@ public interface ContatoDocs {
     public ResponseEntity<List<ContatoDTO>> listar() throws RegraDeNegocioException;
 
     @ComentarioNotas
-    @Operation(summary = "listar contato por id", description = "recupera um contato do banco de dados atraves de seu id")
-    @GetMapping("/{idContato}")
+    @Operation(summary = "listar contato por id do contato", description = "recupera um contato do banco de dados atraves de seu id")
+    //@GetMapping("/{idContato}")
     public ResponseEntity<List<ContatoDTO>> listarContato(@PathVariable("idContato") Integer id) throws RegraDeNegocioException;
 
     @ComentarioNotas
@@ -33,7 +33,7 @@ public interface ContatoDocs {
 
     @ComentarioNotas
     @Operation(summary = "altera um contato por id", description = "altera os registros de um contato no banco de dados atraves de seu id")
-    public ResponseEntity<ContatoDTO> editar(@PathVariable("idContato") Integer id,@Valid @RequestBody ContatoDTO contatoAtualizar) throws RegraDeNegocioException;
+    public ResponseEntity<ContatoDTO> editar(@PathVariable("idContato") Integer id, @Valid @RequestBody ContatoDTO contatoAtualizar) throws RegraDeNegocioException;
 
     @ComentarioNotas
     @Operation(summary = "deleta contato", description = "deleta um contato do banco de dados atraves de seu id")
