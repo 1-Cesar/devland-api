@@ -1,9 +1,11 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO;
 import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
+import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -279,9 +281,25 @@ public class UsuarioService {
     public PageDTO<UsuarioDTO> paginacaoTipo(TipoUsuario tipoUsuario, Integer pagina, Integer quantidadeRegistros) {
         Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
         Page<UsuarioEntity> page = usuarioRepository.getUsuarioByTipo(tipoUsuario, pageable);
-        List<UsuarioDTO> enderecoDTOS = page.getContent().stream()
+        List<UsuarioDTO> usuarioDTOS = page.getContent().stream()
                 .map(this::retornarDTO)
                 .toList();
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, enderecoDTOS);
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, usuarioDTOS);
+    }
+
+    public PageDTO<RelatorioPersonalizadoDevDTO> paginacaoStack(String stack, Integer pagina, Integer quantidadeRegistros) {
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Page<RelatorioPersonalizadoDevDTO> page = usuarioRepository.relatorioPersonalizadoDevDTO(stack, pageable);
+        List<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevDTOS = page.getContent().stream()
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, relatorioPersonalizadoDevDTOS);
+    }
+
+    public PageDTO<RelatorioPersonalizadoDevDTO> paginacaoGenero(Genero genero, Integer pagina, Integer quantidadeRegistros) {
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Page<RelatorioPersonalizadoDevDTO> page = usuarioRepository.relatorioPersonalizadoDevGeneroDTO(genero, pageable);
+        List<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevDTOS = page.getContent().stream()
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, relatorioPersonalizadoDevDTOS);
     }
 }
