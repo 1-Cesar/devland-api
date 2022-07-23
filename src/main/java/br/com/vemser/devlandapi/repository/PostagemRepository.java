@@ -15,6 +15,8 @@ import java.util.List;
 
 @Repository
 public interface PostagemRepository extends JpaRepository<PostagemEntity, Integer> {
+    //TODO - corrigir ( ERROR: operator does not exist: text = integer
+    //  Dica: No operator matches the given name and argument types. You might need to add explicit type casts.)
     @Query("select p from postagem p where p.tipoPostagem = ?1")
     List<PostagemEntity> filtrarPorTipo(TipoPostagem tipoPostagem);
 

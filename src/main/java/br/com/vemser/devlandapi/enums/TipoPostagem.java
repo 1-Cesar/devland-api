@@ -3,9 +3,9 @@ package br.com.vemser.devlandapi.enums;
 import java.util.Arrays;
 
 public enum TipoPostagem {
-    VAGAS(1),
-    PROGRAMAS(2),
-    PENSAMENTOS(3);
+    VAGAS(0),
+    PROGRAMAS(1),
+    PENSAMENTOS(2);
 
     private Integer tipo;
 

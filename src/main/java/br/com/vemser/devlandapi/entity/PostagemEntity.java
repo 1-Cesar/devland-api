@@ -30,12 +30,10 @@ public class PostagemEntity {
     @Column(name = "descricao")
     private String descricao;
 
-    //TODO - adicionar campo na tabela
     @Column(name = "foto")
     private String foto;
 
-    //TODO - renomear ups(curtidas) e remover downs -- em comentario e em postagem
-    @Column(name = "ups")
+    @Column(name = "curtidas")
     private Integer curtidas;
 
     @Column(name = "data_postagem")

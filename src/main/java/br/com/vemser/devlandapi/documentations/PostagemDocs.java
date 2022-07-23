@@ -26,7 +26,7 @@ public interface PostagemDocs {
 
     @PostagemNotas
     @Operation(summary = "listagem por IdPostagem")
-    public ResponseEntity<PostagemComentDTO> listByIdPostagem(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException;
+    public ResponseEntity<PostagemDTO> listByIdPostagem(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException;
 
     @PostagemNotas
     @Operation(summary = "Adicionar postagem", description = "Adicionará uma nova postagem ao banco de dados")

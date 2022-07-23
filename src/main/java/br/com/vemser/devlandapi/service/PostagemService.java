@@ -50,41 +50,11 @@ public class PostagemService {
         }
     }
 
-    public List<PostagemDTO> findByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
-        return postagemRepository.findById(idPostagem).stream().map(this::convertToDTO).toList();
+    public PostagemDTO findByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
+        return (PostagemDTO) postagemRepository.findById(idPostagem).stream().map(this::convertToDTO).toList();
     }
 
 
-//    public List<PostagemDTO> listByTipo(Integer tipoPostagem) throws RegraDeNegocioException {
-//        if (postagemRepository.listByTipo(tipoPostagem).isEmpty()){
-//            throw new RegraDeNegocioException("Nenhuma postagem encontrada");
-//        }
-//        else {
-//            return postagemRepository.listByTipo(tipoPostagem).stream()
-//                    .map(this::convertToDTO)
-//                    .collect(Collectors.toList());
-//        }
-//    }
-
-//    public PostagemComentDTO listById(Integer idPostagem) throws RegraDeNegocioException {
-//        PostagemEntity postagemRecuperada = postagemRepository.findByIdPostagem(idPostagem);
-//
-//        if (postagemRecuperada == null) {
-//            throw new RegraDeNegocioException("PostagemEntity não encontrada");
-//        } else {
-//
-//            List<ComentarioEntity> comentariosRecuperados = comentarioRepository.listByIdPostagem(idPostagem);
-//
-//            List<ComentarioDTO> comentarioDTO = comentariosRecuperados.stream()
-//                    .map(comentario -> comentarioService.convertToDTO(comentario))
-//                    .collect(Collectors.toList());
-//
-//            PostagemComentDTO postagemComentDTO = convertToComentDTO(postagemRecuperada);
-//            postagemComentDTO.setComentarios(comentarioDTO);
-//
-//            return postagemComentDTO;
-//        }
-//    }
     public List<PostagemDTO> listByTipo(TipoPostagem tipoPostagem){
          return postagemRepository.filtrarPorTipo(tipoPostagem).stream()
                  .map(this::convertToDTO)
@@ -97,8 +67,6 @@ public class PostagemService {
             throw new RegraDeNegocioException("Usuário não encontrado");
         }
         else {
-            log.info("Adicionando postagem...");
-
             PostagemEntity postagemEntity = convertToEntity(postagemCreateDTO);
 
             postagemEntity.setIdUsuario(idUsuario);
@@ -106,8 +74,6 @@ public class PostagemService {
             postagemEntity.setData(LocalDateTime.now());
 
             postagemRepository.save(postagemEntity);
-
-            log.info("PostagemEntity criada...");
 
             return convertToDTO(postagemEntity);
         }
@@ -118,7 +84,7 @@ public class PostagemService {
         PostagemEntity postagemEntityRecuperada = convertOptionalToEntity(postagemRepository.findById(idPostagem));
 
         if(postagemEntityRecuperada == null) {
-            throw new RegraDeNegocioException("PostagemEntity não encontrada");
+            throw new RegraDeNegocioException("Postagem não encontrada");
         }
         else {
 
@@ -150,7 +116,7 @@ public class PostagemService {
             return convertToDTO(postagemEntity);
         }
         else {
-            throw new RegraDeNegocioException("PostagemEntity não encontrada");
+            throw new RegraDeNegocioException("Postagem não encontrada");
         }
     }
 
@@ -163,7 +129,7 @@ public class PostagemService {
             postagemRepository.delete(postagemEntityRecuperada);
         }
         else {
-            throw new RegraDeNegocioException("PostagemEntity não encontrada");
+            throw new RegraDeNegocioException("Postagem não encontrada");
         }
     }
 

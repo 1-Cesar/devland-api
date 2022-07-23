@@ -37,6 +37,13 @@ public class ComentarioService {
                 .map(this::convertToDTO).toList();
     }
 
+    public ComentarioDTO create(ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException{
+        ComentarioEntity comentarioEntity = convertToEntity(comentarioCreateDTO);
+
+       return convertToDTO(comentarioRepository.save(comentarioEntity));
+
+    }
+
 //    public ComentarioDTO post(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
 //
 //        if (postagemRepository.findByIdPostagem(idPostagem) == null) {
