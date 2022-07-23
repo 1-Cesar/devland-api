@@ -1,10 +1,11 @@
 package br.com.vemser.devlandapi.repository;
 
+import br.com.vemser.devlandapi.entity.SeguidorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SeguidorRepository extends JpaRepository<SeguidorRepository, Integer> {
+public interface SeguidorRepository extends JpaRepository<SeguidorEntity, Integer> {
 
 
 

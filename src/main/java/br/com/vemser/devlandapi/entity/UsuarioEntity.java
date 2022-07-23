@@ -43,13 +43,28 @@ public class UsuarioEntity {
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipoUsuario;
 
-    //RELACIONAMENTO um para muitos - Usuarios - Contatos
+
+    //------------------------------------------------------------------------------
+    // Relacionamento Usuário - Contatos
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "usuario",         //Indica o lado inverso do relacionamento
             cascade = CascadeType.ALL,   //Faz a cascata para deletar
             orphanRemoval = true)        //Deleta os órfãos
     private Set<ContatoEntity> contatos;
+
+    //-----------------------------------------------------------------------------
+    // Relacionamento Usuário - Seguidores
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "usuario",         //Indica o lado inverso do relacionamento
+            cascade = CascadeType.ALL,   //Faz a cascata para deletar
+            orphanRemoval = true)        //Deleta os órfãos
+    private Set<ContatoEntity> seguidores;
+
+
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

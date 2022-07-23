@@ -2,9 +2,7 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
-import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
-import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -69,13 +67,13 @@ public class ContatoService {
     //ADICIONAR
 
     public ContatoCreateDTO adicionar(Integer id, ContatoCreateDTO contatoDTO) throws RegraDeNegocioException {
-        //recupera usuãrio
+        //recupera usuário
         UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(id);
 
         //converte
         ContatoEntity contatoEntity = retornarContatoEntity(contatoDTO);
 
-        //seta no usuario
+        //seta no usuário
         contatoEntity.setUsuario(usuarioRecuperado);
 
         ContatoEntity contatoCriado = contatoRepository.save(contatoEntity);
@@ -90,8 +88,8 @@ public class ContatoService {
                              ContatoDTO contatoDTO) throws RegraDeNegocioException {
         ContatoEntity contatoRecuperado = localizarContato(id);
 
-        UsuarioEntity usuarioEntity = contatoRecuperado.getUsuario();
-        usuarioEntity.setContatos(null);
+        //UsuarioEntity usuarioEntity = contatoRecuperado.getUsuario();
+        //usuarioEntity.setContatos(null);
 
 
         UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoDTO.getIdUsuario());
@@ -100,17 +98,16 @@ public class ContatoService {
         contatoRecuperado.setNumero(contatoDTO.getNumero());
         contatoRecuperado.setDescricao(contatoDTO.getDescricao());
         contatoRecuperado.setUsuario(usuarioRecuperado);
-        usuarioRecuperado.setContatos(Set.of(contatoRecuperado));
-        usuarioService.adicionar(retornarUsuarioDTO(usuarioRecuperado));
+       // usuarioRecuperado.setContatos(Set.of(contatoRecuperado));
+        //usuarioService.adicionar(retornarUsuarioDTO(usuarioRecuperado));
 
 
-        if (! usuarioRecuperado.getIdUsuario() .equals(usuarioEntity.getIdUsuario())) {
-            usuarioService.adicionar(retornarUsuarioDTO(usuarioEntity));
-        }
+       // if (! usuarioRecuperado.getIdUsuario() .equals(usuarioEntity.getIdUsuario())) {
+       //     usuarioService.adicionar(retornarUsuarioDTO(usuarioEntity));
+       // }
 
 
         return retornarContatoDTO(contatoRepository.save(contatoRecuperado));
-
 
     }
 

@@ -161,8 +161,6 @@ public class PostagemService {
             log.info("Deletando postagem...");
 
             postagemRepository.delete(postagemEntityRecuperada);
-
-            log.info("PostagemEntity removida...");
         }
         else {
             throw new RegraDeNegocioException("PostagemEntity não encontrada");
