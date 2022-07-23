@@ -1,8 +1,12 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.UsuarioDocs;
+import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO;
 import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.enums.Genero;
+import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,14 +40,14 @@ public class UsuarioController implements UsuarioDocs {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioCreateDTO> adicionar(@Valid @RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+    public ResponseEntity<UsuarioDTO> adicionar(@Valid @RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         log.info("Criando um usuário");
         return ResponseEntity.ok(usuarioService.adicionar(usuarioCreateDTO));
     }
 
     @PutMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id,
-                                            @Valid @RequestBody UsuarioDTO usuarioAtualizar) throws RegraDeNegocioException {
+                                            @Valid @RequestBody UsuarioCreateDTO usuarioAtualizar) throws RegraDeNegocioException {
         log.info("Alterando um usuário com base em seu id");
         return ResponseEntity.ok(usuarioService.editar(id, usuarioAtualizar));
     }
@@ -52,5 +56,20 @@ public class UsuarioController implements UsuarioDocs {
     public void delete(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
         log.info("Deletando um usuário com base em seu id");
         usuarioService.delete(id);
+    }
+
+    @GetMapping("/relatorio-tipo-usuario")
+    public PageDTO<UsuarioDTO> getUsuarioByTipo(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) TipoUsuario tipoUsuario) {
+        return usuarioService.paginacaoTipo(tipoUsuario, pagina, quantidadeRegistros);
+    }
+
+    @GetMapping("/relatorio-stack-usuario")
+    public PageDTO<RelatorioPersonalizadoDevDTO> getUsuarioByGenero(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String stack) {
+        return usuarioService.paginacaoStack(stack, pagina, quantidadeRegistros);
+    }
+
+    @GetMapping("/relatorio-genero-usuario")
+    public PageDTO<RelatorioPersonalizadoDevDTO> getUsuarioByGenero(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) Genero genero) {
+        return usuarioService.paginacaoGenero(genero, pagina, quantidadeRegistros);
     }
 }

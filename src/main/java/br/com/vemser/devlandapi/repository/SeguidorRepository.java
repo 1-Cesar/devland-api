@@ -1,18 +1,14 @@
 package br.com.vemser.devlandapi.repository;
 
-import br.com.vemser.devlandapi.config.ConexaoBancoDeDados;
-import br.com.vemser.devlandapi.entity.Seguidor;
-import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 @Repository
-public class SeguidorRepository {
+public interface SeguidorRepository extends JpaRepository<SeguidorRepository, Integer> {
 
+
+
+    /*
     @Autowired
     private ConexaoBancoDeDados connection;
 
@@ -156,4 +152,6 @@ public class SeguidorRepository {
             }
         }
     }
+    */
+
 }
