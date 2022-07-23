@@ -20,18 +20,27 @@ public class UsuarioEntity {
     @Column(name = "id_usuario")
     private Integer idUsuario;
 
+    @Column(name = "nome")
     private String nome;
 
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "area_atuacao")
     private String areaAtuacao;
 
+    @Column(name = "cpf_cnpj")
     private String cpfCnpj;
 
+    @Column(name = "foto")
     private String foto;
 
+    @Column(name = "genero")
+    @Enumerated(EnumType.STRING)
     private Genero genero;
 
+    @Column(name = "tipo")
+    @Enumerated(EnumType.STRING)
     private TipoUsuario tipoUsuario;
 
     //RELACIONAMENTO um para muitos - Usuarios - Contatos

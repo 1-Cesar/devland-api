@@ -56,8 +56,8 @@ public class UsuarioService {
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
         usuarioRepository.delete(usuarioRecuperado);
 
-        String tipoMensagem = TipoMensagem.DELETE.getTipo();
-        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
+//        String tipoMensagem = TipoMensagem.DELETE.getTipo();
+//        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
 
     public UsuarioDTO editar(Integer id, UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
@@ -92,14 +92,14 @@ public class UsuarioService {
         }
     }
 
-    public UsuarioCreateDTO adicionar(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+    public UsuarioDTO adicionar(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
 
         if (usuarioCreateDTO.getTipoUsuario() == TipoUsuario.DEV) {
             if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
                 UsuarioEntity usuario = usuarioRepository.save(retornarUsuarioEntity(usuarioCreateDTO));
 
-                String tipoMensagem = TipoMensagem.CREATE.getTipo();
-                emailService.sendEmailUsuario(usuario, tipoMensagem);
+                /*String tipoMensagem = TipoMensagem.CREATE.getTipo();
+                emailService.sendEmailUsuario(usuario, tipoMensagem);*/
 
                 return retornarDTO(usuario);
             } else {
@@ -110,8 +110,8 @@ public class UsuarioService {
         if (usuarioCreateDTO.getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(usuarioCreateDTO.getCpfCnpj())) {
             UsuarioEntity usuarioEmpresa = usuarioRepository.save(retornarUsuarioEntity(usuarioCreateDTO));
 
-            String tipoMensagem = TipoMensagem.CREATE.getTipo();
-            emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);
+           /* String tipoMensagem = TipoMensagem.CREATE.getTipo();
+            emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);*/
 
             return retornarDTO(usuarioEmpresa);
         } else {

@@ -22,7 +22,7 @@ public interface UsuarioDocs {
 
     @UsuarioNotas
     @Operation(summary = "criar usuario", description = "cria um usuario dentro do banco de dados")
-    public ResponseEntity<UsuarioCreateDTO> adicionar(@Valid @RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException;
+    public ResponseEntity<UsuarioDTO> adicionar(@Valid @RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException;
 
     @UsuarioNotas
     @Operation(summary = "altera um usuario por id", description = "altera os registros de um usuario no banco de dados atraves de seu id")

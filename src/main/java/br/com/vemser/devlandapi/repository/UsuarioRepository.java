@@ -18,7 +18,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
 
     @Query(" select c" +
             " from usuario c" +
-            " where c.tipoUsuario = :tipoUsuario")
+            " where :tipoUsuario is null OR c.tipoUsuario = :tipoUsuario")
     Page<UsuarioEntity> getUsuarioByTipo(@Param("tipoUsuario") TipoUsuario tipoUsuario, Pageable pageable);
 
     @Query(value = " select new br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO(" +
