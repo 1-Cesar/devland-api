@@ -18,10 +18,12 @@ public class PostagemEntity {
     @Column(name = "id_postagem")
     private Integer idPostagem;
 
-    @Column(name = "id_usuario", insertable = false, updatable = false)
+//    , insertable = false, updatable = false
+    @Column(name = "id_usuario")
     private Integer idUsuario;
 
     @Column(name = "tipo")
+    @Enumerated(EnumType.STRING)
     private TipoPostagem tipoPostagem;
 
     @Column(name = "titulo")
@@ -30,14 +32,15 @@ public class PostagemEntity {
     @Column(name = "descricao")
     private String descricao;
 
-    //TODO - adicionar campo na tabela
     @Column(name = "foto")
     private String foto;
 
-    //TODO - renomear ups(curtidas) e remover downs -- em comentario e em postagem
-    @Column(name = "ups")
+    @Column(name = "curtidas")
     private Integer curtidas;
 
     @Column(name = "data_postagem")
     private LocalDateTime data;
+
+
+    //TODO verificar Script - conferir ON DELETE CASCADE - nas filhas
 }

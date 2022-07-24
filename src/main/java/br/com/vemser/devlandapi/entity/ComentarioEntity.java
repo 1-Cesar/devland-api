@@ -26,7 +26,7 @@ public class ComentarioEntity {
     @Column(name = "descricao")
     private String descricao;
 
-    @Column(name = "ups")
+    @Column(name = "curtidas")
     private Integer curtidas;
 
 

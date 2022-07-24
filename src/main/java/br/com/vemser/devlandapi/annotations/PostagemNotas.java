@@ -11,7 +11,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @ApiResponses(
         value = {
-                @ApiResponse(responseCode = "200", description = "Sucesso! A listagem das postagens foi realizada com sucesso"),
+                @ApiResponse(responseCode = "200", description = "Sucesso! A listagem das postagens foi realizada com sucesso."),
+                @ApiResponse(responseCode = "204", description = "A postagem está deletada."),
                 @ApiResponse(responseCode = "403", description = "Permissão negada! Você não possui permissão para utilizar este recurso"),
                 @ApiResponse(responseCode = "500", description = "Erro! Durante a execução, foi gerada uma exceção")
         }
