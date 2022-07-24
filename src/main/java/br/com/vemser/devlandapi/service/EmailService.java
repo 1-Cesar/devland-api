@@ -38,11 +38,11 @@ public class EmailService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(usuario.getEmail());
             if (tipo.equals(TipoMensagem.CREATE.getTipo())){
-                mimeMessageHelper.setSubject("Cadastro realizado");
+                mimeMessageHelper.setSubject("Olá, "usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
             } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
-                mimeMessageHelper.setSubject("Cadastro atualizado");
+                mimeMessageHelper.setSubject(usuario.getNome() + ", seus dados foram atualizados!");
             } else {
-                mimeMessageHelper.setSubject("Cadastro deletado");
+                mimeMessageHelper.setSubject(usuario.getNome() + ", sentiremos sua falta na DevLand!");
             }
             mimeMessageHelper.setText(getContentFromTemplatePessoa(usuario, tipo), true);
             emailSender.send(mimeMessageHelper.getMimeMessage());
@@ -53,16 +53,25 @@ public class EmailService {
 
     public String getContentFromTemplatePessoa(UsuarioEntity usuario, String tipo) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", usuario.getNome());
-        dados.put("id", usuario.getIdUsuario());
-        dados.put("email", this.from);
 
         Template template;
+
         if (tipo.equals(TipoMensagem.CREATE.getTipo())){
+            dados.put("nome", usuario.getNome() ", ");
+            dados.put("id", usuario.getIdUsuario());
+            dados.put("email", this.from);
             template = fmConfiguration.getTemplate("email-template-create.ftl");
+
         } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
+            dados.put("nome", usuario.getNome());
+            dados.put("id", usuario.getIdUsuario());
+            dados.put("email", this.from);
             template = fmConfiguration.getTemplate("email-template-update.ftl");
+
         } else {
+            dados.put("nome", usuario.getNome());
+            dados.put("id", usuario.getIdUsuario());
+            dados.put("email", this.from);
             template = fmConfiguration.getTemplate("email-template-delete.ftl");
         }
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
