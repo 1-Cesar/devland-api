@@ -39,8 +39,8 @@ public class ContatoService {
                                               Integer registroPorPagina) {
         Pageable pageable = PageRequest.of(pagina, registroPorPagina);
         Page<ContatoEntity> page = contatoRepository.findAll(pageable);
+
         List<ContatoDTO> contatoDTOS = page.getContent().stream()
-                //.map(contatoEntity -> objectMapper.convertValue(contatoEntity, ContatoDTO.class))
                 .map(this::retornarContatoDTO)
                 .toList();
 

@@ -29,19 +29,11 @@ public class SeguidorControler implements SeguidorDocs {
 
 
     @GetMapping("/{idUsuario}")
-    public PageDTO<SeguidorDTO> listarSeguidores(Integer pagina, Integer quantidadeRegistros, @PathVariable("idUsuario") Integer id)
+    public PageDTO<SeguidorDTO> listarSeguidores(@PathVariable("idUsuario") Integer id, Integer pagina, Integer quantidadeRegistros)
             throws RegraDeNegocioException {
-        return seguidorService.listarSeguidores(pagina, quantidadeRegistros, id);
+        return seguidorService.listarSeguidores(id, pagina, quantidadeRegistros);
     }
 
-
-/*
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<List<SeguidorDTO>> listarSeguidores(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
-        log.info("Lista quem o usuário segue");
-        return ResponseEntity.ok(seguidorService.listarSeguidor(id));
-    }
-*/
     @PostMapping("/{idUsuario}")
     public ResponseEntity<SeguidorCreateDTO> adicionar(@PathVariable("idUsuario") Integer id,
                                                        @Valid @RequestBody SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {
