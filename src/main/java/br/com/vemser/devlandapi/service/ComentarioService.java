@@ -69,6 +69,12 @@ public class ComentarioService {
 
         UsuarioEntity usuario = convertOptionalToUsuarioEntity(usuarioRepository.findById(comentarioValid.getIdUsuario()));
 
+        //------------------------------------------------------------------------------------------------------------------
+        PostagemEntity postagem = convertOptionalToPostagemEntity(postagemRepository.findById(comentarioValid.getIdPostagem()));
+
+        comentarioValid.setPostagemEntity(postagem);
+        //------------------------------------------------------------------------------------------------------------------
+
         comentarioValid.setDescricao(comentarioCreateDTO.getDescricao());
         comentarioValid.setUsuarioEntity(usuario);
 
@@ -105,4 +111,8 @@ public class ComentarioService {
         return objectMapper.convertValue(comentario, ComentarioEntity.class);
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    public PostagemEntity convertOptionalToPostagemEntity(Optional postagem) {
+        return objectMapper.convertValue(postagem, PostagemEntity.class);
+    }
 }
