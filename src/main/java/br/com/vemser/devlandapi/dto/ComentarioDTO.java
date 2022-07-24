@@ -1,11 +1,11 @@
 package br.com.vemser.devlandapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Data;
 
 @Data
-public class ComentarioDTO extends ComentarioCreateDTO{
-        //alterar para ComentarioDTO
+public class ComentarioDTO extends ComentarioCreateDTO {
+    //alterar para ComentarioDTO
 
     @Schema(description = "Id do Comentário")
     private Integer idComentario;

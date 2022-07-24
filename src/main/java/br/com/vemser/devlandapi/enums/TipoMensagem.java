@@ -18,7 +18,7 @@ public enum TipoMensagem {
         return tipoMensagem;
     }
 
-    public static TipoMensagem ofTipo(String tipoMensagem){
+    public static TipoMensagem ofTipo(String tipoMensagem) {
         return Arrays.stream(TipoMensagem.values())
                 .filter(tp -> tp.getTipo().equals(tipoMensagem))
                 .findFirst()

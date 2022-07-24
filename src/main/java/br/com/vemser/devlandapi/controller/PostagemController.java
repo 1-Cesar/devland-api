@@ -35,26 +35,26 @@ public class PostagemController implements PostagemDocs {
 
     @GetMapping("{idPostagem}")
     public ResponseEntity<PostagemDTO> listByIdPostagem(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.findByIdPostagem(idPostagem),HttpStatus.OK);
+        return new ResponseEntity<>(postagemService.findByIdPostagem(idPostagem), HttpStatus.OK);
     }
 
     // fazer igual a USUARIO post - inserir exemple
     @Override
     @PostMapping("/criar/{idUsuario}")
     public ResponseEntity<PostagemDTO> criar(@PathVariable("idUsuario") Integer idUsuario, @RequestBody PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.post(idUsuario,postagemCreateDTO),HttpStatus.OK);
+        return new ResponseEntity<>(postagemService.post(idUsuario, postagemCreateDTO), HttpStatus.OK);
     }
 
     @Override
     @PutMapping("/curtir/{idPostagem}")
     public ResponseEntity<PostagemDTO> curtir(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.curtir(idPostagem),HttpStatus.OK);
+        return new ResponseEntity<>(postagemService.curtir(idPostagem), HttpStatus.OK);
     }
 
     @Override
     @PutMapping("/editar/{idPostagem}")
-    public ResponseEntity<PostagemDTO> update(@PathVariable("idPostagem") Integer idPostagem,@RequestBody PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.update(idPostagem, postagemCreateDTO),HttpStatus.OK);
+    public ResponseEntity<PostagemDTO> update(@PathVariable("idPostagem") Integer idPostagem, @RequestBody PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(postagemService.update(idPostagem, postagemCreateDTO), HttpStatus.OK);
     }
 
     @Override

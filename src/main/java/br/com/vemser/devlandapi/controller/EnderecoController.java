@@ -3,16 +3,12 @@ package br.com.vemser.devlandapi.controller;
 import br.com.vemser.devlandapi.documentations.EnderecoDocs;
 import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
-
 import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +30,7 @@ public class EnderecoController implements EnderecoDocs {
         log.info("Listando todos os endereços");
         return ResponseEntity.ok(enderecoService.listar());
     }
+
     @GetMapping("/{idEndereco}")
     public ResponseEntity<List<EnderecoDTO>> listarEndereco(@PathVariable("idEndereco") Integer id) throws RegraDeNegocioException {
         log.info("Recuperando um endereço com base em seu id");
@@ -48,7 +45,7 @@ public class EnderecoController implements EnderecoDocs {
 
     @PostMapping("/{idUsuario}")
     public ResponseEntity<EnderecoDTO> adicionar(@PathVariable("idUsuario") Integer id,
-                                                       @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+                                                 @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando um endereço com base no id do usuário");
         return ResponseEntity.ok(enderecoService.adicionar(id, enderecoCreateDTO));
     }
@@ -67,7 +64,7 @@ public class EnderecoController implements EnderecoDocs {
     }
 
     @GetMapping("/paginacao-pais")
-    public PageDTO<EnderecoDTO> getRelatorioPaginadoPais(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String pais){
+    public PageDTO<EnderecoDTO> getRelatorioPaginadoPais(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String pais) {
         return enderecoService.paginacaoPais(pais, pagina, quantidadeRegistros);
     }
 }
