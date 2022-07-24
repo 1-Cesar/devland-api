@@ -1,10 +1,12 @@
 package br.com.vemser.devlandapi.entity;
 
 import br.com.vemser.devlandapi.enums.TipoPostagem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,8 +20,7 @@ public class PostagemEntity {
     @Column(name = "id_postagem")
     private Integer idPostagem;
 
-//    , insertable = false, updatable = false
-    @Column(name = "id_usuario")
+    @Column(name = "id_usuario", insertable = false, updatable = false)
     private Integer idUsuario;
 
     @Column(name = "tipo")
@@ -41,6 +42,17 @@ public class PostagemEntity {
     @Column(name = "data_postagem")
     private LocalDateTime data;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "postagemEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ComentarioEntity> comentarios;
 
-    //TODO verificar Script - conferir ON DELETE CASCADE - nas filhas
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private UsuarioEntity usuarioEntity;
+
+
+
+
+    //TODO inserir relacionamento OneToMany na UsuarioEntity
 }

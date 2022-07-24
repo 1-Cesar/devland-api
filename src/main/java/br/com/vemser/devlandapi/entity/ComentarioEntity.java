@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class ComentarioEntity {
     @Column(name = "id_comentario")
     private Integer idComentario;
 
-    @Column(name = "id_postagem")
+    @Column(name = "id_postagem", insertable = false, updatable = false)
     private Integer idPostagem;
 
     @Column(name = "id_usuario", insertable = false, updatable = false)
@@ -29,13 +30,20 @@ public class ComentarioEntity {
     @Column(name = "curtidas")
     private Integer curtidas;
 
-
     @Column(name = "data_comentario")
-    private String data;
+    private LocalDateTime data;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_postagem", referencedColumnName = "id_postagem")
+    private PostagemEntity postagemEntity;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuarioEntity;
+
+// TODO inserir relacionamento OneToMany na UsuarioEntity
+
 
 }

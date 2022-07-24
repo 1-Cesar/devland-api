@@ -79,4 +79,15 @@ public class UsuarioEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<TecnologiasEntity> tecnologias;
+
+    //-----------------------------------------------------------------------------
+    // Relacionamento Usuário — Postagens e Comentarios
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuarioEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PostagemEntity> postagens;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuarioEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ComentarioEntity> comentarios;
 }
