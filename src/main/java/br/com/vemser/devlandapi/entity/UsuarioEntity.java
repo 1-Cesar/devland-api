@@ -62,7 +62,7 @@ public class UsuarioEntity {
             mappedBy = "usuario",         //Indica o lado inverso do relacionamento
             cascade = CascadeType.ALL,   //Faz a cascata para deletar
             orphanRemoval = true)        //Deleta os órfãos
-    private Set<ContatoEntity> seguidores;
+    private Set<SeguidorEntity> seguidores;
 
 
 

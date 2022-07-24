@@ -1,23 +1,29 @@
 package br.com.vemser.devlandapi.dto;
 
+import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoClassificacao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class EnderecoCreateDTO {
 
-    @Schema(description = "id do desenvolvedor ou empresa", example = "1")
-    private Integer idUsuario;
+    private List<UsuarioEntity> usuarios;
 
     @Schema(description = "RESIDENCIAL OU COMERCIAL", example = "COMERCIAL")
     @NotNull(message = "informe o tipo do endereço (RESIDENCIAL ou COMERCIAL)")

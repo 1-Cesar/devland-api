@@ -1,6 +1,7 @@
 package br.com.vemser.devlandapi.repository;
 
 import br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO;
+import br.com.vemser.devlandapi.entity.SeguidorEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoUsuario;

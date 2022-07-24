@@ -5,16 +5,12 @@ import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
 
 import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.entity.EnderecoEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

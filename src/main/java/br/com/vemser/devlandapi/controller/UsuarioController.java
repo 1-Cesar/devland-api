@@ -63,12 +63,12 @@ public class UsuarioController implements UsuarioDocs {
         return usuarioService.paginacaoTipo(tipoUsuario, pagina, quantidadeRegistros);
     }
 
-    @GetMapping("/relatorio-stack-usuario")
+    @GetMapping("/paginado-stack-usuario")
     public PageDTO<RelatorioPersonalizadoDevDTO> getUsuarioByGenero(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String stack) {
         return usuarioService.paginacaoStack(stack, pagina, quantidadeRegistros);
     }
 
-    @GetMapping("/relatorio-genero-usuario")
+    @GetMapping("/paginado-genero-usuario")
     public PageDTO<RelatorioPersonalizadoDevDTO> getUsuarioByGenero(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) Genero genero) {
         return usuarioService.paginacaoGenero(genero, pagina, quantidadeRegistros);
     }

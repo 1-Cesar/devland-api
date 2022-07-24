@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class TecnologiasCreateDTO {
 
-    @Schema(description = "nome do desenvolvedor ou empresa", example = "João")
+    @Schema(description = "nome da tecnologia que o usuário conhece, uma por registro", example = "Spring Boot")
     @NotEmpty
     @Size(min = 1, max = 100)
     private String nomeTecnologia;
