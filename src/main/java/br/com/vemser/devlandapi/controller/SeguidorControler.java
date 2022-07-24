@@ -30,7 +30,7 @@ public class SeguidorControler implements SeguidorDocs {
 
     @GetMapping("/{idUsuario}")
     public ResponseEntity<List<SeguidorDTO>> listarSeguidores(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
-        log.info("Recuperando seguidores com base no id do usuário");
+        log.info("Lista quem o usuário segue");
         return ResponseEntity.ok(seguidorService.listarSeguidor(id));
     }
 
