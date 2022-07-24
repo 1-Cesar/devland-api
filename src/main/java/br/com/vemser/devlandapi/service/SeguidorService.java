@@ -33,11 +33,10 @@ public class SeguidorService {
     //LIST FOLLOWERS
     public List<SeguidorDTO> listarSeguidor(Integer id) throws RegraDeNegocioException {
         localizarUsuario(id);
-        return seguidorRepository.findAll().stream()
+        return seguidorRepository.findById(id).stream()
                 .filter(seguidor -> seguidor.getIdUsuario().equals(id))
                 .map(this::retornarSeguidorDTO)//converte dto através de método
                 .collect(Collectors.toList());
-
     }
 
     //==================================================================================================================
@@ -91,7 +90,27 @@ public class SeguidorService {
 
     }
 
+    public UsuarioEntity localizarUsuario (Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioRecuperado = usuarioRepository.findAll().stream()
+                .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+        return usuarioRecuperado;
+    }
 
+    //DTO PARA ENTITY
+    public SeguidorEntity retornarSeguidorEntity(SeguidorCreateDTO seguidorCreateDTO) {
+        return objectMapper.convertValue(seguidorCreateDTO, SeguidorEntity.class);
+    }
+
+    //ENTITY PARA DTO
+    public SeguidorDTO retornarSeguidorDTO(SeguidorEntity seguidor) {
+        return objectMapper.convertValue(seguidor, SeguidorDTO.class);
+    }
+}
+
+
+/*
     public SeguidorEntity verificaSeSegue (Integer id, Integer idSeguidor) throws RegraDeNegocioException {
         //SeguidorEntity seguidorRecuperado = seguidorRepository.findById(id).stream()
         SeguidorEntity seguidorRecuperado = seguidorRepository.findAll().stream()
@@ -102,16 +121,8 @@ public class SeguidorService {
         return seguidorRecuperado;
 
     }
-
-
-    public UsuarioEntity localizarUsuario (Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioEntity usuarioRecuperado = usuarioRepository.findAll().stream()
-                .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
-        return usuarioRecuperado;
-    }
-
+*/
+    /*
 
     //Confere se já existe seguidor com mesmo id
     public SeguidorEntity verificaSeguidor (Integer idUsuario) throws RegraDeNegocioException {
@@ -131,18 +142,4 @@ public class SeguidorService {
         return seguidorRecuperado;
     }
 
-
-
-    //DTO PARA ENTITY
-    public SeguidorEntity retornarSeguidorEntity(SeguidorCreateDTO seguidorCreateDTO) {
-        return objectMapper.convertValue(seguidorCreateDTO, SeguidorEntity.class);
-    }
-
-
-    //ENTITY PARA DTO
-    public SeguidorDTO retornarSeguidorDTO(SeguidorEntity seguidor) {
-        return objectMapper.convertValue(seguidor, SeguidorDTO.class);
-    }
-
-
-}
+*/

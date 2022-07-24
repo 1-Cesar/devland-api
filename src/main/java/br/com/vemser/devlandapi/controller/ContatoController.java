@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.controller;
 import br.com.vemser.devlandapi.documentations.ContatoDocs;
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
+import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.ContatoService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +24,23 @@ public class ContatoController implements ContatoDocs {
     @Autowired
     private ContatoService contatoService;
 
+
+    @GetMapping
+    public PageDTO<ContatoDTO> listarPaginado(Integer pagina, Integer quantidadeRegistros){
+        return contatoService.listarPaginado(pagina, quantidadeRegistros);
+    }
+
+/*----------------------------------------------------------------------------------------------------------------------
+
+    SUBSTITUÍDO POR GET MAPPING LISTAR PAGINADO
+
     @GetMapping
     public ResponseEntity<List<ContatoDTO>> listar() throws RegraDeNegocioException {
         log.info("Listando todos os contatos");
         return ResponseEntity.ok(contatoService.listar());
     }
+
+ ---------------------------------------------------------------------------------------------------------------------*/
 
     @GetMapping("/contato/{idContato}")
     public ResponseEntity<List<ContatoDTO>> listarContato(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {

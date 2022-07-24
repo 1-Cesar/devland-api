@@ -2,6 +2,7 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
+import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
@@ -10,10 +11,12 @@ import br.com.vemser.devlandapi.repository.ContatoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,9 +33,11 @@ public class ContatoService {
     private UsuarioService usuarioService;
 
 
-    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    /*  SUBSTITUÍDO POR LIST ALL PAGINADO
+
     //LIST ALL
-    public List<ContatoDTO> listar() throws RegraDeNegocioException { //todo acho que deu certo
+    public List<ContatoDTO> listar() throws RegraDeNegocioException {
         if (contatoRepository.findAll().size() == 0) {
             throw new RegraDeNegocioException("Nenhum contato encontrado");
         } else {
@@ -41,12 +46,25 @@ public class ContatoService {
                     .collect(Collectors.toList());
         }
     }
+    */
+    //==================================================================================================================
+    //LIST ALL - PAGINADO
+
+    public PageDTO<ContatoDTO> listarPaginado(Integer pagina,
+                                              Integer registroPorPagina) {
+        Pageable pageable = PageRequest.of(pagina, registroPorPagina);
+        Page<ContatoEntity> page = contatoRepository.findAll(pageable);
+        List<ContatoDTO> contatoDTOS = page.getContent().stream()
+                .map(contatoEntity -> objectMapper.convertValue(contatoEntity, ContatoDTO.class))
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registroPorPagina, contatoDTOS);
+    }
 
     //==================================================================================================================
-    //LIST CONTATO
+    //LIST CONTATO POR ID
     public List<ContatoDTO> listarContatoPorId(Integer id) throws RegraDeNegocioException {
         localizarContato(id);
-        return contatoRepository.findAll().stream()
+        return contatoRepository.findById(id).stream()
                 .filter(contato -> contato.getIdContato().equals(id))
                 .map(this::retornarContatoDTO)//converte dto através de método
                 .collect(Collectors.toList());
@@ -62,8 +80,6 @@ public class ContatoService {
                 .map(this::retornarContatoDTO)
                 .collect(Collectors.toList());
     }
-
-
 
     //==================================================================================================================
     //ADICIONAR
@@ -90,29 +106,16 @@ public class ContatoService {
                              ContatoDTO contatoDTO) throws RegraDeNegocioException {
         ContatoEntity contatoRecuperado = localizarContato(id);
 
-        //UsuarioEntity usuarioEntity = contatoRecuperado.getUsuario();
-        //usuarioEntity.setContatos(null);
-
-
         UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoDTO.getIdUsuario());
 
         contatoRecuperado.setTipo(contatoDTO.getTipo());
         contatoRecuperado.setNumero(contatoDTO.getNumero());
         contatoRecuperado.setDescricao(contatoDTO.getDescricao());
         contatoRecuperado.setUsuario(usuarioRecuperado);
-       // usuarioRecuperado.setContatos(Set.of(contatoRecuperado));
-        //usuarioService.adicionar(retornarUsuarioDTO(usuarioRecuperado));
-
-
-       // if (! usuarioRecuperado.getIdUsuario() .equals(usuarioEntity.getIdUsuario())) {
-       //     usuarioService.adicionar(retornarUsuarioDTO(usuarioEntity));
-       // }
-
 
         return retornarContatoDTO(contatoRepository.save(contatoRecuperado));
 
     }
-
 
     //==================================================================================================================
     //EXCLUIR
@@ -125,11 +128,10 @@ public class ContatoService {
         contatoRepository.delete(contatoEntityRecuperado);
     }
 
-
     //==================================================================================================================
     //LOCALIZAR CONTATO
     public ContatoEntity localizarContato (Integer idContato) throws RegraDeNegocioException {
-        ContatoEntity contatoRecuperado = contatoRepository.findAll().stream()
+        ContatoEntity contatoRecuperado = contatoRepository.findById(idContato).stream()
                 .filter(contato -> contato.getIdContato().equals(idContato))
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Contato não encontrado"));
@@ -149,6 +151,5 @@ public class ContatoService {
     public UsuarioDTO retornarUsuarioDTO(UsuarioEntity usuario) {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
-
 
 }
