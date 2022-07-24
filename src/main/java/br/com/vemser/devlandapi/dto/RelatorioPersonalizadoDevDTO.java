@@ -1,15 +1,11 @@
 package br.com.vemser.devlandapi.dto;
 
-import br.com.vemser.devlandapi.entity.TecnologiasEntity;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoClassificacao;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

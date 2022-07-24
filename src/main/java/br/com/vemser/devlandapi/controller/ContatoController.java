@@ -26,21 +26,9 @@ public class ContatoController implements ContatoDocs {
 
 
     @GetMapping
-    public PageDTO<ContatoDTO> listarPaginado(Integer pagina, Integer quantidadeRegistros){
+    public PageDTO<ContatoDTO> listarPaginado(Integer pagina, Integer quantidadeRegistros) {
         return contatoService.listarPaginado(pagina, quantidadeRegistros);
     }
-
-/*----------------------------------------------------------------------------------------------------------------------
-
-    SUBSTITUÍDO POR GET MAPPING LISTAR PAGINADO
-
-    @GetMapping
-    public ResponseEntity<List<ContatoDTO>> listar() throws RegraDeNegocioException {
-        log.info("Listando todos os contatos");
-        return ResponseEntity.ok(contatoService.listar());
-    }
-
- ---------------------------------------------------------------------------------------------------------------------*/
 
     @GetMapping("/contato/{idContato}")
     public ResponseEntity<List<ContatoDTO>> listarContato(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {

@@ -17,7 +17,7 @@ public enum TipoPostagem {
         return tipo;
     }
 
-    public static TipoPostagem ofTema(Integer tipo){ // 1
+    public static TipoPostagem ofTema(Integer tipo) { // 1
         return Arrays.stream(TipoPostagem.values()) //[VAGAS(1) , PROGRAMAS(2), PENSAMENTOS(3)]
                 .filter(t -> t.getTipo().equals(tipo)) //[VAGAS(1)]
                 .findFirst() //optional => VAGAS(1)

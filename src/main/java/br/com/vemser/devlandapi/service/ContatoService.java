@@ -3,7 +3,6 @@ package br.com.vemser.devlandapi.service;
 import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.ContatoDTO;
 import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -33,22 +32,8 @@ public class ContatoService {
     private UsuarioService usuarioService;
 
 
-    //------------------------------------------------------------------------------------------------------------------
-    /*  SUBSTITUÍDO POR LIST ALL PAGINADO
-
-    //LIST ALL
-    public List<ContatoDTO> listar() throws RegraDeNegocioException {
-        if (contatoRepository.findAll().size() == 0) {
-            throw new RegraDeNegocioException("Nenhum contato encontrado");
-        } else {
-            return contatoRepository.findAll().stream()
-                    .map(this::retornarContatoDTO)//converte dto através de método
-                    .collect(Collectors.toList());
-        }
-    }
-    */
     //==================================================================================================================
-    //LIST ALL - PAGINADO
+    //LISTAR TUDO - PAGINADO
 
     public PageDTO<ContatoDTO> listarPaginado(Integer pagina,
                                               Integer registroPorPagina) {
@@ -62,6 +47,7 @@ public class ContatoService {
 
     //==================================================================================================================
     //LIST CONTATO POR ID
+
     public List<ContatoDTO> listarContatoPorId(Integer id) throws RegraDeNegocioException {
         localizarContato(id);
         return contatoRepository.findById(id).stream()
@@ -114,7 +100,6 @@ public class ContatoService {
         contatoRecuperado.setUsuario(usuarioRecuperado);
 
         return retornarContatoDTO(contatoRepository.save(contatoRecuperado));
-
     }
 
     //==================================================================================================================
@@ -124,13 +109,15 @@ public class ContatoService {
         ContatoEntity contatoEntityRecuperado = localizarContato(id);
         UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoEntityRecuperado.getIdUsuario());
 
-       // log
+        // log
         contatoRepository.delete(contatoEntityRecuperado);
     }
 
     //==================================================================================================================
+    //MÉTODOS AUXILIARES
+
     //LOCALIZAR CONTATO
-    public ContatoEntity localizarContato (Integer idContato) throws RegraDeNegocioException {
+    public ContatoEntity localizarContato(Integer idContato) throws RegraDeNegocioException {
         ContatoEntity contatoRecuperado = contatoRepository.findById(idContato).stream()
                 .filter(contato -> contato.getIdContato().equals(idContato))
                 .findFirst()
@@ -146,10 +133,6 @@ public class ContatoService {
     //ENTITY PARA DTO
     public ContatoDTO retornarContatoDTO(ContatoEntity contato) {
         return objectMapper.convertValue(contato, ContatoDTO.class);
-    }
-
-    public UsuarioDTO retornarUsuarioDTO(UsuarioEntity usuario) {
-        return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
 
 }
