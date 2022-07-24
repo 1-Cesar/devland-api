@@ -1,7 +1,8 @@
 package br.com.vemser.devlandapi.controller;
 
-import br.com.vemser.devlandapi.dto.*;
-import br.com.vemser.devlandapi.enums.TipoUsuario;
+import br.com.vemser.devlandapi.documentations.TecnologiasDocs;
+import br.com.vemser.devlandapi.dto.TecnologiasCreateDTO;
+import br.com.vemser.devlandapi.dto.TecnologiasDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.TecnologiasService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,14 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/tecnologia")
-public class TecnologiasController {
+public class TecnologiasController implements TecnologiasDocs {
 
     @Autowired
     private TecnologiasService tecnologiasService;
 
 
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<TecnologiasDTO> adicionar(@PathVariable ("idUsuario") Integer idUsuario,
+    public ResponseEntity<TecnologiasDTO> adicionar(@PathVariable("idUsuario") Integer idUsuario,
                                                     @Valid @RequestBody TecnologiasCreateDTO tecnologiasCreateDTO) throws RegraDeNegocioException {
         return ResponseEntity.ok(tecnologiasService.create(idUsuario, tecnologiasCreateDTO));
     }
