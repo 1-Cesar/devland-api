@@ -2,11 +2,8 @@ package br.com.vemser.devlandapi.dto;
 
 import br.com.vemser.devlandapi.enums.TipoClassificacao;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,7 +20,7 @@ public class ContatoCreateDTO {
     private String numero;
 
     @Schema(description = "Whatsapp, Telegram, etc.", example = "Whatsapp")
-    @NotEmpty(message = "Descrição deve ser preencida (ex: whatsapp, telegram, observações, etc.)")
+    @NotEmpty(message = "Descrição deve ser preencida (ex.: whatsapp, telegram, observações, etc.)")
     private String descricao;
 
     @Schema(description = "RESIDENCIAL OU COMERCIAL", example = "RESIDENCIAL")
