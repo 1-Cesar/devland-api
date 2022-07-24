@@ -1,8 +1,7 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
-import br.com.vemser.devlandapi.dto.PostagemDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.entity.ComentarioEntity;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
@@ -13,12 +12,14 @@ import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -40,14 +41,22 @@ public class PostagemService {
 
     private String strLocalDateTime;
 
-    public List<PostagemDTO> list() throws RegraDeNegocioException {
-        if (postagemRepository.findAll().isEmpty()) {
-            throw new RegraDeNegocioException("Nenhuma postagem encontrada");
-        } else {
-            return postagemRepository.findAll().stream()
-                    .map(this::convertToDTO)
-                    .toList();
-        }
+    public PageDTO<PostagemDTO> list(Integer pagina,Integer quantRegistros) throws RegraDeNegocioException {
+        PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
+        Page<PostagemEntity> page = postagemRepository.findAll(pageRequest);
+        List<PostagemDTO> postagensDTO = page.getContent().stream()
+                .map(comentario -> objectMapper.convertValue(comentario, PostagemDTO.class))
+                .toList();
+
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, postagensDTO);
+    }
+
+    public PageDTO<RelatorioPostagemDTO> relatorioPostagem(Integer pagina, Integer quantRegistros) {
+        PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
+        Page<RelatorioPostagemDTO> page = postagemRepository.relatorioPostagem(pageRequest);
+        List<RelatorioPostagemDTO> relatorioPostagemDTO = page.getContent();
+
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, relatorioPostagemDTO);
     }
 
     public PostagemDTO findByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
@@ -55,10 +64,14 @@ public class PostagemService {
     }
 
 
-    public List<PostagemDTO> listByTipo(TipoPostagem tipoPostagem) {
-        return postagemRepository.filtrarPorTipo(tipoPostagem).stream()
-                .map(this::convertToDTO)
+    public PageDTO<PostagemDTO> listByTipo(TipoPostagem tipoPostagem, Integer pagina, Integer quantRegistros) throws RegraDeNegocioException {
+        PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
+        Page<PostagemEntity> page = postagemRepository.filtrarPorTipo(tipoPostagem, pageRequest);
+        List<PostagemDTO> postagensDTO = page.getContent().stream()
+                .map(postagem -> objectMapper.convertValue(postagem, PostagemDTO.class))
                 .toList();
+
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, postagensDTO);
     }
 
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
@@ -69,6 +82,7 @@ public class PostagemService {
         postagemEntity.setIdUsuario(idUsuario);
         postagemEntity.setCurtidas(0);
         postagemEntity.setData(LocalDateTime.now());
+        postagemEntity.setUsuarioEntity(usuarioValid);
 
         postagemRepository.save(postagemEntity);
 

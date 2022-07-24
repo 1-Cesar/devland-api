@@ -26,4 +26,7 @@ public class PostagemCreateDTO {
 
     @Schema(description = "Descrição da PostagemEntity")
     private String foto;
+
+    @Schema(description = "Id do Usuário")
+    private Integer idUsuario;
 }

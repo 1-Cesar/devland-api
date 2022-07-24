@@ -30,7 +30,5 @@ public class PostagemDTO {
     @Schema(description = "Data da PostagemEntity")
     private String data;
 
-    @Schema(description = "Id do Usuário")
-    private Integer idUsuario;
 
 }
