@@ -23,8 +23,6 @@ import java.util.List;
 @AllArgsConstructor
 public class EnderecoCreateDTO {
 
-    private List<UsuarioEntity> usuarios;
-
     @Schema(description = "RESIDENCIAL OU COMERCIAL", example = "COMERCIAL")
     @NotNull(message = "informe o tipo do endereço (RESIDENCIAL ou COMERCIAL)")
     private TipoClassificacao tipo;

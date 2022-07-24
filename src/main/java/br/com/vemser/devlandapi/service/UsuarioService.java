@@ -1,9 +1,6 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO;
-import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.dto.*;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
@@ -287,7 +284,7 @@ public class UsuarioService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, usuarioDTOS);
     }
 
-    public PageDTO<RelatorioPersonalizadoDevDTO> paginacaoStack(String stack, Integer pagina, Integer quantidadeRegistros) {
+    public PageDTO<RelatorioPersonalizadoDevDTO> relatorioStack(String stack, Integer pagina, Integer quantidadeRegistros) {
         Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
         Page<RelatorioPersonalizadoDevDTO> page = usuarioRepository.relatorioPersonalizadoDevDTO(stack, pageable);
         List<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevDTOS = page.getContent().stream()
@@ -295,7 +292,7 @@ public class UsuarioService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, relatorioPersonalizadoDevDTOS);
     }
 
-    public PageDTO<RelatorioPersonalizadoDevDTO> paginacaoGenero(Genero genero, Integer pagina, Integer quantidadeRegistros) {
+    public PageDTO<RelatorioPersonalizadoDevDTO> relatorioGenero(Genero genero, Integer pagina, Integer quantidadeRegistros) {
         Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
         Page<RelatorioPersonalizadoDevDTO> page = usuarioRepository.relatorioPersonalizadoDevGeneroDTO(genero, pageable);
         List<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevDTOS = page.getContent().stream()

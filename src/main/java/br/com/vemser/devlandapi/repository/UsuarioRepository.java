@@ -38,9 +38,9 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
             " t.nomeTecnologia" +
             ") " +
             " from usuario u " +
-            " inner join u.contatos c " +
-            " inner join u.enderecos e " +
-            " inner join u.tecnologias t " +
+            " full join u.contatos c " +
+            " full join u.enderecos e " +
+            " full join u.tecnologias t " +
             " where (:areaAtuacao is null OR u.areaAtuacao = :areaAtuacao )")
     Page<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevDTO(@Param("areaAtuacao") String areaAtuacao, Pageable pageable);
 
@@ -60,9 +60,9 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
             " t.nomeTecnologia" +
             ") " +
             " from usuario u " +
-            " inner join u.contatos c " +
-            " inner join u.enderecos e " +
-            " inner join u.tecnologias t " +
+            " full join u.contatos c " +
+            " full join u.enderecos e " +
+            " full join u.tecnologias t " +
             " where (:genero is null OR u.genero = :genero )")
     Page<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevGeneroDTO(@Param("genero") Genero genero, Pageable pageable);
 

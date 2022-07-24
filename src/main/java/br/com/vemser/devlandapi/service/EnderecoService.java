@@ -3,15 +3,18 @@ package br.com.vemser.devlandapi.service;
 import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.EnderecoDTO;
 import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.EnderecoEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.EnderecoRepository;
+import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +31,9 @@ public class EnderecoService {
     private EnderecoRepository enderecoRepository;
 
     @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
     private UsuarioService usuarioService;
 
     public List<EnderecoDTO> listar() throws RegraDeNegocioException {
@@ -35,25 +41,38 @@ public class EnderecoService {
             throw new RegraDeNegocioException("Nenhum endereço encontrado");
         } else {
             return enderecoRepository.findAll().stream()
-                    .map(this::retornarDTO)
-                    .collect(Collectors.toList());
+                    .map(enderecoEntity -> {
+                        EnderecoDTO enderecoDTO = retornarDTO(enderecoEntity);
+                        enderecoDTO.setUsuarios(enderecoEntity.getUsuarios().stream()
+                                        .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
+                                .toList());
+                        return enderecoDTO;
+                    }).toList();
         }
     }
 
     public List<EnderecoDTO> listarEndereco(int id) throws RegraDeNegocioException {
         localizarEndereco(id);
         return enderecoRepository.findById(id).stream()
-                .filter(endereco -> endereco.getIdEndereco().equals(id))
-                .map(this::retornarDTO)
-                .collect(Collectors.toList());
+                .map(enderecoEntity -> {
+                    EnderecoDTO enderecoDTO = retornarDTO(enderecoEntity);
+                    enderecoDTO.setUsuarios(enderecoEntity.getUsuarios().stream()
+                            .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
+                            .toList());
+                    return enderecoDTO;
+                }).toList();
     }
 
-    public List<EnderecoDTO> listarEnderecoUsuario(Integer id) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = usuarioService.localizarUsuario(id);
-        return enderecoRepository.findAll().stream()
-                .filter(endereco -> endereco.getUsuarios().contains(usuarioEntity))
-                .map(this::retornarDTO)
-                .toList();
+    public List<UsuarioDTO> listarEnderecoUsuario(Integer id) throws RegraDeNegocioException {
+        usuarioService.localizarUsuario(id);
+        return usuarioRepository.findById(id).stream()
+                .map(pessoaEntity -> {
+                    UsuarioDTO usuarioDTO = usuarioService.retornarDTO(pessoaEntity);
+                    usuarioDTO.setEnderecoDTOS(pessoaEntity.getEnderecos().stream()
+                            .map(enderecoEntity -> objectMapper.convertValue(enderecoEntity, EnderecoDTO.class))
+                            .toList());
+                    return usuarioDTO;
+                }).toList();
     }
 
     public void delete(Integer id) throws RegraDeNegocioException {
@@ -118,7 +137,8 @@ public class EnderecoService {
     }
 
     public PageDTO<EnderecoDTO> paginacaoPais(String pais, Integer pagina, Integer quantidadeRegistros) {
-        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Sort ordenacao = Sort.by("pais");
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros, ordenacao);
         Page<EnderecoEntity> page = enderecoRepository.paginacaoPais(pais, pageable);
         List<EnderecoDTO> enderecoDTOS = page.getContent().stream()
                 .map(this::retornarDTO)
