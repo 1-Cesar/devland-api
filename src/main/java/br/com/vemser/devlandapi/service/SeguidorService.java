@@ -33,7 +33,7 @@ public class SeguidorService {
     //LIST FOLLOWERS
     public List<SeguidorDTO> listarSeguidor(Integer id) throws RegraDeNegocioException {
         localizarUsuario(id);
-        return seguidorRepository.findById(id).stream()
+        return seguidorRepository.findAll().stream()
                 .filter(seguidor -> seguidor.getIdUsuario().equals(id))
                 .map(this::retornarSeguidorDTO)//converte dto através de método
                 .collect(Collectors.toList());
