@@ -82,7 +82,7 @@ public class SeguidorService {
 
     public SeguidorEntity seguidorQueSeraDeletado (Integer id, Integer idSeguidor) throws RegraDeNegocioException {
         SeguidorEntity seguidorRecuperado = seguidorRepository.findAll().stream()
-                .filter(seguidor -> seguidor.getId().equals(id) && seguidor.getIdSeguidor().equals(idSeguidor))
+                .filter(seguidor -> seguidor.getIdUsuario().equals(id) && seguidor.getIdSeguidor().equals(idSeguidor))
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Seguidor não encontrado para deixar de seguir"));
 
