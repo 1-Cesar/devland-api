@@ -1,11 +1,20 @@
 package br.com.vemser.devlandapi.repository;
 
 import br.com.vemser.devlandapi.entity.SeguidorEntity;
+import feign.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface SeguidorRepository extends JpaRepository<SeguidorEntity, Integer> {
+
+    @Query( " select s " +
+            " from seguidor s" +
+            " where s.idUsuario = :idUsuario AND s.idSeguidor = :idSeguidor")
+    List<SeguidorEntity> verificaSeguidor(@Param("idUsuario") Integer idUsuario, @Param("idSeguidor") Integer idSeguidor);
 
 
 

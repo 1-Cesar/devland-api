@@ -5,9 +5,10 @@ import lombok.Data;
 @Data
 public class SeguidorCreateDTO {
 
-    private String nomeSeguidor;
 
     private Integer idSeguidor;
+
+    private String nomeSeguidor;
 
     private Integer idUsuario;
 }

@@ -18,14 +18,14 @@ public class SeguidorEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "id_usuario", insertable = false, updatable = false)
-    private Integer idUsuario;
+    @Column(name = "id_seguidor")
+    private Integer idSeguidor;
 
     @Column(name = "nome_seguidor")
     private String nomeSeguidor;
 
-    @Column(name = "id_seguidor")
-    private Integer idSeguidor;
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
 
     //--------------------------------------------------------------------
 
