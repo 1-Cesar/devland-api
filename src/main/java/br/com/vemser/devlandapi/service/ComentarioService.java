@@ -14,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -23,7 +25,7 @@ public class ComentarioService {
     @Autowired
     private PostagemRepository postagemRepository;
 
-//    @Autowired
+    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Autowired
@@ -37,59 +39,43 @@ public class ComentarioService {
                 .map(this::convertToDTO).toList();
     }
 
-    public ComentarioDTO create(ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException{
+    public ComentarioDTO create(Integer idPostagem, Integer idUsuario,ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException{
+
+        UsuarioEntity usuarioValid = convertOptionalToUsuarioEntity(usuarioRepository.findById(idUsuario));
         ComentarioEntity comentarioEntity = convertToEntity(comentarioCreateDTO);
+
+        comentarioEntity.setIdPostagem(idPostagem);
+        comentarioEntity.setIdUsuario(idUsuario);
+        comentarioEntity.setUsuarioEntity(usuarioValid);
+        comentarioEntity.setCurtidas(0);
+        comentarioEntity.setData(LocalDateTime.now());
+
 
        return convertToDTO(comentarioRepository.save(comentarioEntity));
 
     }
 
-//    public ComentarioDTO post(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
-//
-//        if (postagemRepository.findByIdPostagem(idPostagem) == null) {
-//            throw new RegraDeNegocioException("PostagemEntity não encontrada");
-//        } else if (usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).isEmpty()) {
-//            throw new RegraDeNegocioException("Usuário não encontrado");
-//        } else {
-//            log.info("Adicionando comentário...");
-//
-//            Usuario usuario = usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).get(0);
-//
-//            String strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-//
-//            ComentarioEntity comentarioEntity = convertToEntity(comentarioCreateDTO);
-//            comentarioEntity.setIdPostagem(idPostagem);
-//            comentarioEntity.setCurtidas(0);
-//            comentarioEntity.setData(strLocalDateTime);
-//
-//            comentarioRepository.post(comentarioEntity);
-//
-//            log.info("Comentário criado...");
-//
-//            UsuarioDTO usuarioDTO = convertUsuarioDTO(usuario);
-//
-//            ComentarioDTO comentarioDTO = convertToDTO(comentarioEntity);
-//
-//            comentarioDTO.setUsuario(usuarioDTO);
-//
-//            return comentarioDTO;
-//        }
-//    }
-//
-//    public void delete(Integer idComentario) throws RegraDeNegocioException {
-//
-//        if (comentarioRepository.findById(idComentario) != null) {
-//            log.info("Deletando comentário...");
-//
-//            postagemRepository.delete(idComentario);
-//
-//            log.info("PostagemEntity removida...");
-//        }
-//        else {
-//            throw new RegraDeNegocioException("Comentário não encontrado");
-//        }
-//    }
+    public ComentarioDTO update (Integer idComentario,
+                                 ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException{
 
+        ComentarioEntity comentarioValid = convertOptionalToComentarioEntity(comentarioRepository.findById(idComentario));
+        UsuarioEntity usuario = convertOptionalToUsuarioEntity(usuarioRepository.findById(comentarioValid.getIdUsuario()));
+
+        comentarioValid.setDescricao(comentarioCreateDTO.getDescricao());
+        comentarioValid.setUsuarioEntity(usuario);
+
+        System.out.println("ComentarioValid = "+comentarioValid);
+
+        comentarioRepository.save(comentarioValid);
+        return convertToDTO(comentarioValid);
+    }
+
+    public void delete ( Integer idComentario){
+        ComentarioEntity comentarioValid = convertOptionalToComentarioEntity(comentarioRepository.findById(idComentario));
+        comentarioRepository.delete(comentarioValid);
+    }
+
+//    ========================= CONVERSÕES =========================
 
     public ComentarioEntity convertToEntity(ComentarioCreateDTO comentarioCreateDTO) {
         return objectMapper.convertValue(comentarioCreateDTO, ComentarioEntity.class);
@@ -101,6 +87,14 @@ public class ComentarioService {
 
     public UsuarioDTO convertUsuarioDTO(UsuarioEntity usuario) {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
+    }
+
+    public UsuarioEntity convertOptionalToUsuarioEntity(Optional usuario) {
+        return objectMapper.convertValue(usuario, UsuarioEntity.class);
+    }
+
+    public ComentarioEntity convertOptionalToComentarioEntity(Optional comentario) {
+        return objectMapper.convertValue(comentario, ComentarioEntity.class);
     }
 
 }

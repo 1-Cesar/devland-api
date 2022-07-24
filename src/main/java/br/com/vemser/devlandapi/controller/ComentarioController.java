@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,21 +25,24 @@ public class ComentarioController implements ComentarioDocs {
     public List<ComentarioDTO> list() throws RegraDeNegocioException {
         return comentarioService.list();
     }
-//TODO - completar os return
     @Override
-    @PostMapping("/criar/{idPostagem}")
-    public ResponseEntity<ComentarioDTO> create(@PathVariable("idPostagem") Integer idPostagem, @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
-        return null;
+    @PostMapping("/criar/{idPostagem}/postagem/{idUsuario}/usuario")
+    public ResponseEntity<ComentarioDTO> create(@PathVariable("idPostagem") Integer idPostagem,
+                                                @PathVariable("idUsuario") Integer idUsuario,
+                                                @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(comentarioService.create(idPostagem, idUsuario, comentarioCreateDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/editar/{idComentario}")
-    public ResponseEntity<ComentarioDTO> update(@PathVariable("idPostagem") Integer idPostagem, @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
-        return null;
+    public ResponseEntity<ComentarioDTO> update(@PathVariable("idComentario") Integer idComentario,
+                                                @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(comentarioService.update(idComentario, comentarioCreateDTO), HttpStatus.OK);
     }
 
     @Override
     @DeleteMapping("/delete/{idComentario}")
     public ResponseEntity<Void> delete(@PathVariable("idComentario") Integer idComentario) throws RegraDeNegocioException {
-        return null;
+        comentarioService.delete(idComentario);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

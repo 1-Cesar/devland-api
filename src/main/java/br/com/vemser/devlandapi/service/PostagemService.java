@@ -2,7 +2,6 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.PostagemDTO;
-import br.com.vemser.devlandapi.dto.PostagemComentDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
@@ -129,7 +128,7 @@ public class PostagemService {
         return objectMapper.convertValue(postagemEntity, PostagemDTO.class);
     }
 
-    public PostagemComentDTO convertToComentDTO(PostagemEntity postagemEntity) {
-        return objectMapper.convertValue(postagemEntity, PostagemComentDTO.class);
-    }
+//    public PostagemComentDTO convertToComentDTO(PostagemEntity postagemEntity) {
+//        return objectMapper.convertValue(postagemEntity, PostagemComentDTO.class);
+//    }
 }

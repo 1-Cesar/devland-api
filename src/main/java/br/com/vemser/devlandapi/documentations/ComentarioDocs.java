@@ -9,17 +9,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import java.util.List;
 
 public interface ComentarioDocs {
     @ComentarioNotas
     @Operation(summary = "Listar todos os comentários", description = "Listar todos os comentários sem filtro.")
-    public List<ComentarioDTO> list() throws RegraDeNegocioException;
+    List<ComentarioDTO> list() throws RegraDeNegocioException;
 
     @ComentarioNotas
     @Operation(summary = "Adicionar um comentário", description = "Adicionará um novo comentário ao banco de dados.")
-    public ResponseEntity<ComentarioDTO> create(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException;
+    ResponseEntity<ComentarioDTO> create(@PathVariable("idPostagem") Integer idPostagem,
+                                                @PathVariable("idUsuario") Integer idUsuario,
+                                                @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException;
 
     @ComentarioNotas
     @Operation(summary = "Editar um comentário", description = "Edita um comentário especificado por seu id.")
