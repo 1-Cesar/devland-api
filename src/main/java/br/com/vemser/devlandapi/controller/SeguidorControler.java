@@ -1,6 +1,7 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.SeguidorDocs;
+import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.SeguidorCreateDTO;
 import br.com.vemser.devlandapi.dto.SeguidorDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -13,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,11 +29,19 @@ public class SeguidorControler implements SeguidorDocs {
 
 
     @GetMapping("/{idUsuario}")
+    public PageDTO<SeguidorDTO> listarSeguidores(Integer pagina, Integer quantidadeRegistros, @PathVariable("idUsuario") Integer id)
+            throws RegraDeNegocioException {
+        return seguidorService.listarSeguidores(pagina, quantidadeRegistros, id);
+    }
+
+
+/*
+    @GetMapping("/{idUsuario}")
     public ResponseEntity<List<SeguidorDTO>> listarSeguidores(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
         log.info("Lista quem o usuário segue");
         return ResponseEntity.ok(seguidorService.listarSeguidor(id));
     }
-
+*/
     @PostMapping("/{idUsuario}")
     public ResponseEntity<SeguidorCreateDTO> adicionar(@PathVariable("idUsuario") Integer id,
                                                        @Valid @RequestBody SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {

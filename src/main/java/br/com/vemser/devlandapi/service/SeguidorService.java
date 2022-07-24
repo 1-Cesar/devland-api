@@ -1,7 +1,10 @@
 package br.com.vemser.devlandapi.service;
 
+import br.com.vemser.devlandapi.dto.ContatoDTO;
+import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.SeguidorCreateDTO;
 import br.com.vemser.devlandapi.dto.SeguidorDTO;
+import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.SeguidorEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -10,6 +13,9 @@ import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +34,23 @@ public class SeguidorService {
     @Autowired
     private SeguidorRepository seguidorRepository;
 
+    //==================================================================================================================
+    //LIST FOLLOWERS - PAGINADO
+    public PageDTO<SeguidorDTO> listarSeguidores(Integer pagina,
+                                               Integer registroPorPagina, Integer id) throws RegraDeNegocioException {
+        localizarUsuario(id);
+        Pageable pageable = PageRequest.of(pagina, registroPorPagina);
+        Page<SeguidorEntity> page = seguidorRepository.findAll(pageable);
 
+        List<SeguidorDTO> seguidorDTOS = page.getContent().stream()
+                .filter(seguidor -> seguidor.getIdUsuario().equals(id))
+                .map(this::retornarSeguidorDTO)
+                .toList();
+
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registroPorPagina, seguidorDTOS);
+    }
+
+/*
     //==================================================================================================================
     //LIST FOLLOWERS
     public List<SeguidorDTO> listarSeguidor(Integer id) throws RegraDeNegocioException {
@@ -38,7 +60,7 @@ public class SeguidorService {
                 .map(this::retornarSeguidorDTO)//converte dto através de método
                 .collect(Collectors.toList());
     }
-
+*/
     //==================================================================================================================
     //ADICIONAR
 
@@ -109,37 +131,3 @@ public class SeguidorService {
     }
 }
 
-
-/*
-    public SeguidorEntity verificaSeSegue (Integer id, Integer idSeguidor) throws RegraDeNegocioException {
-        //SeguidorEntity seguidorRecuperado = seguidorRepository.findById(id).stream()
-        SeguidorEntity seguidorRecuperado = seguidorRepository.findAll().stream()
-                .filter(seguidor -> seguidor.getId().equals(id) && seguidor.getIdSeguidor().equals(idSeguidor))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Seguidor ja segue devia deixar a porra do codigo continuar"));
-
-        return seguidorRecuperado;
-
-    }
-*/
-    /*
-
-    //Confere se já existe seguidor com mesmo id
-    public SeguidorEntity verificaSeguidor (Integer idUsuario) throws RegraDeNegocioException {
-        SeguidorEntity seguidorRecuperado = seguidorRepository.findAll().stream()
-                .filter(seguidor -> seguidor.getId().equals(idUsuario))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Seguidor não encontrado"));
-        return seguidorRecuperado;
-    }
-
-
-    public SeguidorEntity verificaSeguidorSeguidoPorAlguem (Integer idSeguidor) throws RegraDeNegocioException {
-        SeguidorEntity seguidorRecuperado = seguidorRepository.findAll().stream()
-                .filter(seguidor -> seguidor.getIdSeguidor().equals(idSeguidor))
-                .findFirst()
-             .orElseThrow();
-        return seguidorRecuperado;
-    }
-
-*/
