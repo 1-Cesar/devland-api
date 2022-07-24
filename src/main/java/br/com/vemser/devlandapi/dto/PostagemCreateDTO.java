@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class PostagemCreateDTO {
 
-    @Schema(description = "Tipo da PostagemEntity")
+    @Schema(description = "Tipo da PostagemEntity", example = "VAGAS, PROGRAMAS, PENSAMENTOS")
     @NotNull
     private TipoPostagem tipoPostagem;
 

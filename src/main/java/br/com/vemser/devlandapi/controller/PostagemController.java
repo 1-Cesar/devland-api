@@ -22,7 +22,6 @@ public class PostagemController implements PostagemDocs {
     @Autowired
     private PostagemService postagemService;
 
-    //TODO -- PAGINAÇÃO
     @GetMapping
     public ResponseEntity<PageDTO<PostagemDTO>> list(@RequestParam Integer pagina,@RequestParam Integer quantRegistros) throws RegraDeNegocioException {
         return new ResponseEntity<>(postagemService.list(pagina, quantRegistros), HttpStatus.OK);
@@ -42,7 +41,7 @@ public class PostagemController implements PostagemDocs {
         return new ResponseEntity<>(postagemService.findByIdPostagem(idPostagem), HttpStatus.OK);
     }
 
-    // fazer igual a USUARIO post - inserir exemple
+    // fazer igual a USUARIO post - inserir example
     @Override
     @PostMapping("/criar/{idUsuario}")
     public ResponseEntity<PostagemDTO> criar(@PathVariable("idUsuario") Integer idUsuario, @RequestBody PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
