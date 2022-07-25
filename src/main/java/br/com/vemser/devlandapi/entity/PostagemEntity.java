@@ -43,11 +43,16 @@ public class PostagemEntity {
     private LocalDateTime data;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "postagemEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "postagem",         //Indica o lado inverso do relacionamento
+            cascade = CascadeType.ALL,   //Faz a cascata para deletar
+            orphanRemoval = true)
     private Set<ComentarioEntity> comentarios;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
-    private UsuarioEntity usuarioEntity;
+    private UsuarioEntity usuario;
+
+    //TODO inserir relacionamento OneToMany na UsuarioEntity
 }

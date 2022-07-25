@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.repository;
 import br.com.vemser.devlandapi.dto.RelatorioPostagemDTO;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
+import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import feign.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +27,20 @@ public interface PostagemRepository extends JpaRepository<PostagemEntity, Intege
             "where :tipoPostagem is null OR  p.tipoPostagem = :tipoPostagem")
     Page<PostagemEntity> filtrarPorTipo(@Param("tipoPostagem") TipoPostagem tipoPostagem, PageRequest pageRequest);
 
-    @Query(value = "select from br.com.vemser.devlandapi.dto.RelatorioPostagemDTO(" +
-            "p.titulo, " +
-            "p.descricao, " +
-            "p.tipoPostagem, " +
-            "p.foto, " +
-            "p.curtidas, " +
-            "p.data, " +
-            "p.usuarioDTO, " +
-            "c.descricao, " +
-            "c.curtidas, " +
-            "c.data, " +
-            "c.usuarioDTO) " +
-            "from postagem p " +
-            "join p.comentarios c")
-    Page<RelatorioPostagemDTO> relatorioPostagem(PageRequest pageRequest);
+    @Query(value = "select new br.com.vemser.devlandapi.dto.RelatorioPostagemDTO(" +
+            " u.nome," +
+            " p.titulo," +
+            " p.tipoPostagem," +
+            " p.data," +
+            " p.descricao," +
+            " p.curtidas," +
+            " c" +
+            ") " +
+            " from postagem p " +
+            " left join p.comentarios c " +
+            " left join p.usuario u " +
+            " where (:tipoPostagem is null OR p.tipoPostagem = :tipoPostagem )")
+    Page<RelatorioPostagemDTO> relatorioPostagem(@Param("tipoPostagem") TipoPostagem tipoPostagem, Pageable pageable);
 }
 
 

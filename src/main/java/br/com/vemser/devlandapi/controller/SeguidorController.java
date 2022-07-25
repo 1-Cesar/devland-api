@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/seguidor")
 @Validated
-public class SeguidorControler implements SeguidorDocs {
+public class SeguidorController implements SeguidorDocs {
 
     @Autowired
     private UsuarioService usuarioService;

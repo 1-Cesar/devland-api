@@ -16,7 +16,7 @@ import java.util.List;
 public interface ContatoDocs {
 
     @ContatoNotas
-    @Operation(summary = "listar todos os contatos por páginas", description = "recupera todos os contatos do banco de dados e os exibe em páginas")
+    @Operation(summary = "listar todos os contatos por páginas", description = "Lista paginada de todos contatos")
     public PageDTO<ContatoDTO> listarPaginado(Integer pagina, Integer quantidadeRegistros) throws RegraDeNegocioException;
 
     @ContatoNotas

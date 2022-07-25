@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.controller;
 import br.com.vemser.devlandapi.documentations.PostagemDocs;
 import br.com.vemser.devlandapi.dto.*;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
+import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.PostagemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class PostagemController implements PostagemDocs {
     }
 
     @GetMapping("/relatorio-postagem")
-    public PageDTO<RelatorioPostagemDTO> relatorioPostagem(Integer pagina, Integer quantidadeRegistros) {
-        return postagemService.relatorioPostagem(pagina, quantidadeRegistros);
+    public PageDTO<RelatorioPostagemDTO> relatorioPostagem(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) TipoPostagem tipoPostagem) {
+        return postagemService.relatorioPostagem(tipoPostagem, pagina, quantidadeRegistros);
     }
     @GetMapping("/{tipoPostagem}/tipo")
     public PageDTO<PostagemDTO> listByTipo(@PathVariable("tipoPostagem") TipoPostagem tipoPostagem,@RequestParam Integer pagina,@RequestParam Integer quantRegistros) throws RegraDeNegocioException {
