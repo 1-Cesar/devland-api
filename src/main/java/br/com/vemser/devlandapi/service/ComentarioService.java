@@ -51,7 +51,14 @@ public class ComentarioService {
         UsuarioEntity usuarioValid = convertOptionalToUsuarioEntity(usuarioRepository.findById(idUsuario));
         ComentarioEntity comentarioEntity = convertToEntity(comentarioCreateDTO);
 
-        comentarioEntity.setIdPostagem(idPostagem);
+        //------------------------------------------------------------------------------------------------------------------
+
+        PostagemEntity postagem = convertOptionalToPostagemEntity(postagemRepository.findById(idPostagem));
+
+        comentarioEntity.setPostagemEntity(postagem);
+
+        //------------------------------------------------------------------------------------------------------------------
+
         comentarioEntity.setIdUsuario(idUsuario);
         comentarioEntity.setUsuarioEntity(usuarioValid);
         comentarioEntity.setCurtidas(0);
@@ -69,9 +76,13 @@ public class ComentarioService {
 
         UsuarioEntity usuario = convertOptionalToUsuarioEntity(usuarioRepository.findById(comentarioValid.getIdUsuario()));
 
+        //------------------------------------------------------------------------------------------------------------------
+
         PostagemEntity postagem = convertOptionalToPostagemEntity(postagemRepository.findById(comentarioValid.getIdPostagem()));
 
         comentarioValid.setPostagemEntity(postagem);
+
+        //------------------------------------------------------------------------------------------------------------------
 
         comentarioValid.setDescricao(comentarioCreateDTO.getDescricao());
         comentarioValid.setUsuarioEntity(usuario);

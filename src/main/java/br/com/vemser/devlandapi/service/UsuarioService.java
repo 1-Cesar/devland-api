@@ -53,8 +53,8 @@ public class UsuarioService {
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
         usuarioRepository.delete(usuarioRecuperado);
 
-//        String tipoMensagem = TipoMensagem.DELETE.getTipo();
-//        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
+        String tipoMensagem = TipoMensagem.DELETE.getTipo();
+        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
 
     public UsuarioDTO editar(Integer id, UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
@@ -65,8 +65,8 @@ public class UsuarioService {
                 usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
                 usuarioRepository.save(usuarioEntity);
 
-//                String tipoMensagem = TipoMensagem.CREATE.getTipo();
-//                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
+                String tipoMensagem = TipoMensagem.UPDATE.getTipo();
+                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
 
                 return retornarDTO(usuarioEntity);
             } else {
@@ -80,7 +80,7 @@ public class UsuarioService {
             usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
             usuarioRepository.save(usuarioEntity);
 
-            String tipoMensagem = TipoMensagem.CREATE.getTipo();
+            String tipoMensagem = TipoMensagem.UPDATE.getTipo();
             emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
 
             return retornarDTO(usuarioEntity);
@@ -95,8 +95,8 @@ public class UsuarioService {
             if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
                 UsuarioEntity usuario = usuarioRepository.save(retornarUsuarioEntity(usuarioCreateDTO));
 
-                /*String tipoMensagem = TipoMensagem.CREATE.getTipo();
-                emailService.sendEmailUsuario(usuario, tipoMensagem);*/
+                String tipoMensagem = TipoMensagem.CREATE.getTipo();
+                emailService.sendEmailUsuario(usuario, tipoMensagem);
 
                 return retornarDTO(usuario);
             } else {
@@ -107,8 +107,8 @@ public class UsuarioService {
         if (usuarioCreateDTO.getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(usuarioCreateDTO.getCpfCnpj())) {
             UsuarioEntity usuarioEmpresa = usuarioRepository.save(retornarUsuarioEntity(usuarioCreateDTO));
 
-           /* String tipoMensagem = TipoMensagem.CREATE.getTipo();
-            emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);*/
+           String tipoMensagem = TipoMensagem.CREATE.getTipo();
+           emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);
 
             return retornarDTO(usuarioEmpresa);
         } else {
