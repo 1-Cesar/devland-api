@@ -58,21 +58,21 @@ public class EmailService {
 
         if (tipo.equals(TipoMensagem.CREATE.getTipo())){
             dados.put("nome", "Olá, " + usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
-            dados.put("mensagem", "Seu cadastro foi realizado com sucesso, seu código de idetificação é " + usuario.getIdUsuario());
-            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail" + from);
-            template = fmConfiguration.getTemplate("email-template-create.html");
+            dados.put("mensagem", "Seu cadastro foi realizado com sucesso, seu código de identificação é " + usuario.getIdUsuario());
+            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail " + from);
+            template = fmConfiguration.getTemplate("email-template.html");
 
         } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
             dados.put("nome", "Olá, " + usuario.getNome() + "! Seus dados foram atualizados!");
             dados.put("mensagem", "Seus dados foram atualizados com sucesso e já podem ser encontrados por empresas e talentos.");
-            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail" + from);
-            template = fmConfiguration.getTemplate("email-template-create.html");
+            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail " + from);
+            template = fmConfiguration.getTemplate("email-template.html");
 
         } else {
             dados.put("nome", "Olá, " + usuario.getNome() + "! Sentiremos sua falta na DevLand");
             dados.put("mensagem", "Seu cadastro foi removido da nossa rede, mas você pode voltar quando quiser!");
-            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail" + from);
-            template = fmConfiguration.getTemplate("email-template-create.html");
+            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail " + from);
+            template = fmConfiguration.getTemplate("email-template.html");
         }
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
         return html;
