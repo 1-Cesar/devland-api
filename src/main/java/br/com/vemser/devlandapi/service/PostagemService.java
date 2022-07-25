@@ -54,7 +54,7 @@ public class PostagemService {
     public PageDTO<RelatorioPostagemDTO> relatorioPostagem(Integer pagina, Integer quantRegistros) {
         PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
         Page<RelatorioPostagemDTO> page = postagemRepository.relatorioPostagem(pageRequest);
-        List<RelatorioPostagemDTO> relatorioPostagemDTO = page.getContent();
+        List<RelatorioPostagemDTO> relatorioPostagemDTO = page.getContent().stream().toList();
 
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, relatorioPostagemDTO);
     }

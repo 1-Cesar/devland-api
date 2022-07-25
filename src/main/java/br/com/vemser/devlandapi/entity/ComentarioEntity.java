@@ -43,7 +43,4 @@ public class ComentarioEntity {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuarioEntity;
 
-// TODO inserir relacionamento OneToMany na UsuarioEntity
-
-
 }
