@@ -5,6 +5,7 @@ import br.com.vemser.devlandapi.entity.ComentarioEntity;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
+import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -51,12 +53,12 @@ public class PostagemService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, postagensDTO);
     }
 
-    public PageDTO<RelatorioPostagemDTO> relatorioPostagem(Integer pagina, Integer quantRegistros) {
-        PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
-        Page<RelatorioPostagemDTO> page = postagemRepository.relatorioPostagem(pageRequest);
-        List<RelatorioPostagemDTO> relatorioPostagemDTO = page.getContent();
-
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, relatorioPostagemDTO);
+    public PageDTO<RelatorioPostagemDTO> relatorioPostagem(TipoPostagem tipoPostagem, Integer pagina, Integer quantRegistros) {
+        Pageable pageable = PageRequest.of(pagina, quantRegistros);
+        Page<RelatorioPostagemDTO> page = postagemRepository.relatorioPostagem(tipoPostagem, pageable);
+        List<RelatorioPostagemDTO> relatorioPostagemDTOS = page.getContent().stream()
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, relatorioPostagemDTOS);
     }
 
     public PostagemDTO findByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
@@ -82,7 +84,7 @@ public class PostagemService {
         postagemEntity.setIdUsuario(idUsuario);
         postagemEntity.setCurtidas(0);
         postagemEntity.setData(LocalDateTime.now());
-        postagemEntity.setUsuarioEntity(usuarioValid);
+        postagemEntity.setUsuario(usuarioValid);
 
         postagemRepository.save(postagemEntity);
 

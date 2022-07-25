@@ -25,23 +25,23 @@ public class ComentarioEntity {
     private Integer idUsuario;
 
     @Column(name = "descricao")
-    private String descricao;
+    private String descricaoComentarios;
 
     @Column(name = "curtidas")
-    private Integer curtidas;
+    private Integer curtidasComentario;
 
     @Column(name = "data_comentario")
-    private LocalDateTime data;
+    private LocalDateTime dataComentario;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_postagem", referencedColumnName = "id_postagem")
-    private PostagemEntity postagemEntity;
+    private PostagemEntity postagem;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
-    private UsuarioEntity usuarioEntity;
+    private UsuarioEntity usuario;
 
 // TODO inserir relacionamento OneToMany na UsuarioEntity
 

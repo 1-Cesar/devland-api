@@ -24,6 +24,7 @@ import java.util.Optional;
 @Slf4j
 public class ComentarioService {
 
+
     @Autowired
     private PostagemRepository postagemRepository;
 
@@ -51,21 +52,14 @@ public class ComentarioService {
         UsuarioEntity usuarioValid = convertOptionalToUsuarioEntity(usuarioRepository.findById(idUsuario));
         ComentarioEntity comentarioEntity = convertToEntity(comentarioCreateDTO);
 
-        //------------------------------------------------------------------------------------------------------------------
-
-        PostagemEntity postagem = convertOptionalToPostagemEntity(postagemRepository.findById(idPostagem));
-
-        comentarioEntity.setPostagemEntity(postagem);
-
-        //------------------------------------------------------------------------------------------------------------------
-
+        comentarioEntity.setIdPostagem(idPostagem);
         comentarioEntity.setIdUsuario(idUsuario);
-        comentarioEntity.setUsuarioEntity(usuarioValid);
-        comentarioEntity.setCurtidas(0);
-        comentarioEntity.setData(LocalDateTime.now());
+        comentarioEntity.setUsuario(usuarioValid);
+        comentarioEntity.setCurtidasComentario(0);
+        comentarioEntity.setDataComentario(LocalDateTime.now());
 
 
-       return convertToDTO(comentarioRepository.save(comentarioEntity));
+        return convertToDTO(comentarioRepository.save(comentarioEntity));
 
     }
 
@@ -77,15 +71,13 @@ public class ComentarioService {
         UsuarioEntity usuario = convertOptionalToUsuarioEntity(usuarioRepository.findById(comentarioValid.getIdUsuario()));
 
         //------------------------------------------------------------------------------------------------------------------
-
         PostagemEntity postagem = convertOptionalToPostagemEntity(postagemRepository.findById(comentarioValid.getIdPostagem()));
 
-        comentarioValid.setPostagemEntity(postagem);
-
+        comentarioValid.setPostagem(postagem);
         //------------------------------------------------------------------------------------------------------------------
 
-        comentarioValid.setDescricao(comentarioCreateDTO.getDescricao());
-        comentarioValid.setUsuarioEntity(usuario);
+        comentarioValid.setDescricaoComentarios(comentarioCreateDTO.getDescricao());
+        comentarioValid.setUsuario(usuario);
 
 //TODO - verificar o momento em que idPostagem fica null - não esta persistindo por isso
 

@@ -84,10 +84,16 @@ public class UsuarioEntity {
     // Relacionamento Usuário — Postagens e Comentarios
 
     @JsonIgnore
-    @OneToMany(mappedBy = "usuarioEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "usuario",         //Indica o lado inverso do relacionamento
+            cascade = CascadeType.ALL,   //Faz a cascata para deletar
+            orphanRemoval = true)
     private Set<PostagemEntity> postagens;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "usuarioEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "usuario",         //Indica o lado inverso do relacionamento
+            cascade = CascadeType.ALL,   //Faz a cascata para deletar
+            orphanRemoval = true)
     private Set<ComentarioEntity> comentarios;
 }
