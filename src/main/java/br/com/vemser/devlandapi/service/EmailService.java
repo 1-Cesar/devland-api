@@ -38,7 +38,7 @@ public class EmailService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(usuario.getEmail());
             if (tipo.equals(TipoMensagem.CREATE.getTipo())){
-                mimeMessageHelper.setSubject("Olá, "usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
+                mimeMessageHelper.setSubject("Olá, "+usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
             } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
                 mimeMessageHelper.setSubject(usuario.getNome() + ", seus dados foram atualizados!");
             } else {
@@ -57,7 +57,7 @@ public class EmailService {
         Template template;
 
         if (tipo.equals(TipoMensagem.CREATE.getTipo())){
-            dados.put("nome", usuario.getNome() ", ");
+            dados.put("nome", usuario.getNome()+ ", ");
             dados.put("id", usuario.getIdUsuario());
             dados.put("email", this.from);
             template = fmConfiguration.getTemplate("email-template-create.ftl");

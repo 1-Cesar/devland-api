@@ -69,16 +69,12 @@ public class ComentarioService {
 
         UsuarioEntity usuario = convertOptionalToUsuarioEntity(usuarioRepository.findById(comentarioValid.getIdUsuario()));
 
-        //------------------------------------------------------------------------------------------------------------------
         PostagemEntity postagem = convertOptionalToPostagemEntity(postagemRepository.findById(comentarioValid.getIdPostagem()));
 
         comentarioValid.setPostagemEntity(postagem);
-        //------------------------------------------------------------------------------------------------------------------
 
         comentarioValid.setDescricao(comentarioCreateDTO.getDescricao());
         comentarioValid.setUsuarioEntity(usuario);
-
-//TODO - verificar o momento em que idPostagem fica null - não esta persistindo por isso
 
         comentarioRepository.save(comentarioValid);
         return convertToDTO(comentarioValid);
