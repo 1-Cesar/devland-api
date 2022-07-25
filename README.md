@@ -11,7 +11,7 @@
 <p>Esta API trabalha com chaves primarias e estrangeiras, garantindo assim a integridade de toda a aplicação.</p>
 <p>Por tratar-se de uma API Rest ela estabelece uma comunicação stateless entre cliente e servidor. Isso significa que nenhuma informação do cliente é armazenada entre solicitações GET e todas as solicitações são separadas e desconectadas.</p>
 <h2>Diagrama de Entidade Relacionamento</h2>
-<img src="https://user-images.githubusercontent.com/92181625/179437925-40785f2a-71f1-438c-9796-5eba4037fc14.png">
+<img src="https://user-images.githubusercontent.com/92181625/180592595-142824a6-361c-42c1-a1f4-6448fccb53ce.png">
 <h2>Gostaria de Falar Conosco?</h2>
 <address>
 Clique no nome dos desenvolvedores para enviar um e-mail
@@ -25,6 +25,8 @@ Clique no nome dos desenvolvedores para enviar um e-mail
 <br>
 <a href="mailto:#">Rafael</a> 
 </address>
+<h2>Acessando a API</h2>
+Para acessar esta API, clique no seguinte endereço: https://devland-postgres.herokuapp.com/swagger-ui/index.html
 <h2>Clonando este Projeto</h2>
 <p>Para clonar este projeto basta digitar o seguinte comando em seu terminal git<p>
 <ul>
