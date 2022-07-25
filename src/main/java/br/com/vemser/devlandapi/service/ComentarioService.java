@@ -1,10 +1,9 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.ComentarioCreateDTO;
-import br.com.vemser.devlandapi.dto.ComentarioRespDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
-import br.com.vemser.devlandapi.entity.Comentario;
-import br.com.vemser.devlandapi.entity.Usuario;
+import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.entity.ComentarioEntity;
+import br.com.vemser.devlandapi.entity.PostagemEntity;
+import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
@@ -12,14 +11,19 @@ import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
 public class ComentarioService {
+
 
     @Autowired
     private PostagemRepository postagemRepository;
@@ -33,62 +37,83 @@ public class ComentarioService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public ComentarioRespDTO post(Integer idPostagem, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
+    public PageDTO<ComentarioDTO> list(Integer pagina,Integer quantRegistros) throws RegraDeNegocioException {
+        PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
+        Page<ComentarioEntity> page = comentarioRepository.findAll(pageRequest);
+        List<ComentarioDTO> comentariosDTO = page.getContent().stream()
+                .map(comentario -> objectMapper.convertValue(comentario, ComentarioDTO.class))
+                .toList();
 
-        if (postagemRepository.findByIdPostagem(idPostagem) == null) {
-            throw new RegraDeNegocioException("Postagem não encontrada");
-        } else if (usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).isEmpty()) {
-            throw new RegraDeNegocioException("Usuário não encontrado");
-        } else {
-            log.info("Adicionando comentário...");
-
-            Usuario usuario = usuarioRepository.listarUsuario(comentarioCreateDTO.getIdUsuario()).get(0);
-
-            String strLocalDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-
-            Comentario comentarioEntity = convertToEntity(comentarioCreateDTO);
-            comentarioEntity.setIdPostagem(idPostagem);
-            comentarioEntity.setCurtidas(0);
-            comentarioEntity.setData(strLocalDateTime);
-
-            comentarioRepository.post(comentarioEntity);
-
-            log.info("Comentário criado...");
-
-            UsuarioDTO usuarioDTO = convertUsuarioDTO(usuario);
-
-            ComentarioRespDTO comentarioDTO = convertToDTO(comentarioEntity);
-
-            comentarioDTO.setUsuario(usuarioDTO);
-
-            return comentarioDTO;
-        }
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, comentariosDTO);
     }
 
-    public void delete(Integer idComentario) throws RegraDeNegocioException {
+    public ComentarioDTO create(Integer idPostagem, Integer idUsuario,ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException{
 
-        if (comentarioRepository.findById(idComentario) != null) {
-            log.info("Deletando comentário...");
+        UsuarioEntity usuarioValid = convertOptionalToUsuarioEntity(usuarioRepository.findById(idUsuario));
+        ComentarioEntity comentarioEntity = convertToEntity(comentarioCreateDTO);
 
-            postagemRepository.delete(idComentario);
+        comentarioEntity.setIdPostagem(idPostagem);
+        comentarioEntity.setIdUsuario(idUsuario);
+        comentarioEntity.setUsuario(usuarioValid);
+        comentarioEntity.setCurtidasComentario(0);
+        comentarioEntity.setDataComentario(LocalDateTime.now());
 
-            log.info("Postagem removida...");
-        }
-        else {
-            throw new RegraDeNegocioException("Comentário não encontrado");
-        }
+
+        return convertToDTO(comentarioRepository.save(comentarioEntity));
+
     }
 
-    public Comentario convertToEntity(ComentarioCreateDTO comentarioCreateDTO) {
-        return objectMapper.convertValue(comentarioCreateDTO, Comentario.class);
+    public ComentarioDTO update (Integer idComentario,
+                                 ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException{
+        ComentarioEntity comentarioValid = convertOptionalToComentarioEntity(comentarioRepository.findById(idComentario));
+        System.out.println("ComentarioValid = "+comentarioValid);
+
+        UsuarioEntity usuario = convertOptionalToUsuarioEntity(usuarioRepository.findById(comentarioValid.getIdUsuario()));
+
+        //------------------------------------------------------------------------------------------------------------------
+        PostagemEntity postagem = convertOptionalToPostagemEntity(postagemRepository.findById(comentarioValid.getIdPostagem()));
+
+        comentarioValid.setPostagem(postagem);
+        //------------------------------------------------------------------------------------------------------------------
+
+        comentarioValid.setDescricaoComentarios(comentarioCreateDTO.getDescricao());
+        comentarioValid.setUsuario(usuario);
+
+//TODO - verificar o momento em que idPostagem fica null - não esta persistindo por isso
+
+        comentarioRepository.save(comentarioValid);
+        return convertToDTO(comentarioValid);
     }
 
-    public ComentarioRespDTO convertToDTO(Comentario comentario) {
-        return objectMapper.convertValue(comentario, ComentarioRespDTO.class);
+    public void delete ( Integer idComentario){
+        ComentarioEntity comentarioValid = convertOptionalToComentarioEntity(comentarioRepository.findById(idComentario));
+        comentarioRepository.delete(comentarioValid);
     }
 
-    public UsuarioDTO convertUsuarioDTO(Usuario usuario) {
+//    ========================= CONVERSÕES =========================
+
+    public ComentarioEntity convertToEntity(ComentarioCreateDTO comentarioCreateDTO) {
+        return objectMapper.convertValue(comentarioCreateDTO, ComentarioEntity.class);
+    }
+
+    public ComentarioDTO convertToDTO(ComentarioEntity comentarioEntity) {
+        return objectMapper.convertValue(comentarioEntity, ComentarioDTO.class);
+    }
+
+    public UsuarioDTO convertUsuarioDTO(UsuarioEntity usuario) {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
 
+    public UsuarioEntity convertOptionalToUsuarioEntity(Optional usuario) {
+        return objectMapper.convertValue(usuario, UsuarioEntity.class);
+    }
+
+    public ComentarioEntity convertOptionalToComentarioEntity(Optional comentario) {
+        return objectMapper.convertValue(comentario, ComentarioEntity.class);
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    public PostagemEntity convertOptionalToPostagemEntity(Optional postagem) {
+        return objectMapper.convertValue(postagem, PostagemEntity.class);
+    }
 }

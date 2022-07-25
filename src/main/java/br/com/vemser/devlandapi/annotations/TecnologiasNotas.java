@@ -12,10 +12,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @ApiResponses(
         value = {
-                @ApiResponse(responseCode = "200", description = "Operação em contatos executada com sucesso!"),
-                @ApiResponse(responseCode = "400", description = "Nenhum contato encontrado"),
-                @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                @ApiResponse(responseCode = "200", description = "Operação em tecnologias realizada com sucesso!"),
+                @ApiResponse(responseCode = "400", description = "Nenhuma tecnologia encontrada"),
+                @ApiResponse(responseCode = "500", description = "Erro! Durante a execução, foi gerada uma exceção")
         }
 )
-public @interface ContatoNotas {
+public @interface TecnologiasNotas {
 }

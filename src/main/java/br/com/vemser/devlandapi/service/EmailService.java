@@ -1,7 +1,7 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
-import br.com.vemser.devlandapi.entity.Usuario;
+import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -29,7 +29,7 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
 
-    public void sendEmailUsuario(Usuario usuario, String tipo) {
+    public void sendEmailUsuario(UsuarioEntity usuario, String tipo) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
@@ -38,11 +38,11 @@ public class EmailService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(usuario.getEmail());
             if (tipo.equals(TipoMensagem.CREATE.getTipo())){
-                mimeMessageHelper.setSubject("Cadastro realizado");
+                mimeMessageHelper.setSubject("Olá, " + usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
             } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
-                mimeMessageHelper.setSubject("Cadastro atualizado");
+                mimeMessageHelper.setSubject(usuario.getNome() + ", seus dados foram atualizados!");
             } else {
-                mimeMessageHelper.setSubject("Cadastro deletado");
+                mimeMessageHelper.setSubject(usuario.getNome() + ", sentiremos sua falta na DevLand!");
             }
             mimeMessageHelper.setText(getContentFromTemplatePessoa(usuario, tipo), true);
             emailSender.send(mimeMessageHelper.getMimeMessage());
@@ -51,19 +51,28 @@ public class EmailService {
         }
     }
 
-    public String getContentFromTemplatePessoa(Usuario usuario, String tipo) throws IOException, TemplateException {
+    public String getContentFromTemplatePessoa(UsuarioEntity usuario, String tipo) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", usuario.getNome());
-        dados.put("id", usuario.getIdUsuario());
-        dados.put("email", this.from);
 
         Template template;
+
         if (tipo.equals(TipoMensagem.CREATE.getTipo())){
-            template = fmConfiguration.getTemplate("email-template-create.ftl");
+            dados.put("nome", "Olá, " + usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
+            dados.put("mensagem", "Seu cadastro foi realizado com sucesso, seu código de identificação é " + usuario.getIdUsuario());
+            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail " + from);
+            template = fmConfiguration.getTemplate("email-template.html");
+
         } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
-            template = fmConfiguration.getTemplate("email-template-update.ftl");
+            dados.put("nome", "Olá, " + usuario.getNome() + "! Seus dados foram atualizados!");
+            dados.put("mensagem", "Seus dados foram atualizados com sucesso e já podem ser encontrados por empresas e talentos.");
+            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail " + from);
+            template = fmConfiguration.getTemplate("email-template.html");
+
         } else {
-            template = fmConfiguration.getTemplate("email-template-delete.ftl");
+            dados.put("nome", "Olá, " + usuario.getNome() + "! Sentiremos sua falta na DevLand");
+            dados.put("mensagem", "Seu cadastro foi removido da nossa rede, mas você pode voltar quando quiser!");
+            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail " + from);
+            template = fmConfiguration.getTemplate("email-template.html");
         }
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
         return html;

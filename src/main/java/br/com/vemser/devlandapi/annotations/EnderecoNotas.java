@@ -1,4 +1,5 @@
 package br.com.vemser.devlandapi.annotations;
+
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -11,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @ApiResponses(
         value = {
-                @ApiResponse(responseCode = "200", description = "Retorna a lista de endereços"),
+                @ApiResponse(responseCode = "200", description = "Operação em usuário realizada com sucesso!"),
                 @ApiResponse(responseCode = "400", description = "Nenhum endereço encontrado"),
                 @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
         }

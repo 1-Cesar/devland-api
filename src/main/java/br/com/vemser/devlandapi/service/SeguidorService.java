@@ -1,19 +1,23 @@
 package br.com.vemser.devlandapi.service;
 
+import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.SeguidorCreateDTO;
 import br.com.vemser.devlandapi.dto.SeguidorDTO;
-import br.com.vemser.devlandapi.entity.Seguidor;
-import br.com.vemser.devlandapi.entity.Usuario;
+import br.com.vemser.devlandapi.entity.SeguidorEntity;
+import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.SeguidorRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class SeguidorService {
 
@@ -26,43 +30,88 @@ public class SeguidorService {
     @Autowired
     private SeguidorRepository seguidorRepository;
 
+    //==================================================================================================================
+    //LIST FOLLOWERS - PAGINADO
+    public PageDTO<SeguidorDTO> listarSeguidores(Integer id, Integer pagina,
+                                                 Integer registroPorPagina) throws RegraDeNegocioException {
+        localizarUsuario(id);
+        PageRequest pageRequest = PageRequest.of(pagina, registroPorPagina);
+        Page<SeguidorEntity> page = seguidorRepository.filtrarQuemUsuarioSegue(id, pageRequest);
+
+        List<SeguidorDTO> seguidorDTOS = page.getContent().stream()
+                .map(this::retornarSeguidorDTO)
+                .toList();
+
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registroPorPagina, seguidorDTOS);
+    }
+
+    //==================================================================================================================
+    //ADICIONAR
+
     public SeguidorCreateDTO adicionar(Integer id, SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {
-        Usuario usuarioLocalizado = localizarUsuario(seguidorCreateDTO.getIdSeguidor());
 
-        seguidorCreateDTO.setIdUsuario(id);
-        seguidorCreateDTO.setNomeSeguidor(usuarioLocalizado.getNome());
+        //recupera usuário
+        UsuarioEntity usuarioRecuperado = localizarUsuario(id);
 
-        if (!seguidorCreateDTO.getIdSeguidor().equals(id)) {
-            localizarUsuario(seguidorCreateDTO.getIdSeguidor());
-            if (seguidorRepository.VerificarSeguidor(seguidorCreateDTO.getIdSeguidor(), id)){
-                throw new RegraDeNegocioException("Este seguidor já está seguindo");
-            }
-        } else {
-            throw new RegraDeNegocioException("Você não pode seguir você mesmo");
+        //converte
+        SeguidorEntity seguidorEntity = retornarSeguidorEntity(seguidorCreateDTO);
+
+        //seta no usuário
+        seguidorEntity.setUsuario(usuarioRecuperado);
+
+
+        if (id.equals(seguidorCreateDTO.getIdSeguidor())) {
+            throw new RegraDeNegocioException("Nao pode seguir voce mesmo");
+        } else if (seguidorRepository.verificaSeguidor(id, seguidorCreateDTO.getIdSeguidor()).size() > 0) {
+            throw new RegraDeNegocioException("Você já segue este usuario");
         }
 
-        Seguidor seguidor = seguidorRepository.adicionar(id, objectMapper.convertValue(seguidorCreateDTO, Seguidor.class));
-        return objectMapper.convertValue(seguidor, SeguidorCreateDTO.class);
+        SeguidorEntity seguidorCriado = seguidorRepository.save(seguidorEntity);
+
+        return retornarSeguidorDTO(seguidorCriado);
+
     }
 
-    public List<SeguidorDTO> listarSeguidor(Integer id) throws RegraDeNegocioException {
-        localizarUsuario(id);
-        return seguidorRepository.listarSeguidor(id).stream()
-                .filter(seguidor -> seguidor.getIdUsuario().equals(id))
-                .map(seguidor -> objectMapper.convertValue(seguidor, SeguidorDTO.class))
-                .collect(Collectors.toList());
-    }
+    //==================================================================================================================
+    //EXCLUIR
 
     public void delete(Integer id, Integer idSeguidor) throws RegraDeNegocioException {
         localizarUsuario(id);
-        seguidorRepository.remover(id, idSeguidor);
+
+        SeguidorEntity seguidorEntityRecuperado = seguidorQueSeraDeletado(id, idSeguidor);
+
+        seguidorRepository.delete(seguidorEntityRecuperado);
     }
 
-    public Usuario localizarUsuario (Integer idUsuario) throws RegraDeNegocioException {
-        Usuario usuarioRecuperado = usuarioRepository.listar().stream()
+    //==================================================================================================================
+    //MÉTODOS AUXILIARES
+
+    public SeguidorEntity seguidorQueSeraDeletado(Integer id, Integer idSeguidor) throws RegraDeNegocioException {
+        SeguidorEntity seguidorRecuperado = seguidorRepository.findAll().stream()
+                .filter(seguidor -> seguidor.getIdUsuario().equals(id) && seguidor.getIdSeguidor().equals(idSeguidor))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Seguidor não encontrado para deixar de seguir"));
+
+        return seguidorRecuperado;
+
+    }
+
+    public UsuarioEntity localizarUsuario(Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioRecuperado = usuarioRepository.findAll().stream()
                 .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
         return usuarioRecuperado;
     }
+
+    //DTO PARA ENTITY
+    public SeguidorEntity retornarSeguidorEntity(SeguidorCreateDTO seguidorCreateDTO) {
+        return objectMapper.convertValue(seguidorCreateDTO, SeguidorEntity.class);
+    }
+
+    //ENTITY PARA DTO
+    public SeguidorDTO retornarSeguidorDTO(SeguidorEntity seguidor) {
+        return objectMapper.convertValue(seguidor, SeguidorDTO.class);
+    }
 }
+
