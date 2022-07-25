@@ -38,7 +38,7 @@ public class EmailService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(usuario.getEmail());
             if (tipo.equals(TipoMensagem.CREATE.getTipo())){
-                mimeMessageHelper.setSubject("Olá, "usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
+                mimeMessageHelper.setSubject("Olá, " + usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
             } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
                 mimeMessageHelper.setSubject(usuario.getNome() + ", seus dados foram atualizados!");
             } else {
@@ -57,22 +57,22 @@ public class EmailService {
         Template template;
 
         if (tipo.equals(TipoMensagem.CREATE.getTipo())){
-            dados.put("nome", usuario.getNome() ", ");
-            dados.put("id", usuario.getIdUsuario());
-            dados.put("email", this.from);
-            template = fmConfiguration.getTemplate("email-template-create.ftl");
+            dados.put("nome", "Olá, " + usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
+            dados.put("mensagem", "Seu cadastro foi realizado com sucesso, seu código de idetificação é " + usuario.getIdUsuario());
+            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail" + from);
+            template = fmConfiguration.getTemplate("email-template-create.html");
 
         } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
-            dados.put("nome", usuario.getNome());
-            dados.put("id", usuario.getIdUsuario());
-            dados.put("email", this.from);
-            template = fmConfiguration.getTemplate("email-template-update.ftl");
+            dados.put("nome", "Olá, " + usuario.getNome() + "! Seus dados foram atualizados!");
+            dados.put("mensagem", "Seus dados foram atualizados com sucesso e já podem ser encontrados por empresas e talentos.");
+            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail" + from);
+            template = fmConfiguration.getTemplate("email-template-create.html");
 
         } else {
-            dados.put("nome", usuario.getNome());
-            dados.put("id", usuario.getIdUsuario());
-            dados.put("email", this.from);
-            template = fmConfiguration.getTemplate("email-template-delete.ftl");
+            dados.put("nome", "Olá, " + usuario.getNome() + "! Sentiremos sua falta na DevLand");
+            dados.put("mensagem", "Seu cadastro foi removido da nossa rede, mas você pode voltar quando quiser!");
+            dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail" + from);
+            template = fmConfiguration.getTemplate("email-template-create.html");
         }
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
         return html;
