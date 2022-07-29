@@ -11,17 +11,9 @@ import javax.validation.constraints.NotNull;
 @Data
 public class ComentarioCreateDTO {
 
-//    @Schema(description = "Id do Usuário que está comentando")
-//    @NotNull
-//    private Integer idUsuario;
-//
-//    @Schema(description = "Id da Postagem")
-//    @NotNull
-//    private Integer idPostagem;
-
     @Schema(description = "Descrição do comentário")
     @NotBlank
-    private String descricao;
+    private String descricaoComentarios;
 
 
 

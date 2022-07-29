@@ -54,5 +54,4 @@ public class PostagemEntity {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuario;
 
-    //TODO inserir relacionamento OneToMany na UsuarioEntity
 }

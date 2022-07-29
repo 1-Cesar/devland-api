@@ -144,7 +144,4 @@ public class PostagemService {
         return objectMapper.convertValue(postagemEntity, PostagemDTO.class);
     }
 
-//    public PostagemComentDTO convertToComentDTO(PostagemEntity postagemEntity) {
-//        return objectMapper.convertValue(postagemEntity, PostagemComentDTO.class);
-//    }
 }

@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.dto;
 
+import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -24,12 +25,14 @@ public class ComentarioDTO extends ComentarioCreateDTO {
     private Integer idPostagem;
 
     @Schema(description = "Número de Curtidas do ComentarioEntity")
-    private Integer curtidas;
+    private Integer curtidasComentario;
 
     @Schema(description = "Data do comentario")
-    private LocalDateTime data;
+    private LocalDateTime dataComentario;
 
     @Schema(description = "Usuário que comentou a postagem")
-    private UsuarioEntity usuarioEntity;
+    private UsuarioEntity usuario;
+
+    private PostagemEntity postagem;
 
 }

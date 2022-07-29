@@ -40,6 +40,7 @@ public class ComentarioService {
     public PageDTO<ComentarioDTO> list(Integer pagina,Integer quantRegistros) throws RegraDeNegocioException {
         PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
         Page<ComentarioEntity> page = comentarioRepository.findAll(pageRequest);
+
         List<ComentarioDTO> comentariosDTO = page.getContent().stream()
                 .map(comentario -> objectMapper.convertValue(comentario, ComentarioDTO.class))
                 .toList();
@@ -51,13 +52,14 @@ public class ComentarioService {
 
         UsuarioEntity usuarioValid = convertOptionalToUsuarioEntity(usuarioRepository.findById(idUsuario));
         ComentarioEntity comentarioEntity = convertToEntity(comentarioCreateDTO);
+        PostagemEntity postagem = convertOptionalToPostagemEntity(postagemRepository.findById(comentarioEntity.getIdPostagem()));
 
-        comentarioEntity.setIdPostagem(idPostagem);
         comentarioEntity.setIdUsuario(idUsuario);
         comentarioEntity.setUsuario(usuarioValid);
         comentarioEntity.setCurtidasComentario(0);
         comentarioEntity.setDataComentario(LocalDateTime.now());
 
+        comentarioEntity.setPostagem(postagem);
 
         return convertToDTO(comentarioRepository.save(comentarioEntity));
 
@@ -70,13 +72,11 @@ public class ComentarioService {
 
         UsuarioEntity usuario = convertOptionalToUsuarioEntity(usuarioRepository.findById(comentarioValid.getIdUsuario()));
 
-        //------------------------------------------------------------------------------------------------------------------
         PostagemEntity postagem = convertOptionalToPostagemEntity(postagemRepository.findById(comentarioValid.getIdPostagem()));
 
         comentarioValid.setPostagem(postagem);
-        //------------------------------------------------------------------------------------------------------------------
 
-        comentarioValid.setDescricaoComentarios(comentarioCreateDTO.getDescricao());
+        comentarioValid.setDescricaoComentarios(comentarioCreateDTO.getDescricaoComentarios());
         comentarioValid.setUsuario(usuario);
 
         comentarioRepository.save(comentarioValid);
