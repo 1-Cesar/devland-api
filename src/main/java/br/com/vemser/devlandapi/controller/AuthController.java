@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.dto.UserLoginCreateDTO;
 import br.com.vemser.devlandapi.dto.UserLoginDTO;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
+import br.com.vemser.devlandapi.security.TokenService;
 import br.com.vemser.devlandapi.service.UserLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,12 +26,12 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping
-    public String auth(@RequestBody @Valid UserLoginDTO userLoginDTO) throws RegraDeNegocioException {
+    public String auth(@RequestBody @Valid UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
-                        userLoginDTO.getLogin(),
-                        userLoginDTO.getSenha()
+                        userLoginCreateDTO.getLogin(),
+                        userLoginCreateDTO.getSenha()
                 );
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
@@ -48,7 +49,7 @@ public class AuthController {
 
     @GetMapping("/recuperarLogin")
     public String usuarioLogado() throws RegraDeNegocioException {
-        String idLoggedUser = String.valueOf(userLoginService.getIdLoggedUser());
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
         return usuarioLogadoEntity.getLogin();
     }

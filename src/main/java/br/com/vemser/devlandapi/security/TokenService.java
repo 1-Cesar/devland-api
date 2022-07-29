@@ -1,5 +1,7 @@
 package br.com.vemser.devlandapi.security;
 
+import br.com.vemser.devlandapi.entity.UserLoginEntity;
+import br.com.vemser.devlandapi.service.UserLoginService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,24 +23,26 @@ public class TokenService {
     @Value("${jwt.expiration}")
     private String expiration;
 
-    private final UsuarioService usuarioService;
+    private final UserLoginService userLoginService;
+    private static final String TOKEN_PREFIX = "Bearer ";
+
 
     //criando um token JWT
-    public String getToken(UsuarioEntity usuarioEntity) {
+    public String getToken(UserLoginEntity userLoginEntity) {
 
         Date now = new Date();
         Date exp = new Date(now.getTime() + Long.valueOf(expiration)); //convertendo para long
 
         String token = Jwts.builder()
                 .setIssuer("devland-api")
-                .claim(Claims.ID, usuarioEntity.getIdUsuario())
+                .claim(Claims.ID, userLoginEntity.getIdAutenticacao())
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
 
 
-        return TokenAuthenticationFilter.BEARER + token;
+        return TOKEN_PREFIX + token;
     }
 
     //validar se o token é válido e retornar o usuário se for válido

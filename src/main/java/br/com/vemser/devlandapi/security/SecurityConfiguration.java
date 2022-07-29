@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -25,7 +26,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+//TODO- verificar liberações
         // Desabilitar frameOptions
         http.headers().frameOptions().disable().and()
                 // Habilitar cors
@@ -34,10 +35,9 @@ public class SecurityConfiguration {
                 .csrf().disable()
 
                 // Adicionar regras de requisição
-                .authorizeHttpRequests((authz) -> authz.antMatchers("/", "/auth", "auth/registrar")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated());
+                .authorizeHttpRequests((authz) ->
+                        authz.antMatchers("/", "/auth", "/auth/cadastrar").permitAll()
+                        .anyRequest().authenticated());
         // Adicionar filtro do token
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 
@@ -46,7 +46,6 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        // FIXME fazer o security ignorar o swagger
         return (web) -> web.ignoring().antMatchers("/v3/api-docs",
                 "/v3/api-docs/**",
                 "/swagger-resources/**",
@@ -66,10 +65,9 @@ public class SecurityConfiguration {
         };
     }
 
-    //define qual o tipo de criptografia //todo ldap
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new LdapShaPasswordEncoder();
     }
 
     //retorna a autenticação do spring

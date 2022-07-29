@@ -16,7 +16,7 @@ public class UserLoginEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "autenticacao_seq")
     @SequenceGenerator(name = "autenticacao_seq", sequenceName = "seq_autenticacao", allocationSize = 1)
     @Column(name = "id_autenticacao")
-    private String idAutenticacao;
+    private Integer idAutenticacao;
 
     @Column(name = "login")
     @NotEmpty

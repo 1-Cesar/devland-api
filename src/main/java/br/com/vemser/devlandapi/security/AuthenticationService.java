@@ -1,5 +1,7 @@
 package br.com.vemser.devlandapi.security;
 
+import br.com.vemser.devlandapi.entity.UserLoginEntity;
+import br.com.vemser.devlandapi.service.UserLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,15 +14,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationService implements UserDetailsService {
 
-    private final UsuarioService usuarioService;
+    private final UserLoginService usuarioService;
 
     @Override //2:11
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         //buscar usuário pelo login
-        Optional<UsuarioEntity> usuarioOptional = usuarioService.findByLogin(username);
+        Optional<UserLoginEntity> optionalUserLogin = usuarioService.findByLogin(username);
 
-        return usuarioOptional
+        return optionalUserLogin
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário Inválido"));
 
     }

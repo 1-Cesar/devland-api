@@ -23,12 +23,16 @@ public class UserLoginService {
     private UserLoginRepository userLoginRepository;
 
     public UserLoginDTO cadastrar(UserLoginCreateDTO userLoginCreateDTO){
+
         UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO,UserLoginEntity.class);
 
         LdapShaPasswordEncoder ldapShaPasswordEncoder = new LdapShaPasswordEncoder();
 
-        userLoginEntity.setLogin(ldapShaPasswordEncoder.encode(userLoginCreateDTO.getSenha()));
-        return objectMapper.convertValue(userLoginRepository.save(userLoginEntity), UserLoginDTO.class);
+        userLoginEntity.setSenha(ldapShaPasswordEncoder.encode(userLoginCreateDTO.getSenha()));
+
+        UserLoginEntity userSalvo= userLoginRepository.save(userLoginEntity);
+
+        return objectMapper.convertValue(userSalvo, UserLoginDTO.class);
     }
 
     public Optional<UserLoginEntity> findByLoginAndSenha(String login, String senha) {
@@ -40,8 +44,8 @@ public class UserLoginService {
         return userLoginRepository.findByLogin(login);
     }
 
-    public String getIdLoggedUser(){
-        String findUserId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public Integer getIdLoggedUser(){
+        Integer findUserId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return findUserId;
     }
 
@@ -49,7 +53,7 @@ public class UserLoginService {
         return findById(getIdLoggedUser());
     }
 
-    public UserLoginEntity findById(String idAutenticacao) throws RegraDeNegocioException{
+    public UserLoginEntity findById(Integer idAutenticacao) throws RegraDeNegocioException{
 
         return userLoginRepository.findById(idAutenticacao)
                 .orElseThrow((() -> new RegraDeNegocioException("Usuario nao encontrado")));
