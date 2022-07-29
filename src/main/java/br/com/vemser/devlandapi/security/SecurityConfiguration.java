@@ -26,18 +26,16 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//TODO- verificar liberações
         // Desabilitar frameOptions
         http.headers().frameOptions().disable().and()
                 // Habilitar cors
                 .cors().and()
                 // Desabilitar csrf
                 .csrf().disable()
-
                 // Adicionar regras de requisição
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers("/", "/auth", "/auth/cadastrar").permitAll()
-                        .anyRequest().authenticated());
+                        authz.antMatchers("/", "/auth", "/auth/cadastrar", "/auth/recuperarLogin").permitAll()
+                                .anyRequest().authenticated());
         // Adicionar filtro do token
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 
