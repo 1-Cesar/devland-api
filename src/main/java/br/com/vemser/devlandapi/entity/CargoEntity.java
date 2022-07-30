@@ -15,20 +15,20 @@ import java.util.Set;
 public class CargoEntity implements GrantedAuthority {
 
     @Id
-    @SequenceGenerator(name = "SEQ_CARGO", sequenceName = "seq_cargo", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CARGO")
-    @Column(name = "ID_CARGO")
+    @SequenceGenerator(name = "seq_cargo", sequenceName = "seq_cargo", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cargo")
+    @Column(name = "id_cargo")
     private int idCargo;
 
-    @Column(name = "NOME")
+    @Column(name = "nome")
     private String nome;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "USERLOGIN_CARGO",
-            joinColumns = @JoinColumn(name = "ID_CARGO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_USERLOGIN")
+            name = "userlogin_cargo",
+            joinColumns = @JoinColumn(name = "id_cargo"),
+            inverseJoinColumns = @JoinColumn(name = "id_userlogin")
     )
     private Set<UsuarioEntity> usuarios;
 

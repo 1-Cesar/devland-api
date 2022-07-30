@@ -108,9 +108,17 @@ public class UsuarioService {
                 UsuarioEntity usuario = usuarioRepository.save(userLoginCreateDTO.getUsuarioEntity());
 
                 UserLoginDTO userLoginDTO = new UserLoginDTO();
-                userLoginDTO.setIdUserLogin(usuario.getIdUsuario());
 
-                userLoginRepository.save(objectMapper.convertValue(userLoginDTO, UserLoginEntity.class));
+                userLoginDTO.setLogin(userLoginCreateDTO.getLogin());
+                userLoginDTO.setSenha(userLoginCreateDTO.getSenha());
+                userLoginCreateDTO.setIdUsuario(usuario.getIdUsuario());
+
+                /*userLoginDTO.setLogin(usuario.getUserLoginEntity().getLogin());
+                userLoginDTO.setSenha(usuario.getUserLoginEntity().getSenha());
+                userLoginDTO.setIdUsuario(usuario.getUserLoginEntity().getIdUsuario());*/
+
+
+                userLoginRepository.save(objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class));
 
                 String tipoMensagem = TipoMensagem.CREATE.getTipo();
                 emailService.sendEmailUsuario(usuario, tipoMensagem);

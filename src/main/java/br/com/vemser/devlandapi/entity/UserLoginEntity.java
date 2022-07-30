@@ -22,6 +22,9 @@ public class UserLoginEntity implements UserDetails {
     @Column(name = "id_userlogin")
     private Integer idUserLogin;
 
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
+
     @Column(name = "login")
     @NotEmpty
     private String login;
@@ -38,9 +41,9 @@ public class UserLoginEntity implements UserDetails {
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "USERLOGIN_CARGO",
-            joinColumns = @JoinColumn(name = "ID_USERLOGIN"),
-            inverseJoinColumns = @JoinColumn(name = "ID_CARGO")
+            name = "userlogin_cargo",
+            joinColumns = @JoinColumn(name = "id_userlogin"),
+            inverseJoinColumns = @JoinColumn(name = "id_cargo")
     )
     private Set<CargoEntity> cargos;
 
