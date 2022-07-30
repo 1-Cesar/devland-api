@@ -35,15 +35,26 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 // Adicionar regras de requisição
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers("/", "/auth", "/auth/recuperarLogin", "/usuario").permitAll()
+                        authz.antMatchers("/", "/auth").permitAll()
+
+                                //.antMatchers(HttpMethod.GET, "/contato/","/endereco/","/postagem/","/comentario/","/usuario/", "/seguidores/").hasRole("ADMIN") // 1
+                                /*//ADMIN
                                 .antMatchers(HttpMethod.DELETE, "/usuario", "/comentario","/postagem").hasRole("ADMIN") // 1
-                                .antMatchers(HttpMethod.DELETE, "/contato", "/endereco","/comentario", "/postagem", "/seguidor", "/tecnologia").hasRole("DEV") // 1
-                                .antMatchers(HttpMethod.DELETE, "/contato", "/endereco","/comentario", "/postagem", "/seguidor").hasRole("EMPRESA") // 1
-                                .antMatchers(HttpMethod.GET, "/contato","/endereco","/postagem","/comentario","/usuario","/usuario/").hasRole("ADMIN") // 1
-                                .antMatchers(HttpMethod.GET, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/", "/tecnologia").hasRole("DEV") // 1
-                                .antMatchers(HttpMethod.GET, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/").hasRole("EMPRESA") // 1
-                                .antMatchers(HttpMethod.PUT, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/").hasRole("DEV") // 1
-                                .antMatchers(HttpMethod.PUT, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/").hasRole("EMPRESA") // 1
+
+                                .antMatchers(HttpMethod.POST, "/postagem", "/comentario", "/seguidores").hasRole("EMPRESA") // 1
+                                //DEV
+                                .antMatchers(HttpMethod.DELETE, "/contato", "/endereco","/comentario", "/postagem", "/seguidor", "/tecnologia","/usuario/deletar-se").hasRole("DEV") // 1
+                                .antMatchers(HttpMethod.GET, "/contato/listar-se", "/endereco/listar-se","/postagem/listar-se", "/comentario/listar-se", "/seguidores" ,"/usuario", "/usuario/byname", "/tecnologia/listar-se").hasRole("DEV") // 1
+                                .antMatchers(HttpMethod.POST, "/contato", "/endereco","/postagem", "/comentario", "/seguidores").hasRole("DEV") // 1
+                                .antMatchers(HttpMethod.PUT, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/editar-se").hasRole("DEV") // 1
+                                //EMPRESA
+                                .antMatchers(HttpMethod.DELETE, "/contato", "/endereco","/comentario", "/postagem", "/seguidor","/usuario/deletar-se").hasRole("EMPRESA") // 1
+                                .antMatchers(HttpMethod.GET, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/listar-se","/usuario/byname").hasRole("EMPRESA") // 1
+                                .antMatchers(HttpMethod.POST, "/contato", "/endereco","/postagem", "/comentario", "/seguidores").hasRole("EMPRESA") // 1
+                                .antMatchers(HttpMethod.PUT, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/byname").hasRole("EMPRESA") // 1*/
+                                //.antMatchers(HttpMethod.DELETE, "/usuario").hasAnyRole("ADMIN","DEV", "EMPRESA")
+                                .antMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")  // 2
+                                .antMatchers(HttpMethod.GET, "/usuario/listar-se").hasRole("DEV")  // 2
                                 .anyRequest().authenticated());
         // Adicionar filtro do token
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

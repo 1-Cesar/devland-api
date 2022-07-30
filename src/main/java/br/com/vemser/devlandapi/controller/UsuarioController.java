@@ -43,7 +43,7 @@ public class UsuarioController implements UsuarioDocs {
         return ResponseEntity.ok(usuarioService.listarPorNome(nome));
     }
 
-    @PostMapping
+    @PostMapping("/cadastro")
     public ResponseEntity<String> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
         log.info("Criando um usuário");
         return ResponseEntity.ok(usuarioService.adicionar(userLoginCreateDTO));
