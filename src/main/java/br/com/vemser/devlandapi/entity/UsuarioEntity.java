@@ -96,4 +96,12 @@ public class UsuarioEntity {
             cascade = CascadeType.ALL,   //Faz a cascata para deletar
             orphanRemoval = true)
     private Set<ComentarioEntity> comentarios;
+
+    //-----------------------------------------------------------------------------
+    // Relacionamento Usuário — UserLogin
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private UserLoginEntity userLoginEntity;
 }

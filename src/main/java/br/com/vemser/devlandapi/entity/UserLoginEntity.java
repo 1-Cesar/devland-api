@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 @Getter
 @Setter
-@Entity(name = "autenticacao")
+@Entity(name = "userlogin")
 public class UserLoginEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "autenticacao_seq")
-    @SequenceGenerator(name = "autenticacao_seq", sequenceName = "seq_autenticacao", allocationSize = 1)
-    @Column(name = "id_autenticacao")
+    @SequenceGenerator(name = "autenticacao_seq", sequenceName = "seq_userlogin", allocationSize = 1)
+    @Column(name = "id_userlogin")
     private Integer idAutenticacao;
 
     @Column(name = "login")
@@ -25,6 +26,11 @@ public class UserLoginEntity implements UserDetails {
     @Column(name = "senha")
     @NotEmpty
     private String senha;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private UsuarioEntity usuarioEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
