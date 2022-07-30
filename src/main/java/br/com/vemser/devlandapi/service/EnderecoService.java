@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EnderecoService {
@@ -44,7 +43,7 @@ public class EnderecoService {
                     .map(enderecoEntity -> {
                         EnderecoDTO enderecoDTO = retornarDTO(enderecoEntity);
                         enderecoDTO.setUsuarios(enderecoEntity.getUsuarios().stream()
-                                        .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
+                                .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
                                 .toList());
                         return enderecoDTO;
                     }).toList();
@@ -107,18 +106,18 @@ public class EnderecoService {
         return retornarDTO(enderecoEntity);
     }
 
-    public EnderecoEntity localizarEndereco (Integer idEndereco) throws RegraDeNegocioException {
+    public EnderecoEntity localizarEndereco(Integer idEndereco) throws RegraDeNegocioException {
         return enderecoRepository.findAll().stream()
                 .filter(endereco -> endereco.getIdEndereco().equals(idEndereco))
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Endereço não localizado"));
     }
 
-    public EnderecoDTO retornarDTO (EnderecoEntity enderecoEntity) {
+    public EnderecoDTO retornarDTO(EnderecoEntity enderecoEntity) {
         return objectMapper.convertValue(enderecoEntity, EnderecoDTO.class);
     }
 
-    public EnderecoEntity retornarEnderecoEntity (EnderecoCreateDTO enderecoDTO) {
+    public EnderecoEntity retornarEnderecoEntity(EnderecoCreateDTO enderecoDTO) {
         return objectMapper.convertValue(enderecoDTO, EnderecoEntity.class);
     }
 

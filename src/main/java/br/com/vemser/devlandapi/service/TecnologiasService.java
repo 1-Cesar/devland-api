@@ -1,12 +1,11 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.dto.TecnologiasCreateDTO;
+import br.com.vemser.devlandapi.dto.TecnologiasDTO;
 import br.com.vemser.devlandapi.entity.TecnologiasEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
-
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.TecnologiasRepository;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

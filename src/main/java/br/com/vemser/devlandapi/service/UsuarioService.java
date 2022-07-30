@@ -11,7 +11,6 @@ import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.UserLoginRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -397,7 +396,7 @@ public class UsuarioService {
         String tipoMensagem = TipoMensagem.DELETE.getTipo();
         emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
 
-        return "Usuario "+usuarioLogadoEntity.getIdUsuario()+" foi deletado.";
+        return "Usuario " + usuarioLogadoEntity.getIdUsuario() + " foi deletado.";
     }
 
     public UsuarioDTO editarProprio(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {

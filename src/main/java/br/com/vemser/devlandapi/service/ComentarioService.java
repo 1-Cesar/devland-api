@@ -1,6 +1,9 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.dto.ComentarioCreateDTO;
+import br.com.vemser.devlandapi.dto.ComentarioDTO;
+import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.ComentarioEntity;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
@@ -14,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,7 +39,7 @@ public class ComentarioService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public PageDTO<ComentarioDTO> list(Integer pagina,Integer quantRegistros) throws RegraDeNegocioException {
+    public PageDTO<ComentarioDTO> list(Integer pagina, Integer quantRegistros) throws RegraDeNegocioException {
         PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
         Page<ComentarioEntity> page = comentarioRepository.findAll(pageRequest);
 
@@ -48,7 +50,7 @@ public class ComentarioService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, comentariosDTO);
     }
 
-    public ComentarioDTO create(Integer idPostagem, Integer idUsuario,ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException{
+    public ComentarioDTO create(Integer idPostagem, Integer idUsuario, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
 
         UsuarioEntity usuarioValid = convertOptionalToUsuarioEntity(usuarioRepository.findById(idUsuario));
         ComentarioEntity comentarioEntity = convertToEntity(comentarioCreateDTO);
@@ -65,10 +67,10 @@ public class ComentarioService {
 
     }
 
-    public ComentarioDTO update (Integer idComentario,
-                                 ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException{
+    public ComentarioDTO update(Integer idComentario,
+                                ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
         ComentarioEntity comentarioValid = convertOptionalToComentarioEntity(comentarioRepository.findById(idComentario));
-        System.out.println("ComentarioValid = "+comentarioValid);
+        System.out.println("ComentarioValid = " + comentarioValid);
 
         UsuarioEntity usuario = convertOptionalToUsuarioEntity(usuarioRepository.findById(comentarioValid.getIdUsuario()));
 
@@ -83,7 +85,7 @@ public class ComentarioService {
         return convertToDTO(comentarioValid);
     }
 
-    public void delete ( Integer idComentario){
+    public void delete(Integer idComentario) {
         ComentarioEntity comentarioValid = convertOptionalToComentarioEntity(comentarioRepository.findById(idComentario));
         comentarioRepository.delete(comentarioValid);
     }

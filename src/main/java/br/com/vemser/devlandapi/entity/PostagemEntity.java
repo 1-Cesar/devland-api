@@ -2,7 +2,10 @@ package br.com.vemser.devlandapi.entity;
 
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

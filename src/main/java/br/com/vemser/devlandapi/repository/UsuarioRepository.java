@@ -1,7 +1,6 @@
 package br.com.vemser.devlandapi.repository;
 
 import br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO;
-import br.com.vemser.devlandapi.entity.SeguidorEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
@@ -11,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer> {

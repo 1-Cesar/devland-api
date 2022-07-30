@@ -7,13 +7,10 @@ import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.ComentarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/comentario")
@@ -24,9 +21,10 @@ public class ComentarioController implements ComentarioDocs {
     private ComentarioService comentarioService;
 
     @GetMapping
-    public PageDTO<ComentarioDTO> list(@RequestParam Integer pagina,@RequestParam Integer quantRegistros) throws RegraDeNegocioException {
+    public PageDTO<ComentarioDTO> list(@RequestParam Integer pagina, @RequestParam Integer quantRegistros) throws RegraDeNegocioException {
         return comentarioService.list(pagina, quantRegistros);
     }
+
     @Override
     @PostMapping("/criar/{idPostagem}/postagem/{idUsuario}/usuario")
     public ResponseEntity<ComentarioDTO> create(@PathVariable("idPostagem") Integer idPostagem,

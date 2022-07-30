@@ -1,6 +1,5 @@
 package br.com.vemser.devlandapi.repository;
 
-import br.com.vemser.devlandapi.dto.EnderecoDTO;
 import br.com.vemser.devlandapi.entity.EnderecoEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

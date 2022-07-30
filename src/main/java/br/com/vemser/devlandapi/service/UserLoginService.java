@@ -1,18 +1,10 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.UserLoginAuthDTO;
-import br.com.vemser.devlandapi.dto.UserLoginCreateDTO;
-import br.com.vemser.devlandapi.dto.UserLoginDTO;
-import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
-import br.com.vemser.devlandapi.entity.UsuarioEntity;
-import br.com.vemser.devlandapi.enums.TipoMensagem;
 import br.com.vemser.devlandapi.enums.TipoStatus;
-import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.UserLoginRepository;
-import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

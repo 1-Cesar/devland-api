@@ -1,19 +1,18 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.PostagemDocs;
-import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
+import br.com.vemser.devlandapi.dto.PostagemDTO;
+import br.com.vemser.devlandapi.dto.RelatorioPostagemDTO;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
-import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.PostagemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/postagem")
@@ -24,7 +23,7 @@ public class PostagemController implements PostagemDocs {
     private PostagemService postagemService;
 
     @GetMapping
-    public ResponseEntity<PageDTO<PostagemDTO>> list(@RequestParam Integer pagina,@RequestParam Integer quantRegistros) throws RegraDeNegocioException {
+    public ResponseEntity<PageDTO<PostagemDTO>> list(@RequestParam Integer pagina, @RequestParam Integer quantRegistros) throws RegraDeNegocioException {
         return new ResponseEntity<>(postagemService.list(pagina, quantRegistros), HttpStatus.OK);
     }
 
@@ -32,8 +31,9 @@ public class PostagemController implements PostagemDocs {
     public PageDTO<RelatorioPostagemDTO> relatorioPostagem(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) TipoPostagem tipoPostagem) {
         return postagemService.relatorioPostagem(tipoPostagem, pagina, quantidadeRegistros);
     }
+
     @GetMapping("/{tipoPostagem}/tipo")
-    public PageDTO<PostagemDTO> listByTipo(@PathVariable("tipoPostagem") TipoPostagem tipoPostagem,@RequestParam Integer pagina,@RequestParam Integer quantRegistros) throws RegraDeNegocioException {
+    public PageDTO<PostagemDTO> listByTipo(@PathVariable("tipoPostagem") TipoPostagem tipoPostagem, @RequestParam Integer pagina, @RequestParam Integer quantRegistros) throws RegraDeNegocioException {
         return postagemService.listByTipo(tipoPostagem, pagina, quantRegistros);
     }
 

@@ -19,11 +19,6 @@ public interface TecnologiasDocs {
     public ResponseEntity<TecnologiasDTO> adicionar(@PathVariable("idUsuario") Integer idUsuario,
                                                     @Valid @RequestBody TecnologiasCreateDTO tecnologiasCreateDTO) throws RegraDeNegocioException;
 
-    /* TODO - Molde caso queira inserir novo endpoint
-    @TecnologiasNotas
-    @Operation
-    */
-
     @TecnologiasNotas
     @Operation(summary = "deleta tecnologia", description = "deleta uma tecnologia do banco de dados atraves de seu id")
     public void delete(@PathVariable("nomeTecnologia") String nomeTecnologia) throws RegraDeNegocioException;

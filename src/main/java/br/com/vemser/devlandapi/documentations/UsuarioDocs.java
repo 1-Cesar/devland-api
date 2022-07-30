@@ -1,7 +1,6 @@
 package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.UsuarioNotas;
-import br.com.vemser.devlandapi.dto.UserLoginCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
