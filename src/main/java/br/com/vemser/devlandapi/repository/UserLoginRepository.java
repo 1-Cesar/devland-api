@@ -11,4 +11,5 @@ public interface UserLoginRepository extends JpaRepository<UserLoginEntity, Inte
     Optional<UserLoginEntity> findByLoginAndSenha(String login, String senha);
 
     Optional<UserLoginEntity> findByLogin(String login);
+
 }

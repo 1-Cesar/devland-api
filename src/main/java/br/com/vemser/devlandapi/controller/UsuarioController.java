@@ -5,6 +5,7 @@ import br.com.vemser.devlandapi.dto.*;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
+import br.com.vemser.devlandapi.service.UserLoginService;
 import br.com.vemser.devlandapi.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,16 @@ public class UsuarioController implements UsuarioDocs {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private UserLoginService userLoginService;
+
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listarTodos() throws RegraDeNegocioException {
         log.info("Listando todos os usuários");
         return ResponseEntity.ok(usuarioService.listar());
     }
 
-    @GetMapping("/{idUsuario}")
+    @GetMapping("/{idUsuario}/byId")
     public ResponseEntity<List<UsuarioDTO>> listarUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
         log.info("Recuperando um usuário com base em seu id");
         return ResponseEntity.ok(usuarioService.listarUsuario(id));
