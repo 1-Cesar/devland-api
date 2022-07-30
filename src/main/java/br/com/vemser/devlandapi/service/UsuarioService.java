@@ -1,6 +1,7 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.entity.CargoEntity;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.Genero;
@@ -17,8 +18,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,18 +110,29 @@ public class UsuarioService {
             if (userLoginCreateDTO.getUsuarioEntity().getCpfCnpj().length() == 11 && ValidaCPF.isCPF(userLoginCreateDTO.getUsuarioEntity().getCpfCnpj())) {
                 UsuarioEntity usuario = usuarioRepository.save(userLoginCreateDTO.getUsuarioEntity());
 
-                UserLoginDTO userLoginDTO = new UserLoginDTO();
+                CargoEntity cargoEntity = new CargoEntity();
 
-                userLoginDTO.setLogin(userLoginCreateDTO.getLogin());
-                userLoginDTO.setSenha(userLoginCreateDTO.getSenha());
-                userLoginCreateDTO.setIdUsuario(usuario.getIdUsuario());
+                List<CargoEntity> cargoEntities = new ArrayList<>();
 
-                /*userLoginDTO.setLogin(usuario.getUserLoginEntity().getLogin());
-                userLoginDTO.setSenha(usuario.getUserLoginEntity().getSenha());
-                userLoginDTO.setIdUsuario(usuario.getUserLoginEntity().getIdUsuario());*/
+                UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class);
+                userLoginEntity.setUsuarioEntity(userLoginCreateDTO.getUsuarioEntity());
+                userLoginEntity.setStatus(true);
 
+                if (usuario.getTipoUsuario().toString().equals("DEV")) {
 
-                userLoginRepository.save(objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class));
+                    cargoEntity.setIdCargo(2);
+
+                } else {
+
+                    cargoEntity.setIdCargo(1);
+
+                }
+
+                cargoEntities.add(cargoEntity);
+
+                userLoginEntity.setCargos(cargoEntities);
+
+                userLoginRepository.save(userLoginEntity);
 
                 String tipoMensagem = TipoMensagem.CREATE.getTipo();
                 emailService.sendEmailUsuario(usuario, tipoMensagem);
@@ -132,8 +146,32 @@ public class UsuarioService {
         if (userLoginCreateDTO.getUsuarioEntity().getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(userLoginCreateDTO.getUsuarioEntity().getCpfCnpj())) {
             UsuarioEntity usuarioEmpresa = usuarioRepository.save(userLoginCreateDTO.getUsuarioEntity());
 
-           String tipoMensagem = TipoMensagem.CREATE.getTipo();
-           emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);
+            CargoEntity cargoEntity = new CargoEntity();
+
+            List<CargoEntity> cargoEntities = new ArrayList<>();
+
+            UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class);
+            userLoginEntity.setUsuarioEntity(userLoginCreateDTO.getUsuarioEntity());
+            userLoginEntity.setStatus(true);
+
+            if (usuarioEmpresa.getTipoUsuario().toString().equals("EMPRESA")) {
+
+                cargoEntity.setIdCargo(3);
+
+            } else {
+
+                cargoEntity.setIdCargo(1);
+
+            }
+
+            cargoEntities.add(cargoEntity);
+
+            userLoginEntity.setCargos(cargoEntities);
+
+            userLoginRepository.save(userLoginEntity);
+
+            String tipoMensagem = TipoMensagem.CREATE.getTipo();
+            emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);
 
             return "Salvo com sucesso";
         } else {

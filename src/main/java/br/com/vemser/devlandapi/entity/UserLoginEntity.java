@@ -33,8 +33,11 @@ public class UserLoginEntity implements UserDetails {
     @NotEmpty
     private String senha;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuarioEntity;
 
@@ -45,7 +48,7 @@ public class UserLoginEntity implements UserDetails {
             joinColumns = @JoinColumn(name = "id_userlogin"),
             inverseJoinColumns = @JoinColumn(name = "id_cargo")
     )
-    private Set<CargoEntity> cargos;
+    private List<CargoEntity> cargos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

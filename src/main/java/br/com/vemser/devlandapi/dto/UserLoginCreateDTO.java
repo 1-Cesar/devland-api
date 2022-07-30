@@ -10,9 +10,5 @@ public class UserLoginCreateDTO {
 
     private String senha;
 
-    private Integer idUsuario;
-
     private UsuarioEntity usuarioEntity;
-
-
 }

@@ -7,8 +7,4 @@ import lombok.Data;
 public class UserLoginDTO extends UserLoginCreateDTO{
 
     private Integer idUserLogin;
-
-
-
-
 }

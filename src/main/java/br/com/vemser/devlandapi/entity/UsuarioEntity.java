@@ -101,7 +101,7 @@ public class UsuarioEntity {
     // Relacionamento Usuário — UserLogin
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id_usuario", referencedColumnName = "id_usuario")
     private UserLoginEntity userLoginEntity;
 }
