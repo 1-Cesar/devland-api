@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.controller;
 
+import br.com.vemser.devlandapi.dto.UserLoginAuthDTO;
 import br.com.vemser.devlandapi.dto.UserLoginCreateDTO;
 import br.com.vemser.devlandapi.dto.UserLoginDTO;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
@@ -26,13 +27,14 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping
-    public String auth(@RequestBody @Valid UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
+    public String auth(@RequestBody @Valid UserLoginAuthDTO userLoginAuthDTO) throws RegraDeNegocioException {
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
-                        userLoginCreateDTO.getLogin(),
-                        userLoginCreateDTO.getSenha()
+                        userLoginAuthDTO.getLogin(),
+                        userLoginAuthDTO.getSenha()
                 );
+
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         Object usuarioLogado = authentication.getPrincipal();
@@ -41,10 +43,12 @@ public class AuthController {
         return token;
     }
 
+    //TODO - colocar condicional para o caso de usuario nao estar logado
     @GetMapping("/recuperarLogin")
     public String usuarioLogado() throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
         return usuarioLogadoEntity.getLogin();
     }
+
 }

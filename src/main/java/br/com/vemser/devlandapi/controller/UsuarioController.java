@@ -76,4 +76,21 @@ public class UsuarioController implements UsuarioDocs {
     public PageDTO<RelatorioPersonalizadoDevDTO> getUsuarioByGenero(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) Genero genero) {
         return usuarioService.relatorioGenero(genero, pagina, quantidadeRegistros);
     }
+
+    //    ======================== EXCLUSIVOS DEV =====================
+    @GetMapping("/listar-se")
+    public List<UsuarioDTO> listarProprio() throws RegraDeNegocioException{
+        return usuarioService.listarProprio();
+    }
+
+    @PutMapping("/editar-se")
+    public UsuarioDTO editarProprio(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException{
+        return usuarioService.editarProprio(usuarioCreateDTO);
+    }
+
+    @DeleteMapping("/deletar-se")
+    public String deleteProprio() throws RegraDeNegocioException{
+        return usuarioService.deleteProprio();
+    }
+
 }

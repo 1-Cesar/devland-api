@@ -142,7 +142,7 @@ public class UsuarioService {
                 String tipoMensagem = TipoMensagem.CREATE.getTipo();
                 emailService.sendEmailUsuario(usuario, tipoMensagem);
 
-                return "Salvo com sucesso";
+                return "Usuario salvo com sucesso!";
             } else {
                 throw new RegraDeNegocioException("CPF Inválido");
             }
@@ -181,7 +181,7 @@ public class UsuarioService {
             String tipoMensagem = TipoMensagem.CREATE.getTipo();
             emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);
 
-            return "Salvo com sucesso";
+            return "Empresa cadastrada com sucesso!";
         } else {
             throw new RegraDeNegocioException("CNPJ Inválido");
         }
@@ -371,4 +371,71 @@ public class UsuarioService {
                 .toList();
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, relatorioPersonalizadoDevDTOS);
     }
+
+    //    ======================== EXCLUSIVOS DEV =====================
+    public List<UsuarioDTO> listarProprio() throws RegraDeNegocioException {
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+        localizarUsuario(id);
+        return usuarioRepository.findById(id).stream()
+                .filter(usuario -> usuario.getIdUsuario().equals(id))
+                .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public String deleteProprio() throws RegraDeNegocioException {
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        UsuarioEntity usuarioRecuperado = localizarUsuario(usuarioLogadoEntity.getIdUsuario());
+
+        usuarioRepository.delete(usuarioRecuperado);
+
+        String tipoMensagem = TipoMensagem.DELETE.getTipo();
+        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
+
+        return "Usuario "+usuarioLogadoEntity.getIdUsuario()+" foi deletado.";
+    }
+
+    public UsuarioDTO editarProprio(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = usuarioLogadoEntity.getIdUsuario();
+
+
+        if (usuarioCreateDTO.getTipoUsuario() == TipoUsuario.DEV) {
+            if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
+
+                UsuarioEntity usuarioEntity = localizarUsuario(id);
+                usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
+                usuarioRepository.save(usuarioEntity);
+
+                String tipoMensagem = TipoMensagem.UPDATE.getTipo();
+                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
+
+                return retornarDTO(usuarioEntity);
+            } else {
+                throw new RegraDeNegocioException("CPF Inválido");
+            }
+        }
+
+        if (usuarioCreateDTO.getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(usuarioCreateDTO.getCpfCnpj())) {
+
+            UsuarioEntity usuarioEntity = localizarUsuario(id);
+            usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
+            usuarioRepository.save(usuarioEntity);
+
+            String tipoMensagem = TipoMensagem.UPDATE.getTipo();
+            emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
+
+            return retornarDTO(usuarioEntity);
+        } else {
+            throw new RegraDeNegocioException("CNPJ Inválido");
+        }
+    }
+
 }
