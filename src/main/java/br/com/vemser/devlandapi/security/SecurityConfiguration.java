@@ -53,8 +53,10 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.POST, "/contato", "/endereco","/postagem", "/comentario", "/seguidores").hasRole("EMPRESA") // 1
                                 .antMatchers(HttpMethod.PUT, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/byname").hasRole("EMPRESA") // 1*/
                                 //.antMatchers(HttpMethod.DELETE, "/usuario").hasAnyRole("ADMIN","DEV", "EMPRESA")
-                                .antMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")  // 2
-                                .antMatchers(HttpMethod.GET, "/usuario/listar-se").hasRole("DEV") // 2
+                                .antMatchers(HttpMethod.PUT, "/usuario/editar-se","/comentario/editar-se","/postagem/editar-se","/endereco/editar-se","/contato/").hasAnyRole("DEV", "EMPRESA") // 2
+                                .antMatchers(HttpMethod.GET, "/usuario/listar-se", "/usuario/byname","/contato/usuario/").hasAnyRole("DEV", "EMPRESA") // 2
+                                .antMatchers(HttpMethod.GET, "/**").hasRole("ADMIN") // 2
+                                .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN") // 2
                                 .anyRequest().authenticated());
         // Adicionar filtro do token
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

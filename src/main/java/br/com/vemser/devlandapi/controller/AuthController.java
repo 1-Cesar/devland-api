@@ -1,13 +1,13 @@
 package br.com.vemser.devlandapi.controller;
 
-import br.com.vemser.devlandapi.dto.UserLoginAuthDTO;
-import br.com.vemser.devlandapi.dto.UserLoginCreateDTO;
-import br.com.vemser.devlandapi.dto.UserLoginDTO;
+import br.com.vemser.devlandapi.dto.*;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.security.TokenService;
 import br.com.vemser.devlandapi.service.UserLoginService;
+import br.com.vemser.devlandapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,8 +23,12 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final UserLoginService userLoginService;
+
     private final TokenService tokenService;
+
     private final AuthenticationManager authenticationManager;
+
+    private final UsuarioService usuarioService;
 
     @PostMapping
     public String auth(@RequestBody @Valid UserLoginAuthDTO userLoginAuthDTO) throws RegraDeNegocioException {
@@ -51,4 +55,15 @@ public class AuthController {
         return usuarioLogadoEntity.getLogin();
     }
 
+    @PutMapping("/trocar-senha")
+    public String trocarSenha(@RequestBody @Valid UserLoginAuthDTO userLoginAuthDTO) throws RegraDeNegocioException{
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+        return userLoginService.trocarSenha(userLoginAuthDTO, usuarioLogadoEntity);
+    }
+
+    @PostMapping("/cadastro")
+    public ResponseEntity<String> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
+        return ResponseEntity.ok(usuarioService.adicionar(userLoginCreateDTO));
+    }
 }
