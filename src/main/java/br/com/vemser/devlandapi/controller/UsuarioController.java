@@ -39,6 +39,13 @@ public class UsuarioController implements UsuarioDocs {
         return ResponseEntity.ok(usuarioService.listarUsuario(id));
     }
 
+    @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Rafa
+    public ResponseEntity<List<UsuarioDTO>> listarPorNome(@RequestParam("nome") String nome) throws RegraDeNegocioException {
+       log.info("REcuperando um usuário através do nome");
+
+        return ResponseEntity.ok(usuarioService.listarPorNome(nome));
+    }
+
     @PostMapping
     public ResponseEntity<UsuarioDTO> adicionar(@Valid @RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         log.info("Criando um usuário");
