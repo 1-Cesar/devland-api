@@ -8,10 +8,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +26,8 @@ public class TokenService {
     private String expiration;
 
     private final UserLoginService userLoginService;
-    private static final String TOKEN_PREFIX = "Bearer ";
+    //private static final String TOKEN_PREFIX = "Bearer ";
+    private static final String KEY_CARGOS = "roles";
 
 
     //criando um token JWT
@@ -33,16 +36,22 @@ public class TokenService {
         Date now = new Date();
         Date exp = new Date(now.getTime() + Long.valueOf(expiration)); //convertendo para long
 
+        List<String> listaDeCargos = userLoginEntity.getCargos().stream()
+                .map(cargoEntity -> cargoEntity.getNome())
+                .toList();
+
         String token = Jwts.builder()
                 .setIssuer("devland-api")
                 .claim(Claims.ID, userLoginEntity.getIdAutenticacao())
+                .claim(KEY_CARGOS, listaDeCargos)
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
 
 
-        return TOKEN_PREFIX + token;
+        //return TOKEN_PREFIX + token;
+        return TokenAuthenticationFilter.BEARER + token;
     }
 
     //validar se o token é válido e retornar o usuário se for válido
@@ -62,6 +71,10 @@ public class TokenService {
 
         if (idUsuario != null) {
 
+            List<SimpleGrantedAuthority> cargosGrantedAuthority = cargos.stream()
+                    .map(cargo -> new SimpleGrantedAuthority(cargo))
+                    .toList();
+
             //como o jws já sinalizou que a chave é válida, estamos buscando do póprio jwt
             // e setando no objeto abaixo
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -70,6 +83,5 @@ public class TokenService {
             return usernamePasswordAuthenticationToken;
         }
         return null;
-
     }
 }

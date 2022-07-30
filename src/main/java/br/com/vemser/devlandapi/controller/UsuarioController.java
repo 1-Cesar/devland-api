@@ -1,10 +1,7 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.UsuarioDocs;
-import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO;
-import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.dto.*;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -47,7 +44,7 @@ public class UsuarioController implements UsuarioDocs {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> adicionar(@Valid @RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+    public ResponseEntity<UsuarioDTO> adicionar(@Valid @RequestBody UsuarioCreateDTO usuarioCreateDTO, @Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
         log.info("Criando um usuário");
         return ResponseEntity.ok(usuarioService.adicionar(usuarioCreateDTO));
     }

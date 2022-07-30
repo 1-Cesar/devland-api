@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class UserLoginDTO extends UserLoginCreateDTO{
 
-    private Integer idAutenticacao;
+    private Integer idUserLogin;
 
 }

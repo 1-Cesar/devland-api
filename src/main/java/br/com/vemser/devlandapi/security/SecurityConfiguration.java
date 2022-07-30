@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,7 +35,15 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 // Adicionar regras de requisição
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers("/", "/auth", "/auth/cadastrar", "/auth/recuperarLogin").permitAll()
+                        authz.antMatchers("/", "/auth", "/auth/recuperarLogin", "/usuario/cadastrar").permitAll()
+                                .antMatchers(HttpMethod.DELETE, "/usuario", "/comentario","/postagem").hasRole("ADMIN") // 1
+                                .antMatchers(HttpMethod.DELETE, "/contato", "/endereco","/comentario", "/postagem", "/seguidor", "/tecnologia").hasRole("DEV") // 1
+                                .antMatchers(HttpMethod.DELETE, "/contato", "/endereco","/comentario", "/postagem", "/seguidor").hasRole("EMPRESA") // 1
+                                .antMatchers(HttpMethod.GET, "/contato","/endereco","/postagem","/comentario","/usuario","/usuario/").hasRole("ADMIN") // 1
+                                .antMatchers(HttpMethod.GET, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/", "/tecnologia").hasRole("DEV") // 1
+                                .antMatchers(HttpMethod.GET, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/").hasRole("EMPRESA") // 1
+                                .antMatchers(HttpMethod.PUT, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/").hasRole("DEV") // 1
+                                .antMatchers(HttpMethod.PUT, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/").hasRole("EMPRESA") // 1
                                 .anyRequest().authenticated());
         // Adicionar filtro do token
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
@@ -49,7 +58,6 @@ public class SecurityConfiguration {
                 "/swagger-resources/**",
                 "/swagger-ui/**");
     }
-
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -73,6 +81,4 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-
 }

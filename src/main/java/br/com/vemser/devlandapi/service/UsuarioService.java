@@ -1,11 +1,13 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
+import br.com.vemser.devlandapi.repository.UserLoginRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,6 +29,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UserLoginRepository userLoginRepository;
 
     @Autowired
     private EmailService emailService;
@@ -101,6 +106,11 @@ public class UsuarioService {
         if (usuarioCreateDTO.getTipoUsuario() == TipoUsuario.DEV) {
             if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
                 UsuarioEntity usuario = usuarioRepository.save(retornarUsuarioEntity(usuarioCreateDTO));
+
+                UserLoginDTO userLoginDTO = new UserLoginDTO();
+                userLoginDTO.setIdUserLogin(usuario.getIdUsuario());
+
+                userLoginRepository.save(objectMapper.convertValue(userLoginDTO, UserLoginEntity.class));
 
                 String tipoMensagem = TipoMensagem.CREATE.getTipo();
                 emailService.sendEmailUsuario(usuario, tipoMensagem);
