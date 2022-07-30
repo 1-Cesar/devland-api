@@ -41,12 +41,6 @@ public class AuthController {
         return token;
     }
 
-    @PostMapping("/cadastrar")
-    public String cadastrar(@RequestBody UserLoginCreateDTO userLoginCreateDTO) {
-        userLoginService.cadastrar(userLoginCreateDTO);
-        return "Usuario Cadastrado com Sucesso!";
-    }
-
     @GetMapping("/recuperarLogin")
     public String usuarioLogado() throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();

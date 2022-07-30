@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +34,9 @@ public class UsuarioService {
 
     @Autowired
     private UserLoginRepository userLoginRepository;
+
+    @Autowired
+    private UserLoginService userLoginService;
 
     @Autowired
     private EmailService emailService;
@@ -108,6 +110,9 @@ public class UsuarioService {
 
         if (userLoginCreateDTO.getUsuarioEntity().getTipoUsuario() == TipoUsuario.DEV) {
             if (userLoginCreateDTO.getUsuarioEntity().getCpfCnpj().length() == 11 && ValidaCPF.isCPF(userLoginCreateDTO.getUsuarioEntity().getCpfCnpj())) {
+
+                userLoginCreateDTO.setSenha(userLoginService.criptofrafia(userLoginCreateDTO.getSenha()));
+
                 UsuarioEntity usuario = usuarioRepository.save(userLoginCreateDTO.getUsuarioEntity());
 
                 CargoEntity cargoEntity = new CargoEntity();
@@ -144,6 +149,9 @@ public class UsuarioService {
         }
 
         if (userLoginCreateDTO.getUsuarioEntity().getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(userLoginCreateDTO.getUsuarioEntity().getCpfCnpj())) {
+
+            userLoginCreateDTO.setSenha(userLoginService.criptofrafia(userLoginCreateDTO.getSenha()));
+
             UsuarioEntity usuarioEmpresa = usuarioRepository.save(userLoginCreateDTO.getUsuarioEntity());
 
             CargoEntity cargoEntity = new CargoEntity();
@@ -178,7 +186,6 @@ public class UsuarioService {
             throw new RegraDeNegocioException("CNPJ Inválido");
         }
     }
-
 
     public class ValidaCPF {
         public static boolean isCPF(String CPF) {

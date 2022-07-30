@@ -22,17 +22,13 @@ public class UserLoginService {
     @Autowired
     private UserLoginRepository userLoginRepository;
 
-    public UserLoginDTO cadastrar(UserLoginCreateDTO userLoginCreateDTO){
-
-        UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO,UserLoginEntity.class);
+    public String criptofrafia(String senha){
 
         LdapShaPasswordEncoder ldapShaPasswordEncoder = new LdapShaPasswordEncoder();
 
-        userLoginEntity.setSenha(ldapShaPasswordEncoder.encode(userLoginCreateDTO.getSenha()));
+        String criptografia = ldapShaPasswordEncoder.encode(senha);
 
-        UserLoginEntity userSalvo= userLoginRepository.save(userLoginEntity);
-
-        return objectMapper.convertValue(userSalvo, UserLoginDTO.class);
+        return criptografia;
     }
 
     public Optional<UserLoginEntity> findByLoginAndSenha(String login, String senha) {
