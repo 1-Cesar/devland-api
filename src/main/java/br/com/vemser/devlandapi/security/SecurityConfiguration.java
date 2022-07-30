@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 // Adicionar regras de requisição
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers("/", "/auth").permitAll()
+                        authz.antMatchers("/", "/auth","/auth/cadastro").permitAll()
 
                                 //.antMatchers(HttpMethod.GET, "/contato/","/endereco/","/postagem/","/comentario/","/usuario/", "/seguidores/").hasRole("ADMIN") // 1
                                 /*//ADMIN
