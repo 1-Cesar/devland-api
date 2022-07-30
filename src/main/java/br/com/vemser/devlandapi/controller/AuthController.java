@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.dto.UserLoginAuthDTO;
 import br.com.vemser.devlandapi.dto.UserLoginCreateDTO;
 import br.com.vemser.devlandapi.dto.UserLoginDTO;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
+import br.com.vemser.devlandapi.enums.TipoStatus;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.security.TokenService;
 import br.com.vemser.devlandapi.service.UserLoginService;
@@ -49,6 +50,13 @@ public class AuthController {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
         return usuarioLogadoEntity.getLogin();
+    }
+
+
+    @PutMapping("/alterar-status/{idUsuario}")
+    public String desativar(@PathVariable("idUsuario") Integer id, TipoStatus opção) throws RegraDeNegocioException {
+        //log.info("Alterando um usuário com base em seu id");
+        return userLoginService.desativar(id, opção);
     }
 
 }

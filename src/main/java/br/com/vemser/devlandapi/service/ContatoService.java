@@ -115,6 +115,7 @@ public class ContatoService {
         contatoRepository.delete(contatoEntityRecuperado);
     }
 
+
     //==================================================================================================================
     //MÉTODOS AUXILIARES
 

@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 // Adicionar regras de requisição
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers("/", "/auth").permitAll()
+                        authz.antMatchers("/", "/auth", "/usuario/cadastro").permitAll()
 
                                 //.antMatchers(HttpMethod.GET, "/contato/","/endereco/","/postagem/","/comentario/","/usuario/", "/seguidores/").hasRole("ADMIN") // 1
                                 /*//ADMIN
@@ -53,8 +53,12 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.POST, "/contato", "/endereco","/postagem", "/comentario", "/seguidores").hasRole("EMPRESA") // 1
                                 .antMatchers(HttpMethod.PUT, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/byname").hasRole("EMPRESA") // 1*/
                                 //.antMatchers(HttpMethod.DELETE, "/usuario").hasAnyRole("ADMIN","DEV", "EMPRESA")
+
                                 .antMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")  // 2
                                 .antMatchers(HttpMethod.GET, "/usuario/listar-se").hasRole("DEV") // 2
+
+                                //.antMatchers("/usuario/listar-se").hasRole("DEV")
+
                                 .anyRequest().authenticated());
         // Adicionar filtro do token
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
