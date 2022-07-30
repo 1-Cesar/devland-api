@@ -86,5 +86,4 @@ public class UsuarioController implements UsuarioDocs {
     public String deleteProprio() throws RegraDeNegocioException{
         return usuarioService.deleteProprio();
     }
-
 }
