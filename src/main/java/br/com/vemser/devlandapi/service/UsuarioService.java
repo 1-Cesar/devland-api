@@ -101,11 +101,11 @@ public class UsuarioService {
         }
     }
 
-    public UsuarioDTO adicionar(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+    public String adicionar(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
 
-        if (usuarioCreateDTO.getTipoUsuario() == TipoUsuario.DEV) {
-            if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
-                UsuarioEntity usuario = usuarioRepository.save(retornarUsuarioEntity(usuarioCreateDTO));
+        if (userLoginCreateDTO.getUsuarioEntity().getTipoUsuario() == TipoUsuario.DEV) {
+            if (userLoginCreateDTO.getUsuarioEntity().getCpfCnpj().length() == 11 && ValidaCPF.isCPF(userLoginCreateDTO.getUsuarioEntity().getCpfCnpj())) {
+                UsuarioEntity usuario = usuarioRepository.save(userLoginCreateDTO.getUsuarioEntity());
 
                 UserLoginDTO userLoginDTO = new UserLoginDTO();
                 userLoginDTO.setIdUserLogin(usuario.getIdUsuario());
@@ -115,19 +115,19 @@ public class UsuarioService {
                 String tipoMensagem = TipoMensagem.CREATE.getTipo();
                 emailService.sendEmailUsuario(usuario, tipoMensagem);
 
-                return retornarDTO(usuario);
+                return "Salvo com sucesso";
             } else {
                 throw new RegraDeNegocioException("CPF Inválido");
             }
         }
 
-        if (usuarioCreateDTO.getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(usuarioCreateDTO.getCpfCnpj())) {
-            UsuarioEntity usuarioEmpresa = usuarioRepository.save(retornarUsuarioEntity(usuarioCreateDTO));
+        if (userLoginCreateDTO.getUsuarioEntity().getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(userLoginCreateDTO.getUsuarioEntity().getCpfCnpj())) {
+            UsuarioEntity usuarioEmpresa = usuarioRepository.save(userLoginCreateDTO.getUsuarioEntity());
 
            String tipoMensagem = TipoMensagem.CREATE.getTipo();
            emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);
 
-            return retornarDTO(usuarioEmpresa);
+            return "Salvo com sucesso";
         } else {
             throw new RegraDeNegocioException("CNPJ Inválido");
         }

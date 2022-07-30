@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 // Adicionar regras de requisição
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers("/", "/auth", "/auth/recuperarLogin", "/usuario/cadastrar").permitAll()
+                        authz.antMatchers("/", "/auth", "/auth/recuperarLogin", "/usuario").permitAll()
                                 .antMatchers(HttpMethod.DELETE, "/usuario", "/comentario","/postagem").hasRole("ADMIN") // 1
                                 .antMatchers(HttpMethod.DELETE, "/contato", "/endereco","/comentario", "/postagem", "/seguidor", "/tecnologia").hasRole("DEV") // 1
                                 .antMatchers(HttpMethod.DELETE, "/contato", "/endereco","/comentario", "/postagem", "/seguidor").hasRole("EMPRESA") // 1

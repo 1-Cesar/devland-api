@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class TokenService {
 
         String token = Jwts.builder()
                 .setIssuer("devland-api")
-                .claim(Claims.ID, userLoginEntity.getIdAutenticacao())
+                .claim(Claims.ID, userLoginEntity.getIdUserLogin())
                 .claim(KEY_CARGOS, listaDeCargos)
                 .setIssuedAt(now)
                 .setExpiration(exp)
@@ -70,6 +71,7 @@ public class TokenService {
         Integer idUsuario = payload.get(Claims.ID, Integer.class);
 
         if (idUsuario != null) {
+            List<String> cargos = payload.get(KEY_CARGOS, List.class);
 
             List<SimpleGrantedAuthority> cargosGrantedAuthority = cargos.stream()
                     .map(cargo -> new SimpleGrantedAuthority(cargo))

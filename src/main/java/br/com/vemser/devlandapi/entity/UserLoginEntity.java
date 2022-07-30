@@ -9,15 +9,18 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity(name = "userlogin")
 public class UserLoginEntity implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "autenticacao_seq")
-    @SequenceGenerator(name = "autenticacao_seq", sequenceName = "seq_userlogin", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userlogin_seq")
+    @SequenceGenerator(name = "userlogin_seq", sequenceName = "seq_userlogin", allocationSize = 1)
     @Column(name = "id_userlogin")
-    private Integer idAutenticacao;
+    private Integer idUserLogin;
 
     @Column(name = "login")
     @NotEmpty
@@ -32,9 +35,18 @@ public class UserLoginEntity implements UserDetails {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuarioEntity;
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "USERLOGIN_CARGO",
+            joinColumns = @JoinColumn(name = "ID_USERLOGIN"),
+            inverseJoinColumns = @JoinColumn(name = "ID_CARGO")
+    )
+    private Set<CargoEntity> cargos;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return cargos;
     }
 
     @Override
