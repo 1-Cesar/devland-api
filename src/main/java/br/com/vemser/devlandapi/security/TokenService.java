@@ -1,6 +1,7 @@
 package br.com.vemser.devlandapi.security;
 
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
+import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.UserLoginService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -30,7 +31,11 @@ public class TokenService {
 
 
     //criando um token JWT
-    public String getToken(UserLoginEntity userLoginEntity) {
+    public String getToken(UserLoginEntity userLoginEntity) throws RegraDeNegocioException {
+
+        if (userLoginEntity.getStatus().equals(false)) {
+            throw new RegraDeNegocioException("Seu login foi desativado. Entre em contato com o suporte: contato@devland.com");
+        }
 
         Date now = new Date();
         Date exp = new Date(now.getTime() + Long.valueOf(expiration)); //convertendo para long

@@ -141,7 +141,7 @@ public class UsuarioService {
                 String tipoMensagem = TipoMensagem.CREATE.getTipo();
                 emailService.sendEmailUsuario(usuario, tipoMensagem);
 
-                return "Usuario salvo com sucesso!";
+                return "Desenvolvedor cadastrado com sucesso!";
             } else {
                 throw new RegraDeNegocioException("CPF Inválido");
             }
