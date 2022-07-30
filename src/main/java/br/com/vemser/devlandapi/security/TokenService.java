@@ -80,7 +80,7 @@ public class TokenService {
             //como o jws já sinalizou que a chave é válida, estamos buscando do póprio jwt
             // e setando no objeto abaixo
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(idUsuario, null, Collections.emptyList());
+                    new UsernamePasswordAuthenticationToken(idUsuario, null, cargosGrantedAuthority);
 
             return usernamePasswordAuthenticationToken;
         }
