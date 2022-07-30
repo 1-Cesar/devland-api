@@ -30,13 +30,13 @@ public class ContatoController implements ContatoDocs {
         return contatoService.listarPaginado(pagina, quantidadeRegistros);
     }
 
-    @GetMapping("/contato/{idContato}")
+    @GetMapping("/{idContato}")
     public ResponseEntity<List<ContatoDTO>> listarContato(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {
         log.info("Recuperando um contato através de seu id");
         return ResponseEntity.ok(contatoService.listarContatoPorId(id));
     }
 
-    @GetMapping("/{idUsuario}")
+    @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<List<ContatoDTO>> listarContatoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
         log.info("Recuperando um contato com base no id do usuário");
         return ResponseEntity.ok(contatoService.listarContatoUsuario(id));
