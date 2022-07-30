@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.service;
 
+import br.com.vemser.devlandapi.dto.UserLoginAuthDTO;
 import br.com.vemser.devlandapi.dto.UserLoginCreateDTO;
 import br.com.vemser.devlandapi.dto.UserLoginDTO;
 import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
@@ -37,9 +38,20 @@ public class UserLoginService {
         return criptografia;
     }
 
+    public String trocarSenha (UserLoginAuthDTO userLoginAuthDTO, UserLoginEntity usuarioLogadoEntity) throws RegraDeNegocioException {
+        if (userLoginAuthDTO.getLogin().equals(usuarioLogadoEntity.getLogin())) {
+            usuarioLogadoEntity.setSenha(criptofrafia(userLoginAuthDTO.getSenha()));
+            userLoginRepository.save(usuarioLogadoEntity);
+        } else {
+            throw new RegraDeNegocioException("Usuário ou senha inválidos");
+        }
+        return "Senha Alterada com Sucesso !";
+    }
+
     public Optional<UserLoginEntity> findByLoginAndSenha(String login, String senha) {
         return userLoginRepository.findByLoginAndSenha(login, senha);
     }
+
 
     public Optional<UserLoginEntity> findByLogin(String login) {
         return userLoginRepository.findByLogin(login);

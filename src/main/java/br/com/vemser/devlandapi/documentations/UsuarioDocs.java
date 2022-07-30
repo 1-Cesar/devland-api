@@ -22,9 +22,9 @@ public interface UsuarioDocs {
     @Operation(summary = "listar usuario por id", description = "recupera um usuario do banco de dados atraves de seu id")
     public ResponseEntity<List<UsuarioDTO>> listarUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
 
-    @UsuarioNotas
+    /*@UsuarioNotas
     @Operation(summary = "criar usuario", description = "cria um usuario dentro do banco de dados")
-    public ResponseEntity<String> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException;
+    public ResponseEntity<String> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException;*/
 
     @UsuarioNotas
     @Operation(summary = "altera um usuario por id", description = "altera os registros de um usuario no banco de dados atraves de seu id")
