@@ -49,6 +49,13 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
+    public List<UsuarioDTO> listarPorNome(String nome) {
+        return usuarioRepository.findAll().stream()
+                .filter(usuario -> usuario.getNome().toUpperCase().contains(nome.toUpperCase()))
+                .map(this::retornarDTO)
+                .collect(Collectors.toList());
+    }
+
     public void delete(Integer id) throws RegraDeNegocioException {
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
         usuarioRepository.delete(usuarioRecuperado);
@@ -115,6 +122,7 @@ public class UsuarioService {
             throw new RegraDeNegocioException("CNPJ Inválido");
         }
     }
+
 
     public class ValidaCPF {
         public static boolean isCPF(String CPF) {
@@ -255,6 +263,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
         return usuarioRecuperado;
     }
+
 
     public UsuarioDTO retornarDTO(UsuarioEntity usuario) {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
