@@ -25,10 +25,11 @@ public interface UsuarioDocs {
     @Operation(summary = "criar usuario", description = "cria um usuario dentro do banco de dados")
     public ResponseEntity<String> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException;*/
 
+    /*
     @UsuarioNotas
     @Operation(summary = "altera um usuario por id", description = "altera os registros de um usuario no banco de dados atraves de seu id")
     public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id, @Valid @RequestBody UsuarioCreateDTO usuarioAtualizar) throws RegraDeNegocioException;
-
+    */
     @UsuarioNotas
     @Operation(summary = "deleta um usuario", description = "deleta um usuario do banco de dados atraves de seu id")
     public void delete(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;

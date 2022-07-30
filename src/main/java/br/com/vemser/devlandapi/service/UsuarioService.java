@@ -73,6 +73,7 @@ public class UsuarioService {
         emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
 
+    /*
     public UsuarioDTO editar(Integer id, UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         if (usuarioCreateDTO.getTipoUsuario() == TipoUsuario.DEV) {
             if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
@@ -104,6 +105,8 @@ public class UsuarioService {
             throw new RegraDeNegocioException("CNPJ Inválido");
         }
     }
+    */
+
 
     public String adicionar(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
 

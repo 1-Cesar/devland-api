@@ -50,12 +50,6 @@ public class UsuarioController implements UsuarioDocs {
         return ResponseEntity.ok(usuarioService.listarPorNome(nome));
     }
 
-    @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id,
-                                             @Valid @RequestBody UsuarioCreateDTO usuarioAtualizar) throws RegraDeNegocioException {
-        log.info("Alterando um usuário com base em seu id");
-        return ResponseEntity.ok(usuarioService.editar(id, usuarioAtualizar));
-    }
 
     @DeleteMapping("/{idUsuario}")
     public void delete(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
@@ -93,4 +87,15 @@ public class UsuarioController implements UsuarioDocs {
     public String deleteProprio() throws RegraDeNegocioException {
         return usuarioService.deleteProprio();
     }
+
+
+    /*
+    @PutMapping("/{idUsuario}")
+    public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id,
+                                             @Valid @RequestBody UsuarioCreateDTO usuarioAtualizar) throws RegraDeNegocioException {
+        log.info("Alterando um usuário com base em seu id");
+        return ResponseEntity.ok(usuarioService.editar(id, usuarioAtualizar));
+    }
+    */
+
 }
