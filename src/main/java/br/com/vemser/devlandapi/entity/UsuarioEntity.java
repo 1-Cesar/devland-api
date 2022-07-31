@@ -102,6 +102,6 @@ public class UsuarioEntity {
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_usuario", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UserLoginEntity userLoginEntity;
 }

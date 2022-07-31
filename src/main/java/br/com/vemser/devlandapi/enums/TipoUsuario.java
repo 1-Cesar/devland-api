@@ -3,7 +3,9 @@ package br.com.vemser.devlandapi.enums;
 import java.util.Arrays;
 
 public enum TipoUsuario {
-    DEV(1), EMPRESA(2);
+    DEV(1),
+    EMPRESA(2),
+    ADMIN(3);
 
     private int tipo;
 

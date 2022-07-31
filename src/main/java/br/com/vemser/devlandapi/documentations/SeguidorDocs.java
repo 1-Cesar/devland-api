@@ -2,8 +2,8 @@ package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.SeguidorNotas;
 import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.SeguidorCreateDTO;
-import br.com.vemser.devlandapi.dto.SeguidorDTO;
+import br.com.vemser.devlandapi.dto.seguidor.SeguidorCreateDTO;
+import br.com.vemser.devlandapi.dto.seguidor.SeguidorDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;

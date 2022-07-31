@@ -1,8 +1,8 @@
 package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.ContatoNotas;
-import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
-import br.com.vemser.devlandapi.dto.ContatoDTO;
+import br.com.vemser.devlandapi.dto.contato.ContatoCreateDTO;
+import br.com.vemser.devlandapi.dto.contato.ContatoDTO;
 import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;

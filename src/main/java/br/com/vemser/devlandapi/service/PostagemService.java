@@ -1,11 +1,12 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.*;
-import br.com.vemser.devlandapi.entity.ComentarioEntity;
+import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemDTO;
+import br.com.vemser.devlandapi.dto.relatorios.RelatorioPostagemDTO;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
-import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,7 +43,7 @@ public class PostagemService {
 
     private String strLocalDateTime;
 
-    public PageDTO<PostagemDTO> list(Integer pagina,Integer quantRegistros) throws RegraDeNegocioException {
+    public PageDTO<PostagemDTO> list(Integer pagina, Integer quantRegistros) throws RegraDeNegocioException {
         PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
         Page<PostagemEntity> page = postagemRepository.findAll(pageRequest);
         List<PostagemDTO> postagensDTO = page.getContent().stream()

@@ -1,8 +1,8 @@
 package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.TecnologiasNotas;
-import br.com.vemser.devlandapi.dto.TecnologiasCreateDTO;
-import br.com.vemser.devlandapi.dto.TecnologiasDTO;
+import br.com.vemser.devlandapi.dto.tecnologias.TecnologiasCreateDTO;
+import br.com.vemser.devlandapi.dto.tecnologias.TecnologiasDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +18,6 @@ public interface TecnologiasDocs {
     @Operation(summary = "insere tecnologia através do id do usuário", description = "insere uma tecnologia dentro do banco de dados com base no id do usuário")
     public ResponseEntity<TecnologiasDTO> adicionar(@PathVariable("idUsuario") Integer idUsuario,
                                                     @Valid @RequestBody TecnologiasCreateDTO tecnologiasCreateDTO) throws RegraDeNegocioException;
-
-    /* TODO - Molde caso queira inserir novo endpoint
-    @TecnologiasNotas
-    @Operation
-    */
 
     @TecnologiasNotas
     @Operation(summary = "deleta tecnologia", description = "deleta uma tecnologia do banco de dados atraves de seu id")

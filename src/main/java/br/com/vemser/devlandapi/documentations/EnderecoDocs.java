@@ -1,9 +1,9 @@
 package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.EnderecoNotas;
-import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
-import br.com.vemser.devlandapi.dto.EnderecoDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.dto.endereco.EnderecoCreateDTO;
+import br.com.vemser.devlandapi.dto.endereco.EnderecoDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;

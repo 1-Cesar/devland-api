@@ -2,25 +2,24 @@ package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.PostagemNotas;
 import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
-import br.com.vemser.devlandapi.dto.PostagemDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemDTO;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.List;
 
 public interface PostagemDocs {
 
     @PostagemNotas
     @Operation(summary = "Lista paginada com todas as postagens")
-    public ResponseEntity<PageDTO<PostagemDTO>> list(@RequestParam Integer pagina,@RequestParam Integer quantRegistros) throws RegraDeNegocioException;
+    public ResponseEntity<PageDTO<PostagemDTO>> list(@RequestParam Integer pagina, @RequestParam Integer quantRegistros) throws RegraDeNegocioException;
+
     @PostagemNotas
     @Operation(summary = "Lista paginada com postagens por tipo", description = "Realizará a listagem de todas as postagens do banco de dados filtrando pelo tipo")
     public PageDTO<PostagemDTO> listByTipo(TipoPostagem tipoPostagem, Integer pagina, Integer quantRegistros) throws RegraDeNegocioException;
@@ -40,7 +39,7 @@ public interface PostagemDocs {
 
     @PostagemNotas
     @Operation(summary = "Atualizar postagem", description = "Realizará a atualização da postagem no banco de dados")
-    public ResponseEntity<PostagemDTO> update(@PathVariable() Integer idPostagem,@RequestBody @Valid PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException;
+    public ResponseEntity<PostagemDTO> update(@PathVariable() Integer idPostagem, @RequestBody @Valid PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException;
 
     @PostagemNotas
     @Operation(summary = "Deletar postagem", description = "Deletará a postagem do banco de dados com base na sua identificação")

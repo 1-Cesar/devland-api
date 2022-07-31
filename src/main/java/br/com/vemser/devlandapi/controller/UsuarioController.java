@@ -1,7 +1,10 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.UsuarioDocs;
-import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.dto.relatorios.RelatorioPersonalizadoDevDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioCreateDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -13,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -42,17 +44,11 @@ public class UsuarioController implements UsuarioDocs {
 
     @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Rafa
     public ResponseEntity<List<UsuarioDTO>> listarPorNome(@RequestParam("nome") String nome) throws RegraDeNegocioException {
-       log.info("REcuperando um usuário através do nome");
+        log.info("REcuperando um usuário através do nome");
 
         return ResponseEntity.ok(usuarioService.listarPorNome(nome));
     }
 
-    @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id,
-                                             @Valid @RequestBody UsuarioCreateDTO usuarioAtualizar) throws RegraDeNegocioException {
-        log.info("Alterando um usuário com base em seu id");
-        return ResponseEntity.ok(usuarioService.editar(id, usuarioAtualizar));
-    }
 
     @DeleteMapping("/{idUsuario}")
     public void delete(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
@@ -77,17 +73,28 @@ public class UsuarioController implements UsuarioDocs {
 
     //    ======================== EXCLUSIVOS DEV =====================
     @GetMapping("/listar-se")
-    public List<UsuarioDTO> listarProprio() throws RegraDeNegocioException{
+    public List<UsuarioDTO> listarProprio() throws RegraDeNegocioException {
         return usuarioService.listarProprio();
     }
 
     @PutMapping("/editar-se")
-    public UsuarioDTO editarProprio(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException{
+    public UsuarioDTO editarProprio(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         return usuarioService.editarProprio(usuarioCreateDTO);
     }
 
     @DeleteMapping("/deletar-se")
-    public String deleteProprio() throws RegraDeNegocioException{
+    public String deleteProprio() throws RegraDeNegocioException {
         return usuarioService.deleteProprio();
     }
+
+
+    /*
+    @PutMapping("/{idUsuario}")
+    public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id,
+                                             @Valid @RequestBody UsuarioCreateDTO usuarioAtualizar) throws RegraDeNegocioException {
+        log.info("Alterando um usuário com base em seu id");
+        return ResponseEntity.ok(usuarioService.editar(id, usuarioAtualizar));
+    }
+    */
+
 }

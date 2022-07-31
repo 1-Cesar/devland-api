@@ -1,16 +1,12 @@
 package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.UsuarioNotas;
-import br.com.vemser.devlandapi.dto.UserLoginCreateDTO;
-import br.com.vemser.devlandapi.dto.UsuarioCreateDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import java.util.List;
 
 public interface UsuarioDocs {
@@ -26,10 +22,11 @@ public interface UsuarioDocs {
     @Operation(summary = "criar usuario", description = "cria um usuario dentro do banco de dados")
     public ResponseEntity<String> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException;*/
 
+    /*
     @UsuarioNotas
     @Operation(summary = "altera um usuario por id", description = "altera os registros de um usuario no banco de dados atraves de seu id")
     public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id, @Valid @RequestBody UsuarioCreateDTO usuarioAtualizar) throws RegraDeNegocioException;
-
+    */
     @UsuarioNotas
     @Operation(summary = "deleta um usuario", description = "deleta um usuario do banco de dados atraves de seu id")
     public void delete(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;

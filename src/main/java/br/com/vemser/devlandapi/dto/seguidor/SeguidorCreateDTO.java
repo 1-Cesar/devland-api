@@ -1,4 +1,4 @@
-package br.com.vemser.devlandapi.dto;
+package br.com.vemser.devlandapi.dto.seguidor;
 
 import lombok.Data;
 

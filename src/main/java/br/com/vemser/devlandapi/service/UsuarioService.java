@@ -1,6 +1,10 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.dto.relatorios.RelatorioPersonalizadoDevDTO;
+import br.com.vemser.devlandapi.dto.userlogin.UserLoginCreateDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioCreateDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.CargoEntity;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
@@ -11,7 +15,6 @@ import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.UserLoginRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -74,6 +77,7 @@ public class UsuarioService {
         emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
 
+    /*
     public UsuarioDTO editar(Integer id, UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         if (usuarioCreateDTO.getTipoUsuario() == TipoUsuario.DEV) {
             if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
@@ -105,6 +109,8 @@ public class UsuarioService {
             throw new RegraDeNegocioException("CNPJ Inválido");
         }
     }
+    */
+
 
     public String adicionar(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
 
@@ -327,7 +333,6 @@ public class UsuarioService {
         return usuarioRecuperado;
     }
 
-
     public UsuarioDTO retornarDTO(UsuarioEntity usuario) {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
@@ -372,7 +377,10 @@ public class UsuarioService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, relatorioPersonalizadoDevDTOS);
     }
 
-    //    ======================== EXCLUSIVOS DEV =====================
+    //==================================================================================================================
+    //                                        EXCLUSIVOS DEV & EMPRESA
+    //==================================================================================================================
+
     public List<UsuarioDTO> listarProprio() throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
@@ -397,7 +405,7 @@ public class UsuarioService {
         String tipoMensagem = TipoMensagem.DELETE.getTipo();
         emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
 
-        return "Usuario "+usuarioLogadoEntity.getIdUsuario()+" foi deletado.";
+        return "Usuario " + usuarioLogadoEntity.getIdUsuario() + " foi deletado.";
     }
 
     public UsuarioDTO editarProprio(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {

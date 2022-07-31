@@ -1,8 +1,8 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.ContatoDocs;
-import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
-import br.com.vemser.devlandapi.dto.ContatoDTO;
+import br.com.vemser.devlandapi.dto.contato.ContatoCreateDTO;
+import br.com.vemser.devlandapi.dto.contato.ContatoDTO;
 import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.ContatoService;
@@ -62,5 +62,19 @@ public class ContatoController implements ContatoDocs {
         contatoService.remover(id);
     }
 
+    //==================================================================================================================
+    //                                        EXCLUSIVOS DEV & EMPRESA
+    //==================================================================================================================
+
+    @GetMapping("/listar-seus-contatos")
+    public List<ContatoDTO> listarContatosUsuarioLogado() throws RegraDeNegocioException {
+        return contatoService.listarContatoUsuarioLogado();
+    }
+
+    //TODO - ADICIONAR CONTATO NO USUÁRIO QUE ESTÁ LOGADO
+
+    //TODO - EDITAR CONTATO EM CONTATOS DO USUÁRIO LOGADO
+
+    //TODO - DELETAR CONTATO EM CONTATOS DO USUARIO LOGADO
 
 }
