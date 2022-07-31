@@ -78,54 +78,6 @@ public class ContatoService {
     }
 
     //==================================================================================================================
-    //ADICIONAR
-
-    public ContatoCreateDTO adicionar(Integer id, ContatoCreateDTO contatoDTO) throws RegraDeNegocioException {
-        //recupera usuário
-        UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(id);
-
-        //converte
-        ContatoEntity contatoEntity = retornarContatoEntity(contatoDTO);
-
-        //seta no usuário
-        contatoEntity.setUsuario(usuarioRecuperado);
-
-        ContatoEntity contatoCriado = contatoRepository.save(contatoEntity);
-
-        return retornarContatoDTO(contatoCriado);
-    }
-
-    //==================================================================================================================
-   /*
-    //EDITAR
-
-    public ContatoDTO editar(Integer id,
-                             ContatoDTO contatoDTO) throws RegraDeNegocioException {
-        ContatoEntity contatoRecuperado = localizarContato(id);
-
-        UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoDTO.getIdUsuario());
-
-        contatoRecuperado.setTipo(contatoDTO.getTipo());
-        contatoRecuperado.setNumero(contatoDTO.getNumero());
-        contatoRecuperado.setDescricao(contatoDTO.getDescricao());
-        contatoRecuperado.setUsuario(usuarioRecuperado);
-
-        return retornarContatoDTO(contatoRepository.save(contatoRecuperado));
-    }
-
-
-    //==================================================================================================================
-    //EXCLUIR
-    public void remover(Integer id) throws RegraDeNegocioException {
-
-        ContatoEntity contatoEntityRecuperado = localizarContato(id);
-        UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoEntityRecuperado.getIdUsuario());
-
-        // log
-        contatoRepository.delete(contatoEntityRecuperado);
-    }
-*/
-    //==================================================================================================================
     //                                        EXCLUSIVOS DEV & EMPRESA
     //==================================================================================================================
 
@@ -194,8 +146,6 @@ public class ContatoService {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-
-    //TODO REMOVER CONTATO DE USUÁRIO LOGADO
 
     public void remover(Integer id) throws RegraDeNegocioException {
 
