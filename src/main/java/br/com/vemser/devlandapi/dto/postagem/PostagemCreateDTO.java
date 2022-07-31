@@ -1,4 +1,4 @@
-package br.com.vemser.devlandapi.dto;
+package br.com.vemser.devlandapi.dto.postagem;
 
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import io.swagger.v3.oas.annotations.media.Schema;

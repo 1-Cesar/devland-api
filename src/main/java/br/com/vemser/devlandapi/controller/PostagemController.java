@@ -2,9 +2,9 @@ package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.PostagemDocs;
 import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
-import br.com.vemser.devlandapi.dto.PostagemDTO;
-import br.com.vemser.devlandapi.dto.RelatorioPostagemDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemDTO;
+import br.com.vemser.devlandapi.dto.relatorios.RelatorioPostagemDTO;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.PostagemService;

@@ -1,4 +1,4 @@
-package br.com.vemser.devlandapi.dto;
+package br.com.vemser.devlandapi.dto.relatorios;
 
 import br.com.vemser.devlandapi.entity.ComentarioEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;

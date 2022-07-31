@@ -1,6 +1,6 @@
 package br.com.vemser.devlandapi.repository;
 
-import br.com.vemser.devlandapi.dto.RelatorioPostagemDTO;
+import br.com.vemser.devlandapi.dto.relatorios.RelatorioPostagemDTO;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import feign.Param;
@@ -18,7 +18,7 @@ public interface PostagemRepository extends JpaRepository<PostagemEntity, Intege
             "where :tipoPostagem is null OR  p.tipoPostagem = :tipoPostagem")
     Page<PostagemEntity> filtrarPorTipo(@Param("tipoPostagem") TipoPostagem tipoPostagem, PageRequest pageRequest);
 
-    @Query(value = "select new br.com.vemser.devlandapi.dto.RelatorioPostagemDTO(" +
+    @Query(value = "select new br.com.vemser.devlandapi.dto.relatorios.RelatorioPostagemDTO(" +
             " u.nome," +
             " p.titulo," +
             " p.tipoPostagem," +

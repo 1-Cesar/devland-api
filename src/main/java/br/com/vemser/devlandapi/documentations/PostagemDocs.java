@@ -2,8 +2,8 @@ package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.PostagemNotas;
 import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.PostagemCreateDTO;
-import br.com.vemser.devlandapi.dto.PostagemDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemDTO;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;

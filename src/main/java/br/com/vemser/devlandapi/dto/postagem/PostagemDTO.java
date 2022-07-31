@@ -1,13 +1,11 @@
-package br.com.vemser.devlandapi.dto;
+package br.com.vemser.devlandapi.dto.postagem;
 
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class PostagemComentDTO {
+public class PostagemDTO {
 
     @Schema(description = "Id da PostagemEntity")
     private Integer idPostagem;
@@ -30,10 +28,5 @@ public class PostagemComentDTO {
     @Schema(description = "Data da PostagemEntity")
     private String data;
 
-    @Schema(description = "Id do Usuário")
-    private Integer idUsuario;
-
-    @Schema(description = "Comentários da PostagemEntity")
-    private List<ComentarioDTO> comentarios;
 
 }

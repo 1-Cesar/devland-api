@@ -2,8 +2,8 @@ package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.SeguidorDocs;
 import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.SeguidorCreateDTO;
-import br.com.vemser.devlandapi.dto.SeguidorDTO;
+import br.com.vemser.devlandapi.dto.seguidor.SeguidorCreateDTO;
+import br.com.vemser.devlandapi.dto.seguidor.SeguidorDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.SeguidorService;
 import br.com.vemser.devlandapi.service.UsuarioService;

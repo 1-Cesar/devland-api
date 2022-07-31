@@ -1,7 +1,7 @@
 package br.com.vemser.devlandapi.controller;
 
-import br.com.vemser.devlandapi.dto.UserLoginAuthDTO;
-import br.com.vemser.devlandapi.dto.UserLoginCreateDTO;
+import br.com.vemser.devlandapi.dto.userlogin.UserLoginAuthDTO;
+import br.com.vemser.devlandapi.dto.userlogin.UserLoginCreateDTO;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.enums.TipoStatus;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -49,7 +49,6 @@ public class AuthController {
         return token;
     }
 
-    //TODO - colocar condicional para o caso de usuario nao estar logado
     @GetMapping("/recuperarLogin")
     public String usuarioLogado() throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();

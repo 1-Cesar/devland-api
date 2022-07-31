@@ -1,8 +1,8 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.ComentarioDocs;
-import br.com.vemser.devlandapi.dto.ComentarioCreateDTO;
-import br.com.vemser.devlandapi.dto.ComentarioDTO;
+import br.com.vemser.devlandapi.dto.comentario.ComentarioCreateDTO;
+import br.com.vemser.devlandapi.dto.comentario.ComentarioDTO;
 import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.ComentarioService;

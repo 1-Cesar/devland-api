@@ -1,6 +1,6 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.UserLoginAuthDTO;
+import br.com.vemser.devlandapi.dto.userlogin.UserLoginAuthDTO;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.enums.TipoStatus;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;

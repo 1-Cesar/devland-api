@@ -1,7 +1,7 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.TecnologiasCreateDTO;
-import br.com.vemser.devlandapi.dto.TecnologiasDTO;
+import br.com.vemser.devlandapi.dto.tecnologias.TecnologiasCreateDTO;
+import br.com.vemser.devlandapi.dto.tecnologias.TecnologiasDTO;
 import br.com.vemser.devlandapi.entity.TecnologiasEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;

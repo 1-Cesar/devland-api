@@ -1,8 +1,8 @@
 package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.TecnologiasNotas;
-import br.com.vemser.devlandapi.dto.TecnologiasCreateDTO;
-import br.com.vemser.devlandapi.dto.TecnologiasDTO;
+import br.com.vemser.devlandapi.dto.tecnologias.TecnologiasCreateDTO;
+import br.com.vemser.devlandapi.dto.tecnologias.TecnologiasDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;

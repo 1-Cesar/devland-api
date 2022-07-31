@@ -1,4 +1,4 @@
-package br.com.vemser.devlandapi.dto;
+package br.com.vemser.devlandapi.dto.userlogin;
 
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import lombok.Data;

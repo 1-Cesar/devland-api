@@ -2,6 +2,9 @@ package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.EnderecoDocs;
 import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.dto.endereco.EnderecoCreateDTO;
+import br.com.vemser.devlandapi.dto.endereco.EnderecoDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
 import lombok.extern.slf4j.Slf4j;

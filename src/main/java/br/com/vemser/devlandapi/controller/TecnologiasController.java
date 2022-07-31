@@ -1,8 +1,8 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.TecnologiasDocs;
-import br.com.vemser.devlandapi.dto.TecnologiasCreateDTO;
-import br.com.vemser.devlandapi.dto.TecnologiasDTO;
+import br.com.vemser.devlandapi.dto.tecnologias.TecnologiasCreateDTO;
+import br.com.vemser.devlandapi.dto.tecnologias.TecnologiasDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.TecnologiasService;
 import org.springframework.beans.factory.annotation.Autowired;

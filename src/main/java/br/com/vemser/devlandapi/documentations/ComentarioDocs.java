@@ -1,8 +1,8 @@
 package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.ComentarioNotas;
-import br.com.vemser.devlandapi.dto.ComentarioCreateDTO;
-import br.com.vemser.devlandapi.dto.ComentarioDTO;
+import br.com.vemser.devlandapi.dto.comentario.ComentarioCreateDTO;
+import br.com.vemser.devlandapi.dto.comentario.ComentarioDTO;
 import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,4 +1,4 @@
-package br.com.vemser.devlandapi.dto;
+package br.com.vemser.devlandapi.dto.contato;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
