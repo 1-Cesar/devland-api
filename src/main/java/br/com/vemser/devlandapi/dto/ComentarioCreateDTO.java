@@ -14,8 +14,4 @@ public class ComentarioCreateDTO {
     @Schema(description = "Descrição do comentário")
     @NotBlank
     private String descricaoComentarios;
-
-
-
-
 }
