@@ -73,19 +73,34 @@ public class SeguidorService {
 
     public SeguidorCreateDTO adicionar(SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {
 
+        //Buscando qual usuário está logado
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
 
         Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
-
+    //--------------------------------------------------------------------------------------------------
+        //Armazenando os dados do usuário logado em usuarioREcuperado
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
 
+        //Arazenando os dados do cara que quero seguir
         UsuarioEntity seguidorRecuperado = localizarUsuario(seguidorCreateDTO.getIdSeguidor());
 
+        //-------------------------------------------------------------------------------------------------------------
+
+        //Novo seguidor (vazio)
         SeguidorEntity novoSeguidor = new SeguidorEntity();
 
+        //Setando os dados
         novoSeguidor.setNomeSeguidor(usuarioRecuperado.getNome());
-        novoSeguidor.setIdUsuario(usuarioRecuperado.getIdUsuario());
+        //novoSeguidor.setIdUsuario(usuarioRecuperado.getIdUsuario());
+        novoSeguidor.setUsuario(seguidorRecuperado);
+
+        novoSeguidor.setIdSeguidor(id);
+
+
+
+
+ /*
         //recupera usuário
 
         List<SeguidorEntity> seguidorEntities = new ArrayList<>();
@@ -102,12 +117,15 @@ public class SeguidorService {
 
 
         if (id.equals(seguidorCreateDTO.getIdSeguidor())) {
-            throw new RegraDeNegocioException("Nao pode seguir voce mesmo");
+            throw new RegraDeNegocioException("Não pode seguir voce mesmo");
         } else if (seguidorRepository.verificaSeguidor(id, seguidorCreateDTO.getIdSeguidor()).size() > 0) {
             throw new RegraDeNegocioException("Você já segue este usuario");
         }
+*/
+        //SeguidorEntity seguidorCriado = seguidorRepository.save(seguidorEntity);
 
-        SeguidorEntity seguidorCriado = seguidorRepository.save(seguidorEntity);
+
+        SeguidorEntity seguidorCriado = seguidorRepository.save(novoSeguidor);
 
         return retornarSeguidorDTO(seguidorCriado);
 
