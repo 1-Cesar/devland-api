@@ -1,10 +1,7 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.EnderecoDocs;
-import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
-import br.com.vemser.devlandapi.dto.EnderecoDTO;
-import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.dto.*;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
 import lombok.extern.slf4j.Slf4j;
@@ -67,4 +64,21 @@ public class EnderecoController implements EnderecoDocs {
     public PageDTO<EnderecoDTO> getRelatorioPaginadoPais(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String pais) {
         return enderecoService.paginacaoPais(pais, pagina, quantidadeRegistros);
     }
+
+    //==================================================================================================================
+    //                                        EXCLUSIVOS DEV & EMPRESA
+    //==================================================================================================================
+
+    @GetMapping("/listar-seus-enderecos")
+    public List<UsuarioDTO> listarEnderecosUsuarioLogado() throws RegraDeNegocioException {
+        return enderecoService.listarEnderecosUsuarioLogado();
+    }
+
+    //TODO - ADICIONAR ENDEREÇO NO USUÁRIO QUE ESTÁ LOGADO
+
+    //TODO - EDITAR ENDEREÇO EM ENDEREÇOS DO USUÁRIO LOGADO
+
+    //TODO - DELETAR ENDEREÇO EM ENDEREÇOS DO USUARIO LOGADO
+
+
 }

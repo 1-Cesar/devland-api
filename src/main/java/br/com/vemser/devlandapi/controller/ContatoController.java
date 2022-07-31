@@ -62,5 +62,19 @@ public class ContatoController implements ContatoDocs {
         contatoService.remover(id);
     }
 
+    //==================================================================================================================
+    //                                        EXCLUSIVOS DEV & EMPRESA
+    //==================================================================================================================
+
+    @GetMapping("/listar-seus-contatos")
+    public List<ContatoDTO> listarContatosUsuarioLogado() throws RegraDeNegocioException {
+        return contatoService.listarContatoUsuarioLogado();
+    }
+
+    //TODO - ADICIONAR CONTATO NO USUÁRIO QUE ESTÁ LOGADO
+
+    //TODO - EDITAR CONTATO EM CONTATOS DO USUÁRIO LOGADO
+
+    //TODO - DELETAR CONTATO EM CONTATOS DO USUARIO LOGADO
 
 }

@@ -374,7 +374,10 @@ public class UsuarioService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, relatorioPersonalizadoDevDTOS);
     }
 
-    //    ======================== EXCLUSIVOS DEV =====================
+    //==================================================================================================================
+    //                                        EXCLUSIVOS DEV & EMPRESA
+    //==================================================================================================================
+
     public List<UsuarioDTO> listarProprio() throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
