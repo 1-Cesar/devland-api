@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 public interface ComentarioDocs {
     @ComentarioNotas
     @Operation(summary = "Lista paginada de todos os comentários", description = "Listar todos os comentários sem filtro.")
@@ -29,5 +31,9 @@ public interface ComentarioDocs {
     @ComentarioNotas
     @Operation(summary = "Deletar comentário", description = "Deletará do banco de dados um comentário especificado pelo id.")
     public ResponseEntity<Void> delete(Integer idComenatario) throws RegraDeNegocioException;
+
+    @ComentarioNotas
+    @Operation(summary = "Listar os comentários por Postagem", description = "Exibe uma lista de comentários filtrados por postagem.")
+    public ResponseEntity<List<ComentarioDTO>> listByPostagem(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException;
 
 }

@@ -1,5 +1,6 @@
 package br.com.vemser.devlandapi.controller;
 
+import br.com.vemser.devlandapi.documentations.AuthDocs;
 import br.com.vemser.devlandapi.dto.userlogin.UserLoginAuthDTO;
 import br.com.vemser.devlandapi.dto.userlogin.UserLoginCreateDTO;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
@@ -9,6 +10,7 @@ import br.com.vemser.devlandapi.security.TokenService;
 import br.com.vemser.devlandapi.service.UserLoginService;
 import br.com.vemser.devlandapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +24,7 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 @Validated
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthDocs {
 
     private final UserLoginService userLoginService;
 

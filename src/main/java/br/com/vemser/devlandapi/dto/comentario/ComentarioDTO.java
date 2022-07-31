@@ -1,5 +1,9 @@
 package br.com.vemser.devlandapi.dto.comentario;
 
+import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioCreateDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,8 +34,8 @@ public class ComentarioDTO extends ComentarioCreateDTO {
     private LocalDateTime dataComentario;
 
     @Schema(description = "Usuário que comentou a postagem")
-    private UsuarioEntity usuario;
+    private UsuarioCreateDTO usuario;
 
-    private PostagemEntity postagem;
+    private PostagemCreateDTO postagem;
 
 }

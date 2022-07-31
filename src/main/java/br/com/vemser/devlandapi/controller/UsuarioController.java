@@ -44,7 +44,7 @@ public class UsuarioController implements UsuarioDocs {
 
     @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Rafa
     public ResponseEntity<List<UsuarioDTO>> listarPorNome(@RequestParam("nome") String nome) throws RegraDeNegocioException {
-        log.info("REcuperando um usuário através do nome");
+        log.info("Recuperando um usuário através do nome");
 
         return ResponseEntity.ok(usuarioService.listarPorNome(nome));
     }
@@ -62,7 +62,7 @@ public class UsuarioController implements UsuarioDocs {
     }
 
     @GetMapping("/relatorio-stack-usuario")
-    public PageDTO<RelatorioPersonalizadoDevDTO> getUsuarioByGenero(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String stack) {
+    public PageDTO<RelatorioPersonalizadoDevDTO> getUsuarioByStack(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String stack) {
         return usuarioService.relatorioStack(stack, pagina, quantidadeRegistros);
     }
 
@@ -71,7 +71,9 @@ public class UsuarioController implements UsuarioDocs {
         return usuarioService.relatorioGenero(genero, pagina, quantidadeRegistros);
     }
 
-    //    ======================== EXCLUSIVOS DEV =====================
+    //==================================================================================================================
+    //                                        EXCLUSIVOS DEV & EMPRESA
+    //==================================================================================================================
     @GetMapping("/listar-se")
     public List<UsuarioDTO> listarProprio() throws RegraDeNegocioException {
         return usuarioService.listarProprio();
@@ -87,7 +89,7 @@ public class UsuarioController implements UsuarioDocs {
         return usuarioService.deleteProprio();
     }
 
-
+//TODO - apagar comentario
     /*
     @PutMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id,

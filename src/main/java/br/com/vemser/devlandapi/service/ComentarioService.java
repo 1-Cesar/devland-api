@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.service;
 import br.com.vemser.devlandapi.dto.comentario.ComentarioCreateDTO;
 import br.com.vemser.devlandapi.dto.comentario.ComentarioDTO;
 import br.com.vemser.devlandapi.dto.PageDTO;
+import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.ComentarioEntity;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
@@ -48,6 +49,17 @@ public class ComentarioService {
                 .toList();
 
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, comentariosDTO);
+    }
+
+    public List<ComentarioDTO> listByIdPostagem(Integer idPostagem) {
+        List<ComentarioDTO> comentarios = comentarioRepository.findByidPostagem(idPostagem).stream()
+                .map(this::convertToDTO)
+                .toList();
+        for (ComentarioDTO c:
+             comentarios) {
+            c.setPostagem(objectMapper.convertValue(postagemRepository.findById(c.getIdPostagem()), PostagemCreateDTO.class));
+        }
+        return comentarios;
     }
 
     public ComentarioDTO create(Integer idPostagem, Integer idUsuario, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {

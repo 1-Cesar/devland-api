@@ -62,11 +62,19 @@ public class PostagemService {
     }
 
     public PostagemDTO findByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
-        return (PostagemDTO) postagemRepository.findById(idPostagem).stream().map(this::convertToDTO).toList();
+        return objectMapper.convertValue(postagemRepository.findById(idPostagem), PostagemDTO.class);
+    }
+
+    public List<PostagemDTO> findByTitulo(String titulo){
+         return postagemRepository.findAll().stream()
+                .filter(postagem -> postagem.getTitulo().toLowerCase()
+                        .contains(titulo.toLowerCase()))
+                 .map(this::convertToDTO)
+                 .toList();
     }
 
 
-    public PageDTO<PostagemDTO> listByTipo(TipoPostagem tipoPostagem, Integer pagina, Integer quantRegistros) throws RegraDeNegocioException {
+    public PageDTO<PostagemDTO> findByTipo(TipoPostagem tipoPostagem, Integer pagina, Integer quantRegistros) throws RegraDeNegocioException {
         PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
         Page<PostagemEntity> page = postagemRepository.filtrarPorTipo(tipoPostagem, pageRequest);
         List<PostagemDTO> postagensDTO = page.getContent().stream()

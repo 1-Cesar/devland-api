@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/comentario")
 @Validated
@@ -23,6 +25,11 @@ public class ComentarioController implements ComentarioDocs {
     @GetMapping
     public PageDTO<ComentarioDTO> list(@RequestParam Integer pagina, @RequestParam Integer quantRegistros) throws RegraDeNegocioException {
         return comentarioService.list(pagina, quantRegistros);
+    }
+
+    @GetMapping("/list-by-postagem/{idPostagem}")
+    public ResponseEntity<List<ComentarioDTO>> listByPostagem(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
+        return new ResponseEntity<>(comentarioService.listByIdPostagem(idPostagem), HttpStatus.OK);
     }
 
     @Override

@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/postagem")
 @Validated
@@ -24,7 +26,7 @@ public class PostagemController implements PostagemDocs {
 
     @GetMapping
     public ResponseEntity<PageDTO<PostagemDTO>> list(@RequestParam Integer pagina, @RequestParam Integer quantRegistros) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.list(pagina, quantRegistros), HttpStatus.OK);
+        return new ResponseEntity<>(postagemService.list(pagina, quantRegistros), HttpStatus.FOUND);
     }
 
     @GetMapping("/relatorio-postagem")
@@ -34,15 +36,19 @@ public class PostagemController implements PostagemDocs {
 
     @GetMapping("/{tipoPostagem}/tipo")
     public PageDTO<PostagemDTO> listByTipo(@PathVariable("tipoPostagem") TipoPostagem tipoPostagem, @RequestParam Integer pagina, @RequestParam Integer quantRegistros) throws RegraDeNegocioException {
-        return postagemService.listByTipo(tipoPostagem, pagina, quantRegistros);
+        return postagemService.findByTipo(tipoPostagem, pagina, quantRegistros);
     }
 
     @GetMapping("{idPostagem}")
     public ResponseEntity<PostagemDTO> listByIdPostagem(@PathVariable("idPostagem") Integer idPostagem) throws RegraDeNegocioException {
-        return new ResponseEntity<>(postagemService.findByIdPostagem(idPostagem), HttpStatus.OK);
+        return new ResponseEntity<>(postagemService.findByIdPostagem(idPostagem), HttpStatus.FOUND);
     }
 
-    // fazer igual a USUARIO post - inserir example
+    @GetMapping("/buscar-por-titulo")
+    public ResponseEntity<List<PostagemDTO>> listByTitulo(@RequestParam("titulo") String titulo){
+        return new ResponseEntity<>(postagemService.findByTitulo(titulo), HttpStatus.FOUND);
+    }
+
     @Override
     @PostMapping("/criar/{idUsuario}")
     public ResponseEntity<PostagemDTO> criar(@PathVariable("idUsuario") Integer idUsuario, @RequestBody PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {

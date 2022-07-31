@@ -40,4 +40,8 @@ public interface ContatoDocs {
     @Operation(summary = "deleta contato", description = "deleta um contato do banco de dados atraves de seu id")
     public void remover(@PathVariable("idContato") Integer id) throws RegraDeNegocioException;
 
+    @ContatoNotas
+    @Operation(summary = "Listar os contatos do prórpio usuário.", description = "Exibe os contatos do próprio usuário logado.")
+    public List<ContatoDTO> listarContatosUsuarioLogado() throws RegraDeNegocioException;
+
 }
