@@ -27,7 +27,6 @@ public class SeguidorController implements SeguidorDocs {
     @Autowired
     private SeguidorService seguidorService;
 
-
     @GetMapping("/{idUsuario}")
     public PageDTO<SeguidorDTO> listarSeguidores(@PathVariable("idUsuario") Integer id, Integer pagina, Integer quantidadeRegistros)
             throws RegraDeNegocioException {
@@ -46,9 +45,9 @@ public class SeguidorController implements SeguidorDocs {
         return ResponseEntity.ok(seguidorService.adicionar(seguidorCreateDTO));
     }
 
-    @DeleteMapping("/{idUsuario}/{idSeguidor}")
-    public void delete(@PathVariable("idUsuario") Integer id, @PathVariable("idSeguidor") Integer idSeguidor) throws RegraDeNegocioException {
+    @DeleteMapping("/{idSeguidor}")
+    public void delete(@PathVariable("idSeguidor") Integer idSeguidor) throws RegraDeNegocioException {
         log.info("Excluindo com base no id do usuario e id do seguidor");
-        seguidorService.delete(id, idSeguidor);
+        seguidorService.delete(idSeguidor);
     }
 }

@@ -55,6 +55,7 @@ public class SecurityConfiguration {
                                 //.antMatchers(HttpMethod.DELETE, "/usuario").hasAnyRole("ADMIN","DEV", "EMPRESA")
                                 .antMatchers(HttpMethod.PUT, "/usuario/editar-se","/comentario/editar-se","/postagem/editar-se","/endereco/editar-se","/contato/").hasAnyRole("DEV", "EMPRESA") // 2
                                 .antMatchers(HttpMethod.GET, "/usuario/listar-se", "/usuario/byname","/contato/listar-seus-contatos", "/endereco/listar-seus-enderecos", "/seguidor/**").hasAnyRole("DEV", "EMPRESA", "ADMIN") // 2
+                                .antMatchers(HttpMethod.DELETE, "/usuario/listar-se", "/usuario/byname","/contato/listar-seus-contatos", "/endereco/listar-seus-enderecos", "/seguidor/**").hasAnyRole("DEV", "EMPRESA", "ADMIN") // 2
                                 .antMatchers(HttpMethod.GET, "/**").hasRole("ADMIN") // 2
                                 .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN") // 2
                                 .anyRequest().authenticated());

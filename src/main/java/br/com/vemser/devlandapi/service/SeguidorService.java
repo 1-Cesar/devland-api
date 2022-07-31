@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +50,7 @@ public class SeguidorService {
     }
 
     public PageDTO<SeguidorDTO> listarMeusSeguidores(Integer pagina,
-                                                 Integer registroPorPagina) throws RegraDeNegocioException {
+                                                     Integer registroPorPagina) throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
 
@@ -78,7 +77,7 @@ public class SeguidorService {
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
 
         Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
-    //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
         //Armazenando os dados do usuário logado em usuarioREcuperado
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
 
@@ -97,56 +96,27 @@ public class SeguidorService {
 
         novoSeguidor.setIdSeguidor(id);
 
-
-
-
- /*
-        //recupera usuário
-
-        List<SeguidorEntity> seguidorEntities = new ArrayList<>();
-        seguidorEntities.add(novoSeguidor);
-
-        seguidorRecuperado.setSeguidores(seguidorEntities);
-
-        //converte
-        SeguidorEntity seguidorEntity = retornarSeguidorEntity(seguidorCreateDTO);
-
-        //seta no usuário
-        seguidorEntity.setNomeSeguidor(seguidorRecuperado.getNome());
-        seguidorEntity.setUsuario(usuarioRecuperado);
-
-
         if (id.equals(seguidorCreateDTO.getIdSeguidor())) {
             throw new RegraDeNegocioException("Não pode seguir voce mesmo");
-        } else if (seguidorRepository.verificaSeguidor(id, seguidorCreateDTO.getIdSeguidor()).size() > 0) {
+        } else if (seguidorRepository.verificaSeguidor(seguidorCreateDTO.getIdSeguidor(),id).size() > 0) {
             throw new RegraDeNegocioException("Você já segue este usuario");
         }
-*/
-        //SeguidorEntity seguidorCriado = seguidorRepository.save(seguidorEntity);
-
 
         SeguidorEntity seguidorCriado = seguidorRepository.save(novoSeguidor);
 
         return retornarSeguidorDTO(seguidorCriado);
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     //==================================================================================================================
     //EXCLUIR
 
-    public void delete(Integer id, Integer idSeguidor) throws RegraDeNegocioException {
+    public void delete(Integer idSeguidor) throws RegraDeNegocioException {
+
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
         localizarUsuario(id);
 
         SeguidorEntity seguidorEntityRecuperado = seguidorQueSeraDeletado(id, idSeguidor);
@@ -164,7 +134,6 @@ public class SeguidorService {
                 .orElseThrow(() -> new RegraDeNegocioException("Seguidor não encontrado para deixar de seguir"));
 
         return seguidorRecuperado;
-
     }
 
     public UsuarioEntity localizarUsuario(Integer idUsuario) throws RegraDeNegocioException {
