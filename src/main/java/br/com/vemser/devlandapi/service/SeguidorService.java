@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.seguidor.SeguidorCreateDTO;
 import br.com.vemser.devlandapi.dto.seguidor.SeguidorDTO;
 import br.com.vemser.devlandapi.entity.SeguidorEntity;
+import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.SeguidorRepository;
@@ -30,6 +31,9 @@ public class SeguidorService {
     @Autowired
     private SeguidorRepository seguidorRepository;
 
+    @Autowired
+    private UserLoginService userLoginService;
+
     //==================================================================================================================
     //LIST FOLLOWERS - PAGINADO
     public PageDTO<SeguidorDTO> listarSeguidores(Integer id, Integer pagina,
@@ -45,37 +49,74 @@ public class SeguidorService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registroPorPagina, seguidorDTOS);
     }
 
+    public PageDTO<SeguidorDTO> listarMeusSeguidores(Integer pagina,
+                                                     Integer registroPorPagina) throws RegraDeNegocioException {
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+        localizarUsuario(id);
+        PageRequest pageRequest = PageRequest.of(pagina, registroPorPagina);
+        Page<SeguidorEntity> page = seguidorRepository.filtrarQuemUsuarioSegue(id, pageRequest);
+
+        List<SeguidorDTO> seguidorDTOS = page.getContent().stream()
+                .map(this::retornarSeguidorDTO)
+                .toList();
+
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registroPorPagina, seguidorDTOS);
+    }
+
     //==================================================================================================================
     //ADICIONAR
 
-    public SeguidorCreateDTO adicionar(Integer id, SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {
+    public SeguidorCreateDTO adicionar(SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {
 
-        //recupera usuário
+        //Buscando qual usuário está logado
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+        //--------------------------------------------------------------------------------------------------
+        //Armazenando os dados do usuário logado em usuarioREcuperado
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
 
-        //converte
-        SeguidorEntity seguidorEntity = retornarSeguidorEntity(seguidorCreateDTO);
+        //Arazenando os dados do cara que quero seguir
+        UsuarioEntity seguidorRecuperado = localizarUsuario(seguidorCreateDTO.getIdSeguidor());
 
-        //seta no usuário
-        seguidorEntity.setUsuario(usuarioRecuperado);
+        //-------------------------------------------------------------------------------------------------------------
 
+        //Novo seguidor (vazio)
+        SeguidorEntity novoSeguidor = new SeguidorEntity();
+
+        //Setando os dados
+        novoSeguidor.setNomeSeguidor(usuarioRecuperado.getNome());
+        //novoSeguidor.setIdUsuario(usuarioRecuperado.getIdUsuario());
+        novoSeguidor.setUsuario(seguidorRecuperado);
+
+        novoSeguidor.setIdSeguidor(id);
 
         if (id.equals(seguidorCreateDTO.getIdSeguidor())) {
-            throw new RegraDeNegocioException("Nao pode seguir voce mesmo");
-        } else if (seguidorRepository.verificaSeguidor(id, seguidorCreateDTO.getIdSeguidor()).size() > 0) {
+            throw new RegraDeNegocioException("Não pode seguir voce mesmo");
+        } else if (seguidorRepository.verificaSeguidor(seguidorCreateDTO.getIdSeguidor(),id).size() > 0) {
             throw new RegraDeNegocioException("Você já segue este usuario");
         }
 
-        SeguidorEntity seguidorCriado = seguidorRepository.save(seguidorEntity);
+        SeguidorEntity seguidorCriado = seguidorRepository.save(novoSeguidor);
 
         return retornarSeguidorDTO(seguidorCriado);
-
     }
 
     //==================================================================================================================
     //EXCLUIR
 
-    public void delete(Integer id, Integer idSeguidor) throws RegraDeNegocioException {
+    public void delete(Integer idSeguidor) throws RegraDeNegocioException {
+
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
         localizarUsuario(id);
 
         SeguidorEntity seguidorEntityRecuperado = seguidorQueSeraDeletado(id, idSeguidor);
@@ -93,7 +134,6 @@ public class SeguidorService {
                 .orElseThrow(() -> new RegraDeNegocioException("Seguidor não encontrado para deixar de seguir"));
 
         return seguidorRecuperado;
-
     }
 
     public UsuarioEntity localizarUsuario(Integer idUsuario) throws RegraDeNegocioException {

@@ -45,7 +45,7 @@ public class UsuarioEntity {
     private TipoUsuario tipoUsuario;
 
 
-    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     // Relacionamento Usuário - Contatos
 
     @JsonIgnore
@@ -55,16 +55,18 @@ public class UsuarioEntity {
             orphanRemoval = true)        //Deleta os órfãos
     private Set<ContatoEntity> contatos;
 
-    //-----------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     // Relacionamento Usuário - Seguidores
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "usuario",         //Indica o lado inverso do relacionamento
-            cascade = CascadeType.ALL,   //Faz a cascata para deletar
-            orphanRemoval = true)        //Deleta os órfãos
-    private Set<SeguidorEntity> seguidores;
+            cascade = CascadeType.ALL   //Faz a cascata para deletar
+            )        //Deleta os órfãos
+    private List<SeguidorEntity> seguidores;
 
+    //------------------------------------------------------------------------------------------------------------------
+    //Relacionamento Usuário - Endereços
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -73,6 +75,9 @@ public class UsuarioEntity {
             inverseJoinColumns = @JoinColumn(name = "id_endereco"))
     private List<EnderecoEntity> enderecos;
 
+    //------------------------------------------------------------------------------------------------------------------
+    //Relacionamento Usuário - Tecnologias
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "usuario",
@@ -80,8 +85,8 @@ public class UsuarioEntity {
             orphanRemoval = true)
     private List<TecnologiasEntity> tecnologias;
 
-    //-----------------------------------------------------------------------------
-    // Relacionamento Usuário — Postagens e Comentarios
+    //------------------------------------------------------------------------------------------------------------------
+    // Relacionamento Usuário — Postagens
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
@@ -90,6 +95,9 @@ public class UsuarioEntity {
             orphanRemoval = true)
     private Set<PostagemEntity> postagens;
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Relacionamento Usuário — Comentários
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "usuario",         //Indica o lado inverso do relacionamento
@@ -97,7 +105,7 @@ public class UsuarioEntity {
             orphanRemoval = true)
     private Set<ComentarioEntity> comentarios;
 
-    //-----------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     // Relacionamento Usuário — UserLogin
 
     @JsonIgnore

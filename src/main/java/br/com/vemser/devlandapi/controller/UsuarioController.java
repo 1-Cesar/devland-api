@@ -98,5 +98,4 @@ public class UsuarioController implements UsuarioDocs {
         return ResponseEntity.ok(usuarioService.editar(id, usuarioAtualizar));
     }
     */
-
 }

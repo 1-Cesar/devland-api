@@ -78,52 +78,6 @@ public class ContatoService {
     }
 
     //==================================================================================================================
-    //ADICIONAR
-
-    public ContatoCreateDTO adicionar(Integer id, ContatoCreateDTO contatoDTO) throws RegraDeNegocioException {
-        //recupera usuário
-        UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(id);
-
-        //converte
-        ContatoEntity contatoEntity = retornarContatoEntity(contatoDTO);
-
-        //seta no usuário
-        contatoEntity.setUsuario(usuarioRecuperado);
-
-        ContatoEntity contatoCriado = contatoRepository.save(contatoEntity);
-
-        return retornarContatoDTO(contatoCriado);
-    }
-
-    //==================================================================================================================
-    //EDITAR
-
-    public ContatoDTO editar(Integer id,
-                             ContatoDTO contatoDTO) throws RegraDeNegocioException {
-        ContatoEntity contatoRecuperado = localizarContato(id);
-
-        UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoDTO.getIdUsuario());
-
-        contatoRecuperado.setTipo(contatoDTO.getTipo());
-        contatoRecuperado.setNumero(contatoDTO.getNumero());
-        contatoRecuperado.setDescricao(contatoDTO.getDescricao());
-        contatoRecuperado.setUsuario(usuarioRecuperado);
-
-        return retornarContatoDTO(contatoRepository.save(contatoRecuperado));
-    }
-
-    //==================================================================================================================
-    //EXCLUIR
-    public void remover(Integer id) throws RegraDeNegocioException {
-
-        ContatoEntity contatoEntityRecuperado = localizarContato(id);
-        UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoEntityRecuperado.getIdUsuario());
-
-        // log
-        contatoRepository.delete(contatoEntityRecuperado);
-    }
-
-    //==================================================================================================================
     //                                        EXCLUSIVOS DEV & EMPRESA
     //==================================================================================================================
 
@@ -141,11 +95,74 @@ public class ContatoService {
                 .collect(Collectors.toList());
     }
 
-    //TODO - ADICIONAR CONTATO NO USUÁRIO QUE ESTÁ LOGADO
+    //------------------------------------------------------------------------------------------------------------------
 
-    //TODO - EDITAR CONTATO EM CONTATOS DO USUÁRIO LOGADO
+    public ContatoCreateDTO adicionar(ContatoCreateDTO contatoDTO) throws RegraDeNegocioException {
 
-    //TODO - DELETAR CONTATO EM CONTATOS DO USUARIO LOGADO
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+        UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(id);
+
+        //converte
+        ContatoEntity contatoEntity = retornarContatoEntity(contatoDTO);
+
+        //seta no usuário
+        contatoEntity.setUsuario(usuarioRecuperado);
+
+        ContatoEntity contatoCriado = contatoRepository.save(contatoEntity);
+
+        return retornarContatoDTO(contatoCriado);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public ContatoDTO editar(Integer id,
+                             ContatoDTO contatoDTO) throws RegraDeNegocioException {
+        //Buscando se contato existe
+        ContatoEntity contatoRecuperado = localizarContato(id);
+
+        //Buscando usuário logado
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer idUsuarioLogado = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+        //Verificando se o contato pertence ao usuário
+        ContatoEntity verificaContatoUsuarioLogado = localizarContatoUsuarioLogado(id, idUsuarioLogado);
+
+        //Buscando os dados do usuário
+        UsuarioEntity usuarioContato = usuarioService.localizarUsuario(idUsuarioLogado);
+
+        //Setando as alterações
+        contatoRecuperado.setTipo(contatoDTO.getTipo());
+        contatoRecuperado.setNumero(contatoDTO.getNumero());
+        contatoRecuperado.setDescricao(contatoDTO.getDescricao());
+        contatoRecuperado.setUsuario(usuarioContato);
+
+        return retornarContatoDTO(contatoRepository.save(contatoRecuperado));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public void remover(Integer id) throws RegraDeNegocioException {
+
+        ContatoEntity contatoEntityRecuperado = localizarContato(id);
+
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer idUsuarioLogado = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+       // UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoEntityRecuperado.getIdUsuario());
+
+        //Verificando se o contato pertence ao usuário
+        ContatoEntity verificaContatoUsuarioLogado = localizarContatoUsuarioLogado(id, idUsuarioLogado);
+
+        contatoRepository.delete(contatoEntityRecuperado);
+    }
 
 
     //==================================================================================================================
@@ -169,6 +186,14 @@ public class ContatoService {
     //ENTITY PARA DTO
     public ContatoDTO retornarContatoDTO(ContatoEntity contato) {
         return objectMapper.convertValue(contato, ContatoDTO.class);
+    }
+
+    public ContatoEntity localizarContatoUsuarioLogado(Integer idContato, Integer idUsuario) throws RegraDeNegocioException {
+        ContatoEntity contatoRecuperado = contatoRepository.findAll().stream()
+                .filter(contato -> contato.getIdContato().equals(idContato) && contato.getIdUsuario().equals(idUsuario))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Esse contato não existe em seus registros."));
+        return contatoRecuperado;
     }
 
 }

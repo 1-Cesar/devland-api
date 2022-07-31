@@ -5,6 +5,9 @@ import lombok.Data;
 @Data
 public class SeguidorDTO extends SeguidorCreateDTO {
 
-    private Integer id;
+    //private Integer id;
+
+    private String nomeSeguidor;
+
 
 }
