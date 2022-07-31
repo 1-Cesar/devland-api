@@ -1,9 +1,11 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.dto.contato.ContatoCreateDTO;
 import br.com.vemser.devlandapi.dto.endereco.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.endereco.EnderecoDTO;
 import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
+import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.EnderecoEntity;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
@@ -116,20 +118,6 @@ public class EnderecoService {
         return retornarDTO(enderecoEntity);
     }
 
-    public EnderecoEntity localizarEndereco(Integer idEndereco) throws RegraDeNegocioException {
-        return enderecoRepository.findAll().stream()
-                .filter(endereco -> endereco.getIdEndereco().equals(idEndereco))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Endereço não localizado"));
-    }
-
-    public EnderecoDTO retornarDTO(EnderecoEntity enderecoEntity) {
-        return objectMapper.convertValue(enderecoEntity, EnderecoDTO.class);
-    }
-
-    public EnderecoEntity retornarEnderecoEntity(EnderecoCreateDTO enderecoDTO) {
-        return objectMapper.convertValue(enderecoDTO, EnderecoEntity.class);
-    }
 
     public EnderecoEntity validaAlteracoes(EnderecoEntity enderecoEntity, EnderecoCreateDTO enderecoCreateDTO) {
 
@@ -176,45 +164,58 @@ public class EnderecoService {
                 }).toList();
     }
 
-    //TODO - ADICIONAR ENDEREÇO NO USUÁRIO QUE ESTÁ LOGADO
+    //------------------------------------------------------------------------------------------------------------------
 
+    public EnderecoDTO adicionar(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
 
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+        UsuarioEntity usuarioEntity = usuarioService.localizarUsuario(id);
+
+        EnderecoEntity enderecoEntity = retornarEnderecoEntity(enderecoCreateDTO);
+
+        List<UsuarioEntity> usuarios = new ArrayList<>();
+        usuarios.add(usuarioEntity);
+
+        enderecoEntity.setUsuarios(usuarios);
+
+        enderecoRepository.save(enderecoEntity);
+
+        return retornarDTO(enderecoEntity);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     //TODO - EDITAR ENDEREÇO EM ENDEREÇOS DO USUÁRIO LOGADO
 
 
-
-
-
-
     //------------------------------------------------------------------------------------------------------------------
+
     //TODO - DELETAR ENDEREÇO EM ENDEREÇOS DO USUARIO LOGADO
-/*
-    public String deleteProprio() throws RegraDeNegocioException {
-        Integer idLoggedUser = userLoginService.getIdLoggedUser();
-        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
 
-        UsuarioEntity usuarioRecuperado = localizarUsuario(usuarioLogadoEntity.getIdUsuario());
 
-        usuarioRepository.delete(usuarioRecuperado);
+    //==================================================================================================================
+    //                                             MÉTODOS AUXILIARES
+    //==================================================================================================================
 
-        String tipoMensagem = TipoMensagem.DELETE.getTipo();
-        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
 
-        return "Usuario " + usuarioLogadoEntity.getIdUsuario() + " foi deletado.";
+    public EnderecoEntity localizarEndereco(Integer idEndereco) throws RegraDeNegocioException {
+        return enderecoRepository.findAll().stream()
+                .filter(endereco -> endereco.getIdEndereco().equals(idEndereco))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Endereço não localizado"));
     }
 
-*/
+    public EnderecoDTO retornarDTO(EnderecoEntity enderecoEntity) {
+        return objectMapper.convertValue(enderecoEntity, EnderecoDTO.class);
+    }
 
-
-
-
-
-
-
-
-
-
+    public EnderecoEntity retornarEnderecoEntity(EnderecoCreateDTO enderecoDTO) {
+        return objectMapper.convertValue(enderecoDTO, EnderecoEntity.class);
+    }
 
 
 }

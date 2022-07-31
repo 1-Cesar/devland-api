@@ -33,7 +33,7 @@ public interface ContatoDocs {
     public ResponseEntity<ContatoCreateDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException;
 
     @ContatoNotas
-    @Operation(summary = "altera um contato por id", description = "altera os registros de um contato no banco de dados atraves de seu id")
+    @Operation(summary = "altera um contato de usuário logado por id", description = "altera os registros de um contato de usuário logado atraves do seu id de contato")
     public ResponseEntity<ContatoDTO> editar(@PathVariable("idContato") Integer id, @Valid @RequestBody ContatoDTO contatoAtualizar) throws RegraDeNegocioException;
 
     @ContatoNotas

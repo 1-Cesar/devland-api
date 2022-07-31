@@ -42,20 +42,10 @@ public class ContatoController implements ContatoDocs {
         return ResponseEntity.ok(contatoService.listarContatoUsuario(id));
     }
 
-    @PostMapping("/adicionar-meu-contato")
-    public ResponseEntity<ContatoCreateDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
-        log.info("Criando um contato com base no usuário logado");
-        return ResponseEntity.ok(contatoService.adicionar(contato));
-    }
 
-    @PutMapping("/{idContato}")
-    public ResponseEntity<ContatoDTO> editar(@PathVariable("idContato") Integer id,
-                                             @Valid @RequestBody ContatoDTO contatoAtualizar) throws RegraDeNegocioException {
-        log.info("Alterando um contato com base em seu id");
-        return ResponseEntity.ok(contatoService.editar(id, contatoAtualizar));
-    }
 
-    @DeleteMapping("/{idContato}")
+
+    @DeleteMapping("/deletar-meu-contato/{idContato}")
     public void remover(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {
         log.info("Removendo um contato com base em seu id");
         contatoService.remover(id);
@@ -70,7 +60,20 @@ public class ContatoController implements ContatoDocs {
         return contatoService.listarContatoUsuarioLogado();
     }
 
-    //TODO - ADICIONAR CONTATO NO USUÁRIO QUE ESTÁ LOGADO
+
+    @PostMapping("/adicionar-meu-contato")
+    public ResponseEntity<ContatoCreateDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
+        log.info("Criando um contato com base no usuário logado");
+        return ResponseEntity.ok(contatoService.adicionar(contato));
+    }
+
+    @PutMapping("/{idContato}")
+    public ResponseEntity<ContatoDTO> editar(@PathVariable("idContato") Integer id,
+                                             @Valid @RequestBody ContatoDTO contatoAtualizar) throws RegraDeNegocioException {
+        log.info("Alterando contato de usuário logado com base em seu idContato");
+        return ResponseEntity.ok(contatoService.editar(id, contatoAtualizar));
+    }
+
 
     //TODO - EDITAR CONTATO EM CONTATOS DO USUÁRIO LOGADO
 

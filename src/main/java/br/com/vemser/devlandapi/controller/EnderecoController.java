@@ -77,7 +77,13 @@ public class EnderecoController implements EnderecoDocs {
         return enderecoService.listarEnderecosUsuarioLogado();
     }
 
-    //TODO - ADICIONAR ENDEREÇO NO USUÁRIO QUE ESTÁ LOGADO
+
+    @PostMapping("/adicionar-meu-endereco")
+    public ResponseEntity<EnderecoDTO> adicionar(@Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+        log.info("Criando um endereço com base no usuário logado");
+        return ResponseEntity.ok(enderecoService.adicionar(enderecoCreateDTO));
+    }
+
 
     //TODO - EDITAR ENDEREÇO EM ENDEREÇOS DO USUÁRIO LOGADO
 

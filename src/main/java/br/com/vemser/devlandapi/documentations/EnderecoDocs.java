@@ -27,8 +27,8 @@ public interface EnderecoDocs {
     public ResponseEntity<List<UsuarioDTO>> listarEnderecoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
 
     @EnderecoNotas
-    @Operation(summary = "criar endereço atraves do id do usuario", description = "cria um endereço dentro do banco de dados com base no id do usuario")
-    public ResponseEntity<EnderecoDTO> adicionar(@PathVariable("idUsuario") Integer id, @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException;
+    @Operation(summary = "criar endereço atraves de usuário logado", description = "cria um endereço dentro do banco de dados com base no usuário que está logado")
+    public ResponseEntity<EnderecoDTO> adicionar(@Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException;
 
     @EnderecoNotas
     @Operation(summary = "altera um endereço por id", description = "altera os registros de um endereço no banco de dados atraves de seu id")
