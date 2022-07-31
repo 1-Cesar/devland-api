@@ -34,11 +34,16 @@ public class SeguidorController implements SeguidorDocs {
         return seguidorService.listarSeguidores(id, pagina, quantidadeRegistros);
     }
 
-    @PostMapping("/{idUsuario}")
-    public ResponseEntity<SeguidorCreateDTO> adicionar(@PathVariable("idUsuario") Integer id,
-                                                       @Valid @RequestBody SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {
+    @GetMapping("/meus-seguidores")
+    public PageDTO<SeguidorDTO> listarSeguidores(Integer pagina, Integer quantidadeRegistros)
+            throws RegraDeNegocioException {
+        return seguidorService.listarMeusSeguidores(pagina, quantidadeRegistros);
+    }
+
+    @PostMapping("/seguir-usuario")
+    public ResponseEntity<SeguidorCreateDTO> adicionar(@Valid @RequestBody SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {
         log.info("Adicionando seguidor com base no id do usuário");
-        return ResponseEntity.ok(seguidorService.adicionar(id, seguidorCreateDTO));
+        return ResponseEntity.ok(seguidorService.adicionar(seguidorCreateDTO));
     }
 
     @DeleteMapping("/{idUsuario}/{idSeguidor}")

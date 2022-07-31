@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.seguidor.SeguidorCreateDTO;
 import br.com.vemser.devlandapi.dto.seguidor.SeguidorDTO;
 import br.com.vemser.devlandapi.entity.SeguidorEntity;
+import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.SeguidorRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -29,6 +31,9 @@ public class SeguidorService {
 
     @Autowired
     private SeguidorRepository seguidorRepository;
+
+    @Autowired
+    private UserLoginService userLoginService;
 
     //==================================================================================================================
     //LIST FOLLOWERS - PAGINADO
@@ -45,18 +50,54 @@ public class SeguidorService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registroPorPagina, seguidorDTOS);
     }
 
+    public PageDTO<SeguidorDTO> listarMeusSeguidores(Integer pagina,
+                                                 Integer registroPorPagina) throws RegraDeNegocioException {
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+        localizarUsuario(id);
+        PageRequest pageRequest = PageRequest.of(pagina, registroPorPagina);
+        Page<SeguidorEntity> page = seguidorRepository.filtrarQuemUsuarioSegue(id, pageRequest);
+
+        List<SeguidorDTO> seguidorDTOS = page.getContent().stream()
+                .map(this::retornarSeguidorDTO)
+                .toList();
+
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registroPorPagina, seguidorDTOS);
+    }
+
     //==================================================================================================================
     //ADICIONAR
 
-    public SeguidorCreateDTO adicionar(Integer id, SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {
+    public SeguidorCreateDTO adicionar(SeguidorCreateDTO seguidorCreateDTO) throws RegraDeNegocioException {
 
-        //recupera usuário
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
+
+        UsuarioEntity seguidorRecuperado = localizarUsuario(seguidorCreateDTO.getIdSeguidor());
+
+        SeguidorEntity novoSeguidor = new SeguidorEntity();
+
+        novoSeguidor.setNomeSeguidor(usuarioRecuperado.getNome());
+        novoSeguidor.setIdUsuario(usuarioRecuperado.getIdUsuario());
+        //recupera usuário
+
+        List<SeguidorEntity> seguidorEntities = new ArrayList<>();
+        seguidorEntities.add(novoSeguidor);
+
+        seguidorRecuperado.setSeguidores(seguidorEntities);
 
         //converte
         SeguidorEntity seguidorEntity = retornarSeguidorEntity(seguidorCreateDTO);
 
         //seta no usuário
+        seguidorEntity.setNomeSeguidor(seguidorRecuperado.getNome());
         seguidorEntity.setUsuario(usuarioRecuperado);
 
 

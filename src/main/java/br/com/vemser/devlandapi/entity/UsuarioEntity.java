@@ -61,9 +61,9 @@ public class UsuarioEntity {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "usuario",         //Indica o lado inverso do relacionamento
-            cascade = CascadeType.ALL,   //Faz a cascata para deletar
-            orphanRemoval = true)        //Deleta os órfãos
-    private Set<SeguidorEntity> seguidores;
+            cascade = CascadeType.ALL   //Faz a cascata para deletar
+            )        //Deleta os órfãos
+    private List<SeguidorEntity> seguidores;
 
     //------------------------------------------------------------------------------------------------------------------
     //Relacionamento Usuário - Endereços

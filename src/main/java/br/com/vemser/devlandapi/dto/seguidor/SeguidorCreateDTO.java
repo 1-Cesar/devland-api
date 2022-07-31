@@ -7,7 +7,7 @@ public class SeguidorCreateDTO {
 
     private Integer idSeguidor;
 
-    private String nomeSeguidor;
 
-    private Integer idUsuario;
+
+    //private Integer idUsuario;
 }
