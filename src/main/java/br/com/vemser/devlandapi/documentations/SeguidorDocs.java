@@ -26,7 +26,7 @@ public interface SeguidorDocs {
 
     @SeguidorNotas
     @Operation(summary = "Deleta seguidor com base no id do usuário e id do seguidor", description = "Deleta seguidor presente no banco de dados com base no id do usuário e id do seguidor")
-    public void delete(@PathVariable("idUsuario") Integer id, @PathVariable("idSeguidor") Integer idSeguidor) throws RegraDeNegocioException;
+    public void delete(@PathVariable("idSeguidor") Integer idSeguidor) throws RegraDeNegocioException;
 
 
 }
