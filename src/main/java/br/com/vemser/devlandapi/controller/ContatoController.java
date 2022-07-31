@@ -42,11 +42,10 @@ public class ContatoController implements ContatoDocs {
         return ResponseEntity.ok(contatoService.listarContatoUsuario(id));
     }
 
-    @PostMapping("/{idUsuario}")
-    public ResponseEntity<ContatoCreateDTO> adicionar(@PathVariable("idUsuario") Integer id,
-                                                      @Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
-        log.info("Criando um contato com base no id do usuário");
-        return ResponseEntity.ok(contatoService.adicionar(id, contato));
+    @PostMapping("/adicionar-meu-contato")
+    public ResponseEntity<ContatoCreateDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
+        log.info("Criando um contato com base no usuário logado");
+        return ResponseEntity.ok(contatoService.adicionar(contato));
     }
 
     @PutMapping("/{idContato}")

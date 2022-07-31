@@ -7,6 +7,7 @@ import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.EnderecoEntity;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
+import br.com.vemser.devlandapi.enums.TipoMensagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.EnderecoRepository;
 import br.com.vemser.devlandapi.repository.UserLoginRepository;
@@ -177,9 +178,43 @@ public class EnderecoService {
 
     //TODO - ADICIONAR ENDEREÇO NO USUÁRIO QUE ESTÁ LOGADO
 
+
+
     //TODO - EDITAR ENDEREÇO EM ENDEREÇOS DO USUÁRIO LOGADO
 
+
+
+
+
+
+    //------------------------------------------------------------------------------------------------------------------
     //TODO - DELETAR ENDEREÇO EM ENDEREÇOS DO USUARIO LOGADO
+/*
+    public String deleteProprio() throws RegraDeNegocioException {
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        UsuarioEntity usuarioRecuperado = localizarUsuario(usuarioLogadoEntity.getIdUsuario());
+
+        usuarioRepository.delete(usuarioRecuperado);
+
+        String tipoMensagem = TipoMensagem.DELETE.getTipo();
+        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
+
+        return "Usuario " + usuarioLogadoEntity.getIdUsuario() + " foi deletado.";
+    }
+
+*/
+
+
+
+
+
+
+
+
+
+
 
 
 }

@@ -143,8 +143,45 @@ public class ContatoService {
 
     //TODO - ADICIONAR CONTATO NO USUÁRIO QUE ESTÁ LOGADO
 
+    public ContatoCreateDTO adicionar(ContatoCreateDTO contatoDTO) throws RegraDeNegocioException {
+
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+        UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(id);
+
+        //converte
+        ContatoEntity contatoEntity = retornarContatoEntity(contatoDTO);
+
+        //seta no usuário
+        contatoEntity.setUsuario(usuarioRecuperado);
+
+        ContatoEntity contatoCriado = contatoRepository.save(contatoEntity);
+
+        return retornarContatoDTO(contatoCriado);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //TODO - EDITAR CONTATO EM CONTATOS DO USUÁRIO LOGADO
 
+
+
+    //------------------------------------------------------------------------------------------------------------------
     //TODO - DELETAR CONTATO EM CONTATOS DO USUARIO LOGADO
 
 

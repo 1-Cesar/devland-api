@@ -29,8 +29,8 @@ public interface ContatoDocs {
     public ResponseEntity<List<ContatoDTO>> listarContatoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
 
     @ContatoNotas
-    @Operation(summary = "criar contato atraves do id do usuario", description = "cria um contato dentro do banco de dados com base no id do usuario")
-    public ResponseEntity<ContatoCreateDTO> adicionar(@PathVariable("idPessoa") Integer id, @Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException;
+    @Operation(summary = "criar contato atraves do usuário logado", description = "cria um contato dentro do banco de dados com base no usuário logado")
+    public ResponseEntity<ContatoCreateDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException;
 
     @ContatoNotas
     @Operation(summary = "altera um contato por id", description = "altera os registros de um contato no banco de dados atraves de seu id")
