@@ -132,17 +132,20 @@ public class UsuarioService {
 
             userLoginCreateDTO.setSenha(userLoginService.criptografia(userLoginCreateDTO.getSenha()));
 
-            UsuarioEntity usuarioEmpresa = usuarioRepository.save(retornarUsuarioEntity(userLoginCreateDTO.getUsuarioCreateDTO()));
+            UsuarioEntity usuarioEntity = objectMapper.convertValue(userLoginCreateDTO.getUsuarioCreateDTO(), UsuarioEntity.class);
+
+            UsuarioEntity usuario = usuarioRepository.save(usuarioEntity);
 
             CargoEntity cargoEntity = new CargoEntity();
 
             List<CargoEntity> cargoEntities = new ArrayList<>();
 
             UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class);
-            userLoginEntity.setUsuarioEntity(retornarUsuarioEntity(userLoginCreateDTO.getUsuarioCreateDTO()));
+
+            userLoginEntity.setUsuarioEntity(usuario);
             userLoginEntity.setStatus(true);
 
-            if (usuarioEmpresa.getTipoUsuario().toString().equals("EMPRESA")) {
+            if (usuario.getTipoUsuario().toString().equals("EMPRESA")) {
 
                 cargoEntity.setIdCargo(3);
 
@@ -159,7 +162,7 @@ public class UsuarioService {
             userLoginRepository.save(userLoginEntity);
 
             String tipoMensagem = TipoMensagem.CREATE.getTipo();
-            emailService.sendEmailUsuario(usuarioEmpresa, tipoMensagem);
+            emailService.sendEmailUsuario(usuario, tipoMensagem);
 
             return "Empresa cadastrada com sucesso!";
         } else {
