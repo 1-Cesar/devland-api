@@ -51,13 +51,6 @@ public class EnderecoController implements EnderecoDocs {
         return ResponseEntity.ok(enderecoService.adicionar(id, enderecoCreateDTO));
     }
 
-    @PutMapping("/editar-se/{idEndereco}")
-    public EnderecoDTO editar(@PathVariable("idEndereco") Integer idEndereco,
-                                              @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException {
-        log.info("Modificando um endereço com base em seu id");
-        return enderecoService.editarProprio(idEndereco, enderecoAtualizar);
-    }
-
     @DeleteMapping("/{idEndereco}")
     public void delete(@PathVariable("idEndereco") Integer id) throws RegraDeNegocioException {
         log.info("Excluindo um endereço com base em seu id");
@@ -78,6 +71,17 @@ public class EnderecoController implements EnderecoDocs {
         return enderecoService.listarEnderecosUsuarioLogado();
     }
 
+    @PutMapping("/editar-se/{idEndereco}")
+    public EnderecoDTO editar(@PathVariable("idEndereco") Integer idEndereco,
+                              @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException {
+        log.info("Modificando um endereço com base em seu id");
+        return enderecoService.editarProprio(idEndereco, enderecoAtualizar);
+    }
+
+    @DeleteMapping("/deletar-se/{idEndereco}")
+    public String deletar(@PathVariable("idEndereco") Integer idEndereco) throws RegraDeNegocioException {
+        return enderecoService.deletarProprio(idEndereco);
+    }
 
     @PostMapping("/adicionar-meu-endereco")
     public ResponseEntity<EnderecoDTO> adicionar(@Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
