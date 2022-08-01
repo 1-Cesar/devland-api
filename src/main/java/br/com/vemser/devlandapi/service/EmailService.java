@@ -1,6 +1,5 @@
 package br.com.vemser.devlandapi.service;
 
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
 import freemarker.template.Template;
@@ -37,7 +36,7 @@ public class EmailService {
 
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(usuario.getEmail());
-            if (tipo.equals(TipoMensagem.CREATE.getTipo())){
+            if (tipo.equals(TipoMensagem.CREATE.getTipo())) {
                 mimeMessageHelper.setSubject("Olá, " + usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
             } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
                 mimeMessageHelper.setSubject(usuario.getNome() + ", seus dados foram atualizados!");
@@ -56,7 +55,7 @@ public class EmailService {
 
         Template template;
 
-        if (tipo.equals(TipoMensagem.CREATE.getTipo())){
+        if (tipo.equals(TipoMensagem.CREATE.getTipo())) {
             dados.put("nome", "Olá, " + usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
             dados.put("mensagem", "Seu cadastro foi realizado com sucesso, seu código de identificação é " + usuario.getIdUsuario());
             dados.put("email", "Qualquer dúvida, entre em contato com o suporte pelo e-mail " + from);

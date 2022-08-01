@@ -1,8 +1,6 @@
 package br.com.vemser.devlandapi.repository;
 
-import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.SeguidorEntity;
-import br.com.vemser.devlandapi.enums.TipoPostagem;
 import feign.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +14,7 @@ import java.util.List;
 public interface SeguidorRepository extends JpaRepository<SeguidorEntity, Integer> {
 
     //Verifica seguidor pra ver se segue a si
-    @Query( " select s " +
+    @Query(" select s " +
             " from seguidor s" +
             " where s.idUsuario = :idUsuario AND s.idSeguidor = :idSeguidor")
     List<SeguidorEntity> verificaSeguidor(@Param("idUsuario") Integer idUsuario, @Param("idSeguidor") Integer idSeguidor);

@@ -1,7 +1,6 @@
 package br.com.vemser.devlandapi.repository;
 
-import br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO;
-import br.com.vemser.devlandapi.entity.SeguidorEntity;
+import br.com.vemser.devlandapi.dto.relatorios.RelatorioPersonalizadoDevDTO;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
@@ -12,8 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer> {
 
@@ -22,7 +19,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
             " where :tipoUsuario is null OR c.tipoUsuario = :tipoUsuario")
     Page<UsuarioEntity> getUsuarioByTipo(@Param("tipoUsuario") TipoUsuario tipoUsuario, Pageable pageable);
 
-    @Query(value = " select new br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO(" +
+    @Query(value = " select new br.com.vemser.devlandapi.dto.relatorios.RelatorioPersonalizadoDevDTO(" +
             " u.nome," +
             " u.email," +
             " u.areaAtuacao," +
@@ -44,7 +41,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
             " where (:areaAtuacao is null OR u.areaAtuacao = :areaAtuacao )")
     Page<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevDTO(@Param("areaAtuacao") String areaAtuacao, Pageable pageable);
 
-    @Query(value = " select new br.com.vemser.devlandapi.dto.RelatorioPersonalizadoDevDTO(" +
+    @Query(value = " select new br.com.vemser.devlandapi.dto.relatorios.RelatorioPersonalizadoDevDTO(" +
             " u.nome," +
             " u.email," +
             " u.areaAtuacao," +

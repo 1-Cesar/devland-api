@@ -19,7 +19,7 @@ create table tecnologias (
 	  primary key (id_tecnologia),
 	  constraint fk_tecnologias_usuario
 	  	foreign key (id_usuario)
-	  		references usuario(id_usuario)
+	  		references usuario(id_usuario) on delete cascade
 );
 
 create table endereco (
@@ -41,11 +41,10 @@ create table usuario_x_endereco (
 	  primary key(id_usuario, id_endereco),
 	  constraint fk_x_usuario
 	  	foreign key(id_usuario)
-	  		references usuario(id_usuario),
+	  		references usuario(id_usuario) on delete cascade,
 	  constraint fk_x_endereco
 	  	foreign key (id_endereco)
-	  		references endereco(id_endereco)
-	
+	  		references endereco(id_endereco) on delete cascade
 );
 
 create table contato (
@@ -57,7 +56,7 @@ create table contato (
 	  primary key (id_contato),
 	  constraint fk_contato_usuario
 	    foreign KEY (id_usuario)
-	      references usuario(id_usuario)
+	      references usuario(id_usuario) on delete cascade
 );
 
 create table seguidor (
@@ -68,7 +67,7 @@ create table seguidor (
 	  primary key (id),
 	  constraint fk_seguidor_usuario
 	    foreign KEY (id_usuario)
-	      references usuario(id_usuario)
+	      references usuario(id_usuario) on delete cascade
 );
 
 create table postagem (
@@ -83,7 +82,7 @@ create table postagem (
 	  primary key (id_postagem),
 	  constraint fk_postagem_usuario
 	    foreign KEY (id_usuario)
-	      references usuario(id_usuario)
+	      references usuario(id_usuario) on delete cascade
 );
 
 create table comentario (
@@ -96,10 +95,10 @@ create table comentario (
 	  primary key (id_comentario),
 	  constraint fk_comentario_usuario
 	    foreign KEY (id_usuario)
-	      references usuario(id_usuario),
+	      references usuario(id_usuario) on delete cascade,
 	  constraint fk_comentario_postagem
 	    foreign KEY (id_postagem)
-	      references postagem(id_postagem)
+	      references postagem(id_postagem) on delete cascade
 );
 
 create sequence seq_usuario

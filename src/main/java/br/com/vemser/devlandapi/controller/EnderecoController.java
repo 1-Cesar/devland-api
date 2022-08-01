@@ -1,14 +1,15 @@
 package br.com.vemser.devlandapi.controller;
 
 import br.com.vemser.devlandapi.documentations.EnderecoDocs;
-import br.com.vemser.devlandapi.dto.EnderecoCreateDTO;
-import br.com.vemser.devlandapi.dto.EnderecoDTO;
-import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.UsuarioDTO;
+import br.com.vemser.devlandapi.dto.*;
+import br.com.vemser.devlandapi.dto.endereco.EnderecoCreateDTO;
+import br.com.vemser.devlandapi.dto.endereco.EnderecoDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -50,11 +51,11 @@ public class EnderecoController implements EnderecoDocs {
         return ResponseEntity.ok(enderecoService.adicionar(id, enderecoCreateDTO));
     }
 
-    @PutMapping("/{idEndereco}")
-    public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id,
+    @PutMapping("/editar-se/{idEndereco}")
+    public EnderecoDTO editar(@PathVariable("idEndereco") Integer idEndereco,
                                               @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException {
         log.info("Modificando um endereço com base em seu id");
-        return ResponseEntity.ok(enderecoService.editar(id, enderecoAtualizar));
+        return enderecoService.editarProprio(idEndereco, enderecoAtualizar);
     }
 
     @DeleteMapping("/{idEndereco}")
@@ -66,5 +67,21 @@ public class EnderecoController implements EnderecoDocs {
     @GetMapping("/paginacao-pais")
     public PageDTO<EnderecoDTO> getRelatorioPaginadoPais(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String pais) {
         return enderecoService.paginacaoPais(pais, pagina, quantidadeRegistros);
+    }
+
+    //==================================================================================================================
+    //                                        EXCLUSIVOS DEV & EMPRESA
+    //==================================================================================================================
+
+    @GetMapping("/listar-seus-enderecos")
+    public List<UsuarioDTO> listarEnderecosUsuarioLogado() throws RegraDeNegocioException {
+        return enderecoService.listarEnderecosUsuarioLogado();
+    }
+
+
+    @PostMapping("/adicionar-meu-endereco")
+    public ResponseEntity<EnderecoDTO> adicionar(@Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+        log.info("Criando um endereço com base no usuário logado");
+        return ResponseEntity.ok(enderecoService.adicionar(enderecoCreateDTO));
     }
 }

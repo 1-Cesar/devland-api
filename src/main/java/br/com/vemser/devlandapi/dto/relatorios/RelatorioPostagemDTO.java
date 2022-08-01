@@ -1,16 +1,12 @@
-package br.com.vemser.devlandapi.dto;
+package br.com.vemser.devlandapi.dto.relatorios;
 
 import br.com.vemser.devlandapi.entity.ComentarioEntity;
-import br.com.vemser.devlandapi.entity.PostagemEntity;
-import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
-import br.com.vemser.devlandapi.enums.TipoUsuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

@@ -1,5 +1,6 @@
-package br.com.vemser.devlandapi.dto;
+package br.com.vemser.devlandapi.dto.endereco;
 
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

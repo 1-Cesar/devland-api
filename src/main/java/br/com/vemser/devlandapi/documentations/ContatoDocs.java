@@ -1,8 +1,8 @@
 package br.com.vemser.devlandapi.documentations;
 
 import br.com.vemser.devlandapi.annotations.ContatoNotas;
-import br.com.vemser.devlandapi.dto.ContatoCreateDTO;
-import br.com.vemser.devlandapi.dto.ContatoDTO;
+import br.com.vemser.devlandapi.dto.contato.ContatoCreateDTO;
+import br.com.vemser.devlandapi.dto.contato.ContatoDTO;
 import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,15 +29,19 @@ public interface ContatoDocs {
     public ResponseEntity<List<ContatoDTO>> listarContatoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
 
     @ContatoNotas
-    @Operation(summary = "criar contato atraves do id do usuario", description = "cria um contato dentro do banco de dados com base no id do usuario")
-    public ResponseEntity<ContatoCreateDTO> adicionar(@PathVariable("idPessoa") Integer id, @Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException;
+    @Operation(summary = "criar contato atraves do usuário logado", description = "cria um contato dentro do banco de dados com base no usuário logado")
+    public ResponseEntity<ContatoCreateDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException;
 
     @ContatoNotas
-    @Operation(summary = "altera um contato por id", description = "altera os registros de um contato no banco de dados atraves de seu id")
+    @Operation(summary = "altera um contato de usuário logado por id", description = "altera os registros de um contato de usuário logado atraves do seu id de contato")
     public ResponseEntity<ContatoDTO> editar(@PathVariable("idContato") Integer id, @Valid @RequestBody ContatoDTO contatoAtualizar) throws RegraDeNegocioException;
 
     @ContatoNotas
     @Operation(summary = "deleta contato", description = "deleta um contato do banco de dados atraves de seu id")
     public void remover(@PathVariable("idContato") Integer id) throws RegraDeNegocioException;
+
+    @ContatoNotas
+    @Operation(summary = "Listar os contatos do prórpio usuário.", description = "Exibe os contatos do próprio usuário logado.")
+    public List<ContatoDTO> listarContatosUsuarioLogado() throws RegraDeNegocioException;
 
 }
