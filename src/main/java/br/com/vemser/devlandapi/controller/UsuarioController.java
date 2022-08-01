@@ -6,7 +6,6 @@ import br.com.vemser.devlandapi.dto.relatorios.RelatorioPersonalizadoDevDTO;
 import br.com.vemser.devlandapi.dto.usuario.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.enums.Genero;
-import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.UserLoginService;
 import br.com.vemser.devlandapi.service.UsuarioService;
@@ -56,11 +55,6 @@ public class UsuarioController implements UsuarioDocs {
         usuarioService.delete(id);
     }
 
-    @GetMapping("/paginacao-tipo-usuario")
-    public PageDTO<UsuarioDTO> getUsuarioByTipo(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) TipoUsuario tipoUsuario) {
-        return usuarioService.paginacaoTipo(tipoUsuario, pagina, quantidadeRegistros);
-    }
-
     @GetMapping("/relatorio-stack-usuario")
     public PageDTO<RelatorioPersonalizadoDevDTO> getUsuarioByStack(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String stack) {
         return usuarioService.relatorioStack(stack, pagina, quantidadeRegistros);
@@ -88,14 +82,4 @@ public class UsuarioController implements UsuarioDocs {
     public String deleteProprio() throws RegraDeNegocioException {
         return usuarioService.deleteProprio();
     }
-
-//TODO - apagar comentario
-    /*
-    @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> editar(@PathVariable("idUsuario") Integer id,
-                                             @Valid @RequestBody UsuarioCreateDTO usuarioAtualizar) throws RegraDeNegocioException {
-        log.info("Alterando um usuário com base em seu id");
-        return ResponseEntity.ok(usuarioService.editar(id, usuarioAtualizar));
-    }
-    */
 }

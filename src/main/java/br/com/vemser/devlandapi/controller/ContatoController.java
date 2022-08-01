@@ -42,41 +42,32 @@ public class ContatoController implements ContatoDocs {
         return ResponseEntity.ok(contatoService.listarContatoUsuario(id));
     }
 
-
-
-
-    @DeleteMapping("/deletar-meu-contato/{idContato}")
-    public void remover(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {
-        log.info("Removendo um contato com base em seu id");
-        contatoService.remover(id);
-    }
-
     //==================================================================================================================
     //                                        EXCLUSIVOS DEV & EMPRESA
     //==================================================================================================================
 
-    @GetMapping("/listar-seus-contatos")
+    @GetMapping("/listar-se")
     public List<ContatoDTO> listarContatosUsuarioLogado() throws RegraDeNegocioException {
         return contatoService.listarContatoUsuarioLogado();
     }
 
-
-    @PostMapping("/adicionar-meu-contato")
+    @PostMapping("/adicionar-se")
     public ResponseEntity<ContatoCreateDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
         log.info("Criando um contato com base no usuário logado");
         return ResponseEntity.ok(contatoService.adicionar(contato));
     }
 
-    @PutMapping("/{idContato}")
+    @PutMapping("/editar-se/{idContato}")
     public ResponseEntity<ContatoDTO> editar(@PathVariable("idContato") Integer id,
                                              @Valid @RequestBody ContatoDTO contatoAtualizar) throws RegraDeNegocioException {
         log.info("Alterando contato de usuário logado com base em seu idContato");
         return ResponseEntity.ok(contatoService.editar(id, contatoAtualizar));
     }
 
-
-    //TODO - EDITAR CONTATO EM CONTATOS DO USUÁRIO LOGADO
-
-    //TODO - DELETAR CONTATO EM CONTATOS DO USUARIO LOGADO
-
+    @DeleteMapping("/deletar-se/{idContato}")
+    public void remover(@PathVariable("idContato") Integer id) throws RegraDeNegocioException {
+        log.info("Removendo um contato com base em seu id");
+        contatoService.remover(id);
+    }
 }
+

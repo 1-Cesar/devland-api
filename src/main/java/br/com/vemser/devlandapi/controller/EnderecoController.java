@@ -84,11 +84,4 @@ public class EnderecoController implements EnderecoDocs {
         log.info("Criando um endereço com base no usuário logado");
         return ResponseEntity.ok(enderecoService.adicionar(enderecoCreateDTO));
     }
-
-
-    //TODO - EDITAR ENDEREÇO EM ENDEREÇOS DO USUÁRIO LOGADO
-
-    //TODO - DELETAR ENDEREÇO EM ENDEREÇOS DO USUARIO LOGADO
-
-
 }
