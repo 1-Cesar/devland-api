@@ -77,56 +77,30 @@ public class UsuarioService {
         emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
 
-//    TODO - apagar comentarios
-    /*
-    public UsuarioDTO editar(Integer id, UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
-        if (usuarioCreateDTO.getTipoUsuario() == TipoUsuario.DEV) {
-            if (usuarioCreateDTO.getCpfCnpj().length() == 11 && ValidaCPF.isCPF(usuarioCreateDTO.getCpfCnpj())) {
-
-                UsuarioEntity usuarioEntity = localizarUsuario(id);
-                usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
-                usuarioRepository.save(usuarioEntity);
-
-                String tipoMensagem = TipoMensagem.UPDATE.getTipo();
-                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
-
-                return retornarDTO(usuarioEntity);
-            } else {
-                throw new RegraDeNegocioException("CPF Inválido");
-            }
-        }
-
-        if (usuarioCreateDTO.getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(usuarioCreateDTO.getCpfCnpj())) {
-
-            UsuarioEntity usuarioEntity = localizarUsuario(id);
-            usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
-            usuarioRepository.save(usuarioEntity);
-
-            String tipoMensagem = TipoMensagem.UPDATE.getTipo();
-            emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
-
-            return retornarDTO(usuarioEntity);
-        } else {
-            throw new RegraDeNegocioException("CNPJ Inválido");
-        }
-    }
-    */
-
     public String adicionar(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
+
+        if (userLoginCreateDTO.getUsuarioCreateDTO().getTipoUsuario() == TipoUsuario.ADMIN) {
+            throw new RegraDeNegocioException("tipo de usuário inválido");
+        }
 
         if (userLoginCreateDTO.getUsuarioCreateDTO().getTipoUsuario() == TipoUsuario.DEV) {
             if (userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj().length() == 11 && ValidaCPF.isCPF(userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj())) {
 
                 userLoginCreateDTO.setSenha(userLoginService.criptofrafia(userLoginCreateDTO.getSenha()));
 
-                UsuarioEntity usuario = usuarioRepository.save(retornarUsuarioEntity(userLoginCreateDTO.getUsuarioCreateDTO()));
+                UsuarioEntity usuarioEntity = objectMapper.convertValue(userLoginCreateDTO.getUsuarioCreateDTO(), UsuarioEntity.class);
+
+                UsuarioEntity usuario = usuarioRepository.save(usuarioEntity);
 
                 CargoEntity cargoEntity = new CargoEntity();
 
                 List<CargoEntity> cargoEntities = new ArrayList<>();
 
                 UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class);
-                userLoginEntity.setUsuarioEntity(retornarUsuarioEntity(userLoginCreateDTO.getUsuarioCreateDTO()));
+
+
+
+                userLoginEntity.setUsuarioEntity(usuario);
                 userLoginEntity.setStatus(true);
 
                 if (usuario.getTipoUsuario().toString().equals("DEV")) {

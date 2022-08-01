@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/endereco")
 @Validated
-public class EnderecoController implements EnderecoDocs {
+public class EnderecoController  {
 
     @Autowired
     private EnderecoService enderecoService;
@@ -50,12 +50,12 @@ public class EnderecoController implements EnderecoDocs {
         return ResponseEntity.ok(enderecoService.adicionar(id, enderecoCreateDTO));
     }
 
-    @PutMapping("/{idEndereco}")
-    public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id,
-                                              @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException {
-        log.info("Modificando um endereço com base em seu id");
-        return ResponseEntity.ok(enderecoService.editar(id, enderecoAtualizar));
-    }
+//    @PutMapping("/{idEndereco}")
+//    public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id,
+//                                              @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException {
+//        log.info("Modificando um endereço com base em seu id");
+//        return ResponseEntity.ok(enderecoService.editar(id, enderecoAtualizar));
+//    }
 
     @DeleteMapping("/{idEndereco}")
     public void delete(@PathVariable("idEndereco") Integer id) throws RegraDeNegocioException {

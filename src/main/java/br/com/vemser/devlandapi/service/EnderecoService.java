@@ -242,7 +242,5 @@ public class EnderecoService {
     public EnderecoEntity retornarEnderecoEntity(EnderecoCreateDTO enderecoDTO) {
         return objectMapper.convertValue(enderecoDTO, EnderecoEntity.class);
     }
-
-
 }
 
