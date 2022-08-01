@@ -117,7 +117,7 @@ public class UsuarioService {
         if (userLoginCreateDTO.getUsuarioCreateDTO().getTipoUsuario() == TipoUsuario.DEV) {
             if (userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj().length() == 11 && ValidaCPF.isCPF(userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj())) {
 
-                userLoginCreateDTO.setSenha(userLoginService.criptofrafia(userLoginCreateDTO.getSenha()));
+                userLoginCreateDTO.setSenha(userLoginService.criptografia(userLoginCreateDTO.getSenha()));
 
                 UsuarioEntity usuario = usuarioRepository.save(retornarUsuarioEntity(userLoginCreateDTO.getUsuarioCreateDTO()));
 
@@ -156,7 +156,7 @@ public class UsuarioService {
 
         if (userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj())) {
 
-            userLoginCreateDTO.setSenha(userLoginService.criptofrafia(userLoginCreateDTO.getSenha()));
+            userLoginCreateDTO.setSenha(userLoginService.criptografia(userLoginCreateDTO.getSenha()));
 
             UsuarioEntity usuarioEmpresa = usuarioRepository.save(retornarUsuarioEntity(userLoginCreateDTO.getUsuarioCreateDTO()));
 

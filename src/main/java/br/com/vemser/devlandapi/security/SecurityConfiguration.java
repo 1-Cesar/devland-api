@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 // Adicionar regras de requisição
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers("/", "/auth","/auth/cadastro").permitAll()
+                        authz.antMatchers("/", "/auth","/auth/cadastro", "/auth/recuperar-login").permitAll()
 
                                 //.antMatchers(HttpMethod.GET, "/contato/","/endereco/","/postagem/","/comentario/","/usuario/", "/seguidores/").hasRole("ADMIN") // 1
                                 /*//ADMIN
@@ -53,7 +53,7 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.POST, "/contato", "/endereco","/postagem", "/comentario", "/seguidores").hasRole("EMPRESA") // 1
                                 .antMatchers(HttpMethod.PUT, "/contato", "/endereco","/postagem", "/comentario", "/seguidores" ,"/usuario/byname").hasRole("EMPRESA") // 1*/
                                 //.antMatchers(HttpMethod.DELETE, "/usuario").hasAnyRole("ADMIN","DEV", "EMPRESA")
-                                .antMatchers(HttpMethod.PUT, "/usuario/editar-se","/comentario/editar-se","/postagem/editar-se","/endereco/editar-se","/contato/").hasAnyRole("DEV", "EMPRESA") // 2
+                                .antMatchers(HttpMethod.PUT, "/usuario/editar-se","/comentario/editar-se","/postagem/editar-se","/endereco/editar-se/","/contato/").hasAnyRole("DEV", "EMPRESA") // 2
                                 .antMatchers(HttpMethod.GET, "/usuario/listar-se", "/usuario/byname","/contato/listar-seus-contatos", "/endereco/listar-seus-enderecos", "/seguidor/**").hasAnyRole("DEV", "EMPRESA", "ADMIN") // 2
                                 .antMatchers(HttpMethod.DELETE, "/usuario/listar-se", "/usuario/byname","/contato/listar-seus-contatos",  "/endereco/listar-seus-enderecos", "/seguidor/**").hasAnyRole("DEV", "EMPRESA", "ADMIN") // 2
                                 .antMatchers(HttpMethod.GET, "/**").hasRole("ADMIN") // 2

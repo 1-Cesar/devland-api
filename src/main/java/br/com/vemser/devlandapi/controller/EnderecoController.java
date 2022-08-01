@@ -9,6 +9,7 @@ import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -50,11 +51,11 @@ public class EnderecoController implements EnderecoDocs {
         return ResponseEntity.ok(enderecoService.adicionar(id, enderecoCreateDTO));
     }
 
-    @PutMapping("/{idEndereco}")
-    public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id,
+    @PutMapping("/editar-se/{idEndereco}")
+    public EnderecoDTO editar(@PathVariable("idEndereco") Integer idEndereco,
                                               @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException {
         log.info("Modificando um endereço com base em seu id");
-        return ResponseEntity.ok(enderecoService.editar(id, enderecoAtualizar));
+        return enderecoService.editarProprio(idEndereco, enderecoAtualizar);
     }
 
     @DeleteMapping("/{idEndereco}")

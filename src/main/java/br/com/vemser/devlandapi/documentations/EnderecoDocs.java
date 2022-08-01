@@ -38,7 +38,7 @@ public interface EnderecoDocs {
 
     @EnderecoNotas
     @Operation(summary = "Alterar um endereço por id", description = "Altera os registros de um endereço no banco de dados atraves de seu id")
-    public ResponseEntity<EnderecoDTO> editar(@PathVariable("idEndereco") Integer id, @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException;
+    public EnderecoDTO editar(@PathVariable("idEndereco") Integer id, @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException;
 
     @EnderecoNotas
     @Operation(summary = "Deletar endereço", description = "Deleta um endereço do banco de dados atraves de seu id")

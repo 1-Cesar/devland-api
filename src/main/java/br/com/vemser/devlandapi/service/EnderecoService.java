@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EnderecoService {
@@ -180,29 +181,35 @@ public class EnderecoService {
     //------------------------------------------------------------------------------------------------------------------
 
 
-    // TODO - EDITAR ENDEREÇO EM ENDEREÇOS DO USUÁRIO LOGADO
 
-    /*
-    public EnderecoDTO editar(Integer id, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
-
-        EnderecoEntity enderecoEntity = localizarEndereco(id);
-
+    public EnderecoDTO editarProprio(Integer idEndereco, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         //Buscando usuário logado
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
-
         Integer idUsuarioLogado = (Integer) usuarioLogadoEntity.getIdUsuario();
 
+        UsuarioEntity usuarioEntity = usuarioRepository.findById(idUsuarioLogado).get();
+        List<UsuarioEntity> listaUsuarios = new ArrayList<>();
+        listaUsuarios.add(0,usuarioEntity);
 
-        //Verificando se o endereço pertence ao usuário
-        enderecoEntity = validaAlteracoes(enderecoEntity, enderecoCreateDTO);
-
-        enderecoRepository.save(enderecoEntity);
-
-        return retornarDTO(enderecoEntity);
+        List<EnderecoEntity> enderecos = usuarioEntity.getEnderecos().stream().toList();
+        int contador = 0;
+        for (EnderecoEntity end: enderecos
+             ) {
+            if(end.getIdEndereco().equals(idEndereco)){
+            contador +=1;
+            }
+        }
+        if (contador>0) {
+            EnderecoEntity enderecoEntity = convertEnderecoOptionalToEntity(enderecoRepository.findById(idEndereco));
+            enderecoEntity = retornarEnderecoEntity(enderecoCreateDTO);
+            enderecoEntity.setIdEndereco(idEndereco);
+            enderecoEntity.setUsuarios(listaUsuarios);
+            return retornarDTO(enderecoRepository.save(enderecoEntity));
+        } else {
+            throw new RegraDeNegocioException("Endereco nao pertence ao usuario logado.");
+        }
     }
-
-     */
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -241,6 +248,10 @@ public class EnderecoService {
 
     public EnderecoEntity retornarEnderecoEntity(EnderecoCreateDTO enderecoDTO) {
         return objectMapper.convertValue(enderecoDTO, EnderecoEntity.class);
+    }
+
+    public EnderecoEntity convertEnderecoOptionalToEntity(Optional enderecoOptional) {
+        return objectMapper.convertValue(enderecoOptional, EnderecoEntity.class);
     }
 
 

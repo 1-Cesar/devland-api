@@ -51,7 +51,7 @@ public class AuthController implements AuthDocs {
         return token;
     }
 
-    @GetMapping("/recuperarLogin")
+    @GetMapping("/recuperar-login")
     public String usuarioLogado() throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
