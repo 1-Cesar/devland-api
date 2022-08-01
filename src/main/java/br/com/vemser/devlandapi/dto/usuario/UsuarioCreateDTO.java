@@ -45,7 +45,7 @@ public class UsuarioCreateDTO {
     @NotNull
     private Genero genero;
 
-    @Schema(description = "perfil de usuário", example = "ADMIN, DEV ou EMPRESA")
+    @Schema(description = "perfil de usuário", example = "DEV ou EMPRESA")
     @NotNull
     private TipoUsuario tipoUsuario;
 }

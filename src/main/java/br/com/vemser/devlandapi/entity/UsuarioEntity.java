@@ -81,8 +81,8 @@ public class UsuarioEntity {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "usuario",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.ALL
+            )
     private List<TecnologiasEntity> tecnologias;
 
     //------------------------------------------------------------------------------------------------------------------

@@ -15,7 +15,7 @@ public class TecnologiasEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tecnologias_seq")
     @SequenceGenerator(name = "tecnologias_seq", sequenceName = "seq_tecnologias", allocationSize = 1)
     @Column(name = "id_tecnologia")
-    private Integer idTecnologia;
+    private Integer idTecnologias;
 
     @Column(name = "id_usuario", insertable = false, updatable = false)
     private Integer idUsuario;
