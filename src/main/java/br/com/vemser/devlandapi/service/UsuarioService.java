@@ -178,15 +178,6 @@ public class UsuarioService {
         return usuarioRecuperado;
     }
 
-    public PageDTO<UsuarioDTO> paginacaoTipo(TipoUsuario tipoUsuario, Integer pagina, Integer quantidadeRegistros) {
-        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
-        Page<UsuarioEntity> page = usuarioRepository.getUsuarioByTipo(tipoUsuario, pageable);
-        List<UsuarioDTO> usuarioDTOS = page.getContent().stream()
-                .map(this::retornarDTO)
-                .toList();
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, usuarioDTOS);
-    }
-
     public PageDTO<RelatorioPersonalizadoDevDTO> relatorioStack(String stack, Integer pagina, Integer quantidadeRegistros) {
         Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
         Page<RelatorioPersonalizadoDevDTO> page = usuarioRepository.relatorioPersonalizadoDevDTO(stack, pageable);
@@ -248,9 +239,6 @@ public class UsuarioService {
                 usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
                 usuarioRepository.save(usuarioEntity);
 
-                String tipoMensagem = TipoMensagem.UPDATE.getTipo();
-                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
-
                 return retornarDTO(usuarioEntity);
             } else {
                 throw new RegraDeNegocioException("CPF Inválido");
@@ -262,9 +250,6 @@ public class UsuarioService {
             UsuarioEntity usuarioEntity = localizarUsuario(id);
             usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
             usuarioRepository.save(usuarioEntity);
-
-            String tipoMensagem = TipoMensagem.UPDATE.getTipo();
-            emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
 
             return retornarDTO(usuarioEntity);
         } else {
@@ -425,7 +410,5 @@ public class UsuarioService {
 
         return usuarioEntity;
     }
-
-
 
 }
