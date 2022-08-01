@@ -33,10 +33,6 @@ public interface UsuarioDocs {
     public void delete(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
 
     @UsuarioNotas
-    @Operation(summary = "Filtrar os usuarios por Tipo", description = "Filtra os usuarios por tipo de cargo: ADMIN, DEV ou EMPRESA.")
-    public PageDTO<UsuarioDTO> getUsuarioByTipo(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) TipoUsuario tipoUsuario);
-
-    @UsuarioNotas
     @Operation(summary = "Filtrar os usuarios por Stack", description = "Filtra os usuarios por stack.")
     public PageDTO<RelatorioPersonalizadoDevDTO> getUsuarioByStack(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String stack);
 
