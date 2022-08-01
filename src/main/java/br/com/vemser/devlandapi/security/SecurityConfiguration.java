@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/", "/auth","/auth/cadastro", "/auth/recuperar-login").permitAll()
                                 .antMatchers(HttpMethod.PUT,
-                                        "/usuario/editar-se/",
+                                        "/usuario/editar-se",
                                                     "/comentario/editar-se/",
                                                     "/postagem/editar/","/postagem/curtir/",
                                                     "/endereco/editar-se/",
@@ -52,7 +52,9 @@ public class SecurityConfiguration {
                                                     "/contato/listar-se",
                                                     "/endereco/listar-seus-enderecos",
                                                     "/tecnologia/minhas-tecnologias",
-                                                    "/seguidor/**").hasAnyRole("DEV", "EMPRESA")
+                                                    "/postagem/**",
+                                                    "/comentario/**",
+                                                    "/seguidor/**").hasAnyRole("DEV", "EMPRESA", "ADMIN")
                                 .antMatchers(HttpMethod.POST,
                                         "/contato/adicionar-se",
                                                     "/endereco/",
@@ -60,9 +62,10 @@ public class SecurityConfiguration {
                                                     "/postagem/**",
                                                     "/tecnologia/**",
                                                     "/comentario/**").hasAnyRole("DEV", "EMPRESA")
-                                .antMatchers(HttpMethod.DELETE, "/contato/**",  "/endereco/**", "/seguidor/**", "/postagem/**", "/comentario/**").hasAnyRole("DEV", "EMPRESA")
+                                .antMatchers(HttpMethod.DELETE, "/contato/deletar-se/",  "/endereco/", "/seguidor/", "/tecnologia/","/postagem/deletar/", "/comentario/delete/","usuario/deletar-se").hasAnyRole("DEV", "EMPRESA")
                                 .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                                 .antMatchers(HttpMethod.GET, "/**").hasRole("ADMIN")
+                                .antMatchers(HttpMethod.PUT, "/auth/alterar-status/").hasRole("ADMIN")
                                 .anyRequest().authenticated());
         // Adicionar filtro do token
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
