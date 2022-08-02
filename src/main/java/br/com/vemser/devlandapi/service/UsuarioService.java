@@ -77,6 +77,7 @@ public class UsuarioService {
         emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
 
+    // TODO - extrair metodos e verificar retornar DTO (com o id)
     public String adicionar(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
 
         if (userLoginCreateDTO.getUsuarioCreateDTO().getTipoUsuario() == TipoUsuario.ADMIN) {
@@ -97,7 +98,6 @@ public class UsuarioService {
                 List<CargoEntity> cargoEntities = new ArrayList<>();
 
                 UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class);
-
 
 
                 userLoginEntity.setUsuarioEntity(usuario);
@@ -147,7 +147,7 @@ public class UsuarioService {
 
             if (usuario.getTipoUsuario().toString().equals("EMPRESA")) {
 
-                cargoEntity.setIdCargo(3);
+                cargoEntity.setIdCargo(2);
 
             } else {
 
@@ -425,7 +425,6 @@ public class UsuarioService {
 
         return usuarioEntity;
     }
-
 
 
 }

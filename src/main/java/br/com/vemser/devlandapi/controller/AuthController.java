@@ -69,7 +69,7 @@ public class AuthController implements AuthDocs {
     public ResponseEntity<String> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
         return ResponseEntity.ok(usuarioService.adicionar(userLoginCreateDTO));
     }
-
+// TODO - remover acentos
     @PutMapping("/alterar-status/{idUsuario}")
     public String desativar(@PathVariable("idUsuario") Integer id, TipoStatus opção) throws RegraDeNegocioException {
         //log.info("Alterando um usuário com base em seu id");
