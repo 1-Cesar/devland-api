@@ -4,7 +4,6 @@ import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.endereco.EnderecoCreateDTO;
 import br.com.vemser.devlandapi.dto.endereco.EnderecoDTO;
 import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
-import br.com.vemser.devlandapi.entity.ContatoEntity;
 import br.com.vemser.devlandapi.entity.EnderecoEntity;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
@@ -181,7 +180,6 @@ public class EnderecoService {
     //------------------------------------------------------------------------------------------------------------------
 
 
-
     public EnderecoDTO editarProprio(Integer idEndereco, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         //Buscando usuário logado
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
@@ -190,17 +188,17 @@ public class EnderecoService {
 
         UsuarioEntity usuarioEntity = usuarioRepository.findById(idUsuarioLogado).get();
         List<UsuarioEntity> listaUsuarios = new ArrayList<>();
-        listaUsuarios.add(0,usuarioEntity);
+        listaUsuarios.add(0, usuarioEntity);
 
         List<EnderecoEntity> enderecos = usuarioEntity.getEnderecos().stream().toList();
         int contador = 0;
-        for (EnderecoEntity end: enderecos
-             ) {
-            if(end.getIdEndereco().equals(idEndereco)){
-            contador +=1;
+        for (EnderecoEntity end : enderecos
+        ) {
+            if (end.getIdEndereco().equals(idEndereco)) {
+                contador += 1;
             }
         }
-        if (contador>0) {
+        if (contador > 0) {
             EnderecoEntity enderecoEntity = convertEnderecoOptionalToEntity(enderecoRepository.findById(idEndereco));
             enderecoEntity = retornarEnderecoEntity(enderecoCreateDTO);
             enderecoEntity.setIdEndereco(idEndereco);
@@ -216,6 +214,32 @@ public class EnderecoService {
 
 
     // TODO - DELETAR ENDEREÇO EM ENDEREÇOS DO USUARIO LOGADO
+
+    public String deletarProprio(Integer idEndereco) throws RegraDeNegocioException {
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+        Integer idUsuarioLogado = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+        UsuarioEntity usuarioEntity = usuarioRepository.findById(idUsuarioLogado).get();
+        List<UsuarioEntity> listaUsuarios = new ArrayList<>();
+        listaUsuarios.add(0, usuarioEntity);
+
+        List<EnderecoEntity> enderecos = usuarioEntity.getEnderecos().stream().toList();
+        int contador = 0;
+        for (EnderecoEntity end : enderecos
+        ) {
+            if (end.getIdEndereco().equals(idEndereco)) {
+                contador += 1;
+            }
+        }
+        if (contador > 0) {
+            EnderecoEntity enderecoEntity = convertEnderecoOptionalToEntity(enderecoRepository.findById(idEndereco));
+            enderecoRepository.delete(enderecoEntity);
+            return "Endereco deletado.";
+        } else {
+            throw new RegraDeNegocioException("Endereco nao pertence ao usuario logado.");
+        }
+    }
 
 
     //==================================================================================================================

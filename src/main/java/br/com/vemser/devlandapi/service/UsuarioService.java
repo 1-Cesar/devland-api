@@ -77,7 +77,8 @@ public class UsuarioService {
         emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
 
-    public String adicionar(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
+    // TODO - extrair metodos e verificar retornar DTO (com o id)
+    public UsuarioDTO adicionar(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
 
         if (userLoginCreateDTO.getUsuarioCreateDTO().getTipoUsuario() == TipoUsuario.ADMIN) {
             throw new RegraDeNegocioException("tipo de usuário inválido");
@@ -97,7 +98,6 @@ public class UsuarioService {
                 List<CargoEntity> cargoEntities = new ArrayList<>();
 
                 UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class);
-
 
 
                 userLoginEntity.setUsuarioEntity(usuario);
@@ -122,7 +122,7 @@ public class UsuarioService {
                 String tipoMensagem = TipoMensagem.CREATE.getTipo();
                 emailService.sendEmailUsuario(usuario, tipoMensagem);
 
-                return "Desenvolvedor cadastrado com sucesso!";
+                return objectMapper.convertValue(userLoginEntity.getUsuarioEntity(), UsuarioDTO.class);
             } else {
                 throw new RegraDeNegocioException("CPF Inválido");
             }
@@ -147,7 +147,7 @@ public class UsuarioService {
 
             if (usuario.getTipoUsuario().toString().equals("EMPRESA")) {
 
-                cargoEntity.setIdCargo(3);
+                cargoEntity.setIdCargo(2);
 
             } else {
 
@@ -164,7 +164,7 @@ public class UsuarioService {
             String tipoMensagem = TipoMensagem.CREATE.getTipo();
             emailService.sendEmailUsuario(usuario, tipoMensagem);
 
-            return "Empresa cadastrada com sucesso!";
+            return objectMapper.convertValue(userLoginEntity.getUsuarioEntity(), UsuarioDTO.class);
         } else {
             throw new RegraDeNegocioException("CNPJ Inválido");
         }

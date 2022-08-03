@@ -14,10 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer> {
 
-    @Query(" select c" +
-            " from usuario c" +
-            " where :tipoUsuario is null OR c.tipoUsuario = :tipoUsuario")
-    Page<UsuarioEntity> getUsuarioByTipo(@Param("tipoUsuario") TipoUsuario tipoUsuario, Pageable pageable);
+
 
     @Query(value = " select new br.com.vemser.devlandapi.dto.relatorios.RelatorioPersonalizadoDevDTO(" +
             " u.nome," +
@@ -62,5 +59,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
             " full join u.tecnologias t " +
             " where (:genero is null OR u.genero = :genero )")
     Page<RelatorioPersonalizadoDevDTO> relatorioPersonalizadoDevGeneroDTO(@Param("genero") Genero genero, Pageable pageable);
+
 
 }

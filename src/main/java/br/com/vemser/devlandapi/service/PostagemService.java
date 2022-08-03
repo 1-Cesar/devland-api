@@ -62,21 +62,23 @@ public class PostagemService {
     }
 
     public PostagemDTO findByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
-        return objectMapper.convertValue(postagemRepository.findById(idPostagem), PostagemDTO.class);
+        return objectMapper.convertValue(postagemRepository.findById(idPostagem).get(), PostagemDTO.class);
     }
 
-    public List<PostagemDTO> findByTitulo(String titulo){
-         return postagemRepository.findAll().stream()
+    public List<PostagemDTO> findByTitulo(String titulo) {
+        return postagemRepository.findAll().stream()
                 .filter(postagem -> postagem.getTitulo().toLowerCase()
                         .contains(titulo.toLowerCase()))
-                 .map(this::convertToDTO)
-                 .toList();
+                .map(this::convertToDTO)
+                .toList();
     }
 
 
     public PageDTO<PostagemDTO> findByTipo(TipoPostagem tipoPostagem, Integer pagina, Integer quantRegistros) throws RegraDeNegocioException {
         PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
+
         Page<PostagemEntity> page = postagemRepository.filtrarPorTipo(tipoPostagem, pageRequest);
+
         List<PostagemDTO> postagensDTO = page.getContent().stream()
                 .map(postagem -> objectMapper.convertValue(postagem, PostagemDTO.class))
                 .toList();
@@ -101,7 +103,7 @@ public class PostagemService {
 
     public PostagemDTO curtir(Integer idPostagem) throws RegraDeNegocioException {
 
-        PostagemEntity postagemEntityValid = convertOptionalToEntity(postagemRepository.findById(idPostagem));
+        PostagemEntity postagemEntityValid = postagemRepository.findById(idPostagem).get();
 
         if (postagemEntityValid == null) {
             throw new RegraDeNegocioException("Postagem não encontrada");
@@ -117,7 +119,7 @@ public class PostagemService {
 
     public PostagemDTO update(Integer idPostagem, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
 
-        PostagemEntity postagemEntityValid = convertOptionalToEntity(postagemRepository.findById(idPostagem));
+        PostagemEntity postagemEntityValid = postagemRepository.findById(idPostagem).get();
 
         PostagemEntity postagemEntityPersist = convertToEntity(postagemCreateDTO);
         postagemEntityPersist.setIdPostagem(postagemEntityValid.getIdPostagem());
@@ -136,19 +138,19 @@ public class PostagemService {
         postagemRepository.delete(postagemEntityValid);
     }
 
-    public PostagemEntity convertOptionalToEntity(Optional postagemCreateDTO) {
-        return objectMapper.convertValue(postagemCreateDTO, PostagemEntity.class);
+    private PostagemEntity convertOptionalToEntity(Optional postagemCreateDTO) {
+        return objectMapper.convertValue(postagemCreateDTO.get(), PostagemEntity.class);
     }
 
-    public PostagemDTO convertOptionalToDTO(Optional postagemCreateDTO) {
+    private PostagemDTO convertOptionalToDTO(Optional postagemCreateDTO) {
         return objectMapper.convertValue(postagemCreateDTO, PostagemDTO.class);
     }
 
-    public PostagemEntity convertToEntity(PostagemCreateDTO postagemCreateDTO) {
+    private PostagemEntity convertToEntity(PostagemCreateDTO postagemCreateDTO) {
         return objectMapper.convertValue(postagemCreateDTO, PostagemEntity.class);
     }
 
-    public PostagemDTO convertToDTO(PostagemEntity postagemEntity) {
+    private PostagemDTO convertToDTO(PostagemEntity postagemEntity) {
         return objectMapper.convertValue(postagemEntity, PostagemDTO.class);
     }
 

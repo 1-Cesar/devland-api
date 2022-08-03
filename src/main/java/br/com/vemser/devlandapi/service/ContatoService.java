@@ -156,7 +156,7 @@ public class ContatoService {
 
         Integer idUsuarioLogado = (Integer) usuarioLogadoEntity.getIdUsuario();
 
-       // UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoEntityRecuperado.getIdUsuario());
+        // UsuarioEntity usuarioRecuperado = usuarioService.localizarUsuario(contatoEntityRecuperado.getIdUsuario());
 
         //Verificando se o contato pertence ao usuário
         ContatoEntity verificaContatoUsuarioLogado = localizarContatoUsuarioLogado(id, idUsuarioLogado);
