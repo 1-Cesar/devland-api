@@ -1,10 +1,8 @@
 package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.dto.PageDTO;
-import br.com.vemser.devlandapi.dto.comentario.ComentarioDTO;
 import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.postagem.PostagemDTO;
-import br.com.vemser.devlandapi.entity.EnderecoEntity;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
@@ -16,7 +14,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,16 +26,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 

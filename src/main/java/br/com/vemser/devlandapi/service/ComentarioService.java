@@ -93,8 +93,7 @@ public class ComentarioService {
         comentarioValid.setDescricaoComentarios(comentarioCreateDTO.getDescricaoComentarios());
         comentarioValid.setUsuario(usuario);
 
-        comentarioRepository.save(comentarioValid);
-        return convertToDTO(comentarioValid);
+        return convertToDTO(comentarioRepository.save(comentarioValid));
     }
 
     public void delete(Integer idComentario) {
