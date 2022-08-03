@@ -239,9 +239,6 @@ public class UsuarioService {
                 usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
                 usuarioRepository.save(usuarioEntity);
 
-                String tipoMensagem = TipoMensagem.UPDATE.getTipo();
-                emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
-
                 return retornarDTO(usuarioEntity);
             } else {
                 throw new RegraDeNegocioException("CPF Inválido");
@@ -253,9 +250,6 @@ public class UsuarioService {
             UsuarioEntity usuarioEntity = localizarUsuario(id);
             usuarioEntity = validaAlteracoes(usuarioEntity, usuarioCreateDTO);
             usuarioRepository.save(usuarioEntity);
-
-            String tipoMensagem = TipoMensagem.UPDATE.getTipo();
-            emailService.sendEmailUsuario(usuarioEntity, tipoMensagem);
 
             return retornarDTO(usuarioEntity);
         } else {
@@ -416,6 +410,5 @@ public class UsuarioService {
 
         return usuarioEntity;
     }
-
 
 }
