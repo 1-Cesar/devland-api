@@ -78,7 +78,7 @@ public class UsuarioService {
     }
 
     // TODO - extrair metodos e verificar retornar DTO (com o id)
-    public String adicionar(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
+    public UsuarioDTO adicionar(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
 
         if (userLoginCreateDTO.getUsuarioCreateDTO().getTipoUsuario() == TipoUsuario.ADMIN) {
             throw new RegraDeNegocioException("tipo de usuário inválido");
@@ -122,7 +122,7 @@ public class UsuarioService {
                 String tipoMensagem = TipoMensagem.CREATE.getTipo();
                 emailService.sendEmailUsuario(usuario, tipoMensagem);
 
-                return "Desenvolvedor cadastrado com sucesso!";
+                return objectMapper.convertValue(userLoginEntity.getUsuarioEntity(), UsuarioDTO.class);
             } else {
                 throw new RegraDeNegocioException("CPF Inválido");
             }
@@ -164,7 +164,7 @@ public class UsuarioService {
             String tipoMensagem = TipoMensagem.CREATE.getTipo();
             emailService.sendEmailUsuario(usuario, tipoMensagem);
 
-            return "Empresa cadastrada com sucesso!";
+            return objectMapper.convertValue(userLoginEntity.getUsuarioEntity(), UsuarioDTO.class);
         } else {
             throw new RegraDeNegocioException("CNPJ Inválido");
         }
@@ -176,15 +176,6 @@ public class UsuarioService {
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
         return usuarioRecuperado;
-    }
-
-    public PageDTO<UsuarioDTO> paginacaoTipo(TipoUsuario tipoUsuario, Integer pagina, Integer quantidadeRegistros) {
-        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
-        Page<UsuarioEntity> page = usuarioRepository.getUsuarioByTipo(tipoUsuario, pageable);
-        List<UsuarioDTO> usuarioDTOS = page.getContent().stream()
-                .map(this::retornarDTO)
-                .toList();
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeRegistros, usuarioDTOS);
     }
 
     public PageDTO<RelatorioPersonalizadoDevDTO> relatorioStack(String stack, Integer pagina, Integer quantidadeRegistros) {
