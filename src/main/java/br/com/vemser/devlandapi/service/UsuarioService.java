@@ -107,10 +107,6 @@ public class UsuarioService {
 
                     cargoEntity.setIdCargo(2);
 
-                } else {
-
-                    cargoEntity.setIdCargo(1);
-
                 }
 
                 cargoEntities.add(cargoEntity);
@@ -148,10 +144,6 @@ public class UsuarioService {
             if (usuario.getTipoUsuario().toString().equals("EMPRESA")) {
 
                 cargoEntity.setIdCargo(2);
-
-            } else {
-
-                cargoEntity.setIdCargo(1);
 
             }
 
@@ -211,20 +203,6 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public String deleteProprio() throws RegraDeNegocioException {
-        Integer idLoggedUser = userLoginService.getIdLoggedUser();
-        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
-
-        UsuarioEntity usuarioRecuperado = localizarUsuario(usuarioLogadoEntity.getIdUsuario());
-
-        usuarioRepository.delete(usuarioRecuperado);
-
-        String tipoMensagem = TipoMensagem.DELETE.getTipo();
-        emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
-
-        return "Usuario " + usuarioLogadoEntity.getIdUsuario() + " foi deletado.";
-    }
-
     public UsuarioDTO editarProprio(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
@@ -261,10 +239,6 @@ public class UsuarioService {
 
     public UsuarioDTO retornarDTO(UsuarioEntity usuario) {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
-    }
-
-    public UsuarioEntity retornarUsuarioEntity(UsuarioCreateDTO usuarioCreateDTO) {
-        return objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
     }
 
     //    ================================== VALIDAÇÕES ======================================

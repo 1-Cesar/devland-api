@@ -48,7 +48,4 @@ public interface UsuarioDocs {
     @Operation(summary = "Permitir ao usuário editar seu proprio perfil", description = "Usuario edita o seu proprio perfil.")
     public UsuarioDTO editarProprio(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException;
 
-    @UsuarioNotas
-    @Operation(summary = "Permitir ao usuário deletar seu proprio perfil", description = "Usuario deleta o seu proprio perfil.")
-    public String deleteProprio() throws RegraDeNegocioException;
 }
