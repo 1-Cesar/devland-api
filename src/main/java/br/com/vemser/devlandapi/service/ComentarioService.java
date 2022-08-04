@@ -111,10 +111,6 @@ public class ComentarioService {
         return objectMapper.convertValue(comentarioEntity, ComentarioDTO.class);
     }
 
-    public UsuarioDTO convertUsuarioDTO(UsuarioEntity usuario) {
-        return objectMapper.convertValue(usuario, UsuarioDTO.class);
-    }
-
     public UsuarioEntity convertOptionalToUsuarioEntity(Optional usuario) {
         return objectMapper.convertValue(usuario, UsuarioEntity.class);
     }

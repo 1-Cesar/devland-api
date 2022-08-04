@@ -77,9 +77,4 @@ public class UsuarioController implements UsuarioDocs {
     public UsuarioDTO editarProprio(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         return usuarioService.editarProprio(usuarioCreateDTO);
     }
-
-    @DeleteMapping("/deletar-se")
-    public String deleteProprio() throws RegraDeNegocioException {
-        return usuarioService.deleteProprio();
-    }
 }

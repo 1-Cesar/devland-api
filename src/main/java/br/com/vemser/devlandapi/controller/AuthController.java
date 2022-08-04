@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.controller;
 import br.com.vemser.devlandapi.documentations.AuthDocs;
 import br.com.vemser.devlandapi.dto.userlogin.UserLoginAuthDTO;
 import br.com.vemser.devlandapi.dto.userlogin.UserLoginCreateDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.enums.TipoStatus;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
@@ -66,7 +67,7 @@ public class AuthController implements AuthDocs {
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity<String> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
+    public ResponseEntity<UsuarioDTO> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
         return ResponseEntity.ok(usuarioService.adicionar(userLoginCreateDTO));
     }
 // TODO - remover acentos
