@@ -73,6 +73,8 @@ public class UsuarioServiceTest {
 
         UsuarioEntity usuarioEntity = getUsuarioEntity();
 
+        when(userLoginService.criptografia(anyString())).thenReturn(userLoginCreateDTO.getSenha());
+
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 
         when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
@@ -88,6 +90,7 @@ public class UsuarioServiceTest {
         assertEquals("Java", usuarioDTO.getAreaAtuacao());
         assertEquals(TipoUsuario.DEV, usuarioDTO.getTipoUsuario());
         assertEquals("cesar", userLoginCreateDTO.getLogin());
+        assertEquals("123", userLoginCreateDTO.getSenha());
         assertNotNull(usuarioDTO);
     }
 
@@ -102,8 +105,7 @@ public class UsuarioServiceTest {
         userLoginCreateDTO.getUsuarioCreateDTO().setTipoUsuario(TipoUsuario.ADMIN);
         usuarioEntity.setCpfCnpj("11111111111");
         userLoginCreateDTO.getUsuarioCreateDTO().setCpfCnpj("11111111111");
-//        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
-//        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
+
         UsuarioDTO usuarioDTO = usuarioService.adicionar(userLoginCreateDTO);
 
         assertNotNull(usuarioDTO);
@@ -115,6 +117,7 @@ public class UsuarioServiceTest {
         assertEquals("Java", usuarioDTO.getAreaAtuacao());
         assertEquals(TipoUsuario.ADMIN, usuarioDTO.getTipoUsuario());
         assertEquals("cesar", userLoginCreateDTO.getLogin());
+        assertEquals("123", userLoginCreateDTO.getSenha());
         assertNotNull(usuarioDTO);
     }
 
@@ -128,9 +131,6 @@ public class UsuarioServiceTest {
         usuarioEntity.setCpfCnpj("11111111111");
         userLoginCreateDTO.getUsuarioCreateDTO().setCpfCnpj("11111111111");
 
-//        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
-//        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
-
         UsuarioDTO usuarioDTO = usuarioService.adicionar(userLoginCreateDTO);
 
         assertNotNull(usuarioDTO);
@@ -142,6 +142,7 @@ public class UsuarioServiceTest {
         assertEquals("Java", usuarioDTO.getAreaAtuacao());
         assertEquals(TipoUsuario.ADMIN, usuarioDTO.getTipoUsuario());
         assertEquals("cesar", userLoginCreateDTO.getLogin());
+        assertEquals("123", userLoginCreateDTO.getSenha());
         assertNotNull(usuarioDTO);
     }
 
@@ -156,6 +157,8 @@ public class UsuarioServiceTest {
         userLoginCreateDTO.getUsuarioCreateDTO().setTipoUsuario(TipoUsuario.EMPRESA);
         usuarioEntity.setCpfCnpj("06526412000146");
         userLoginCreateDTO.getUsuarioCreateDTO().setCpfCnpj("06526412000146");
+
+        when(userLoginService.criptografia(anyString())).thenReturn(userLoginCreateDTO.getSenha());
 
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 
@@ -172,6 +175,7 @@ public class UsuarioServiceTest {
         assertEquals("Java", usuarioDTO.getAreaAtuacao());
         assertEquals(TipoUsuario.EMPRESA, usuarioDTO.getTipoUsuario());
         assertEquals("cesar", userLoginCreateDTO.getLogin());
+        assertEquals("123", userLoginCreateDTO.getSenha());
         assertNotNull(usuarioDTO);
     }
 
@@ -187,10 +191,6 @@ public class UsuarioServiceTest {
         usuarioEntity.setCpfCnpj("06526400000146");
         userLoginCreateDTO.getUsuarioCreateDTO().setCpfCnpj("06526400000146");
 
-//        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
-
-//        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
-
         UsuarioDTO usuarioDTO = usuarioService.adicionar(userLoginCreateDTO);
 
         assertNotNull(usuarioDTO);
@@ -202,6 +202,7 @@ public class UsuarioServiceTest {
         assertEquals("Java", usuarioDTO.getAreaAtuacao());
         assertEquals(TipoUsuario.EMPRESA, usuarioDTO.getTipoUsuario());
         assertEquals("cesar", userLoginCreateDTO.getLogin());
+        assertEquals("123", userLoginCreateDTO.getSenha());
         assertNotNull(usuarioDTO);
     }
 
@@ -221,7 +222,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void deveTestarListarNomeComSucesso() throws RegraDeNegocioException {
+    public void deveTestarListarNomeComSucesso() {
         // setup
         List<UsuarioEntity> usuarioEntities = List.of(getUsuarioEntity());
         UsuarioCreateDTO usuarioDTO = getUsuarioCreateDTO();
@@ -275,10 +276,11 @@ public class UsuarioServiceTest {
 
         // act
         PageDTO<RelatorioPersonalizadoDevDTO> relatorioDeUsuario = usuarioService
-                .relatorioStack("java", 1,10);
+                .relatorioStack("Java", 1,10);
 
         // assert
         assertNotNull(relatorioDeUsuario);
+        assertEquals(1, relatorioDeUsuario.getTotalElements().intValue());
         assertEquals(1, relatorioDeUsuario.getContent().size());
     }
 
@@ -297,6 +299,7 @@ public class UsuarioServiceTest {
 
         // assert
         assertNotNull(relatorioDeUsuario);
+        assertEquals(1, relatorioDeUsuario.getTotalElements().intValue());
         assertEquals(1, relatorioDeUsuario.getContent().size());
     }
 
@@ -310,9 +313,9 @@ public class UsuarioServiceTest {
         userLoginEntity.setUsuarioEntity(getUsuarioEntity());
         userLoginEntity.setIdUsuario(teste);
         usuarioEntities.add(userLoginEntity.getUsuarioEntity());
+
         when(userLoginService.getIdLoggedUser()).thenReturn(teste);
         when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
-//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
         when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
 
@@ -327,11 +330,9 @@ public class UsuarioServiceTest {
         // setup
 
         Integer idParaDeletar = 1;
-        UsuarioEntity usuarioEntity = getUsuarioEntity();
         List<UsuarioEntity> usuarioEntities2 = List.of(getUsuarioEntity());
 
         when(usuarioRepository.findAll()).thenReturn(usuarioEntities2);
-//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
         doNothing().when(usuarioRepository).delete(any(UsuarioEntity.class));
 
         // act
@@ -352,11 +353,10 @@ public class UsuarioServiceTest {
         userLoginEntity.setUsuarioEntity(getUsuarioEntity());
         userLoginEntity.setIdUsuario(teste);
         usuarioEntities.add(userLoginEntity.getUsuarioEntity());
+
         when(userLoginService.getIdLoggedUser()).thenReturn(teste);
         when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
-//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
         when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
-//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
 
         UsuarioDTO usuarioDTO = usuarioService.editarProprio(usuarioCreateDTO);
 
@@ -386,9 +386,6 @@ public class UsuarioServiceTest {
         usuarioEntities.add(userLoginEntity.getUsuarioEntity());
         when(userLoginService.getIdLoggedUser()).thenReturn(teste);
         when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
-//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
-//        when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
-//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
 
         usuarioCreateDTO.setCpfCnpj("123");
         usuarioEntity.setCpfCnpj("123");
@@ -419,11 +416,11 @@ public class UsuarioServiceTest {
         userLoginEntity.setUsuarioEntity(getUsuarioEntity());
         userLoginEntity.setIdUsuario(teste);
         usuarioEntities.add(userLoginEntity.getUsuarioEntity());
+
         when(userLoginService.getIdLoggedUser()).thenReturn(teste);
         when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
-//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
         when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
-//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
+
 
         usuarioCreateDTO.setTipoUsuario(TipoUsuario.EMPRESA);
         usuarioEntity.setTipoUsuario(TipoUsuario.EMPRESA);
@@ -456,11 +453,9 @@ public class UsuarioServiceTest {
         userLoginEntity.setUsuarioEntity(getUsuarioEntity());
         userLoginEntity.setIdUsuario(teste);
         usuarioEntities.add(userLoginEntity.getUsuarioEntity());
+
         when(userLoginService.getIdLoggedUser()).thenReturn(teste);
         when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
-//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
-//        when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
-//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
 
         usuarioCreateDTO.setTipoUsuario(TipoUsuario.EMPRESA);
         usuarioEntity.setTipoUsuario(TipoUsuario.EMPRESA);
