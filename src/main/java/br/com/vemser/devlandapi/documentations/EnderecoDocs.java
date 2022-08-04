@@ -33,10 +33,6 @@ public interface EnderecoDocs {
     public PageDTO<EnderecoDTO> getRelatorioPaginadoPais(Integer pagina, Integer quantidadeRegistros, @RequestParam(required = false) String pais);
 
     @EnderecoNotas
-    @Operation(summary = "Criar endereço atraves do id do usuario logado", description = "Cria um endereço dentro do banco de dados com base no usuario que está logado")
-    public ResponseEntity<EnderecoDTO> adicionar(@PathVariable("idUsuario") Integer id, @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException;
-
-    @EnderecoNotas
     @Operation(summary = "Alterar um endereço por id", description = "Altera os registros de um endereço no banco de dados atraves de seu id")
     public EnderecoDTO editar(@PathVariable("idEndereco") Integer id, @Valid @RequestBody EnderecoCreateDTO enderecoAtualizar) throws RegraDeNegocioException;
 

@@ -44,13 +44,6 @@ public class EnderecoController implements EnderecoDocs {
         return ResponseEntity.ok(enderecoService.listarEnderecoUsuario(id));
     }
 
-    @PostMapping("/{idUsuario}")
-    public ResponseEntity<EnderecoDTO> adicionar(@PathVariable("idUsuario") Integer id,
-                                                 @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
-        log.info("Criando um endereço com base no id do usuário");
-        return ResponseEntity.ok(enderecoService.adicionar(id, enderecoCreateDTO));
-    }
-
     @DeleteMapping("/{idEndereco}")
     public void delete(@PathVariable("idEndereco") Integer id) throws RegraDeNegocioException {
         log.info("Excluindo um endereço com base em seu id");

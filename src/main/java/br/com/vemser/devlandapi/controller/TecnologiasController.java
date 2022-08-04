@@ -26,7 +26,7 @@ public class TecnologiasController  {
         return tecnologiasService.listarProprio();
     }
 
-    @PostMapping("/{idUsuario}")
+    @PostMapping
     public ResponseEntity<TecnologiasDTO> adicionar(@Valid @RequestBody TecnologiasCreateDTO tecnologiasCreateDTO) throws RegraDeNegocioException {
         return ResponseEntity.ok(tecnologiasService.create(tecnologiasCreateDTO));
     }
