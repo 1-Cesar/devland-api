@@ -374,5 +374,4 @@ public class UsuarioService {
 
         return usuarioEntity;
     }
-
 }
