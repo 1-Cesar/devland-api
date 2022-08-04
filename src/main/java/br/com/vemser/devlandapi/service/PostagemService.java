@@ -102,19 +102,13 @@ public class PostagemService {
     }
 
     public PostagemDTO curtir(Integer idPostagem) throws RegraDeNegocioException {
-
         PostagemEntity postagemEntityValid = postagemRepository.findById(idPostagem).get();
 
-        if (postagemEntityValid == null) {
-            throw new RegraDeNegocioException("Postagem não encontrada");
-        } else {
+        postagemEntityValid.setCurtidas(postagemEntityValid.getCurtidas() + 1);
 
-            postagemEntityValid.setCurtidas(postagemEntityValid.getCurtidas() + 1);
+        postagemRepository.save(postagemEntityValid);
 
-            postagemRepository.save(postagemEntityValid);
-
-            return convertToDTO(postagemEntityValid);
-        }
+        return convertToDTO(postagemEntityValid);
     }
 
     public PostagemDTO update(Integer idPostagem, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
@@ -140,10 +134,6 @@ public class PostagemService {
 
     private PostagemEntity convertOptionalToEntity(Optional postagemCreateDTO) {
         return objectMapper.convertValue(postagemCreateDTO.get(), PostagemEntity.class);
-    }
-
-    private PostagemDTO convertOptionalToDTO(Optional postagemCreateDTO) {
-        return objectMapper.convertValue(postagemCreateDTO, PostagemDTO.class);
     }
 
     private PostagemEntity convertToEntity(PostagemCreateDTO postagemCreateDTO) {
