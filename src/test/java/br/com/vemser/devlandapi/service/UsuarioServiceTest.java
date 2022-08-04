@@ -220,6 +220,21 @@ public class UsuarioServiceTest {
         assertTrue(!usuarioDTOS.isEmpty());
     }
 
+    @Test
+    public void deveTestarListarNomeComSucesso() throws RegraDeNegocioException {
+        // setup
+        List<UsuarioEntity> usuarioEntities = List.of(getUsuarioEntity());
+        UsuarioCreateDTO usuarioDTO = getUsuarioCreateDTO();
+        when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
+
+        // act
+        List<UsuarioDTO> usuarioDTOS = usuarioService.listarPorNome(usuarioDTO.getNome());
+
+        // assert
+        assertNotNull(usuarioDTOS);
+        assertTrue(!usuarioDTOS.isEmpty());
+    }
+
     @Test(expected = RegraDeNegocioException.class)
     public void deveTestarListarSemSucesso() throws RegraDeNegocioException {
         // setup
@@ -261,6 +276,24 @@ public class UsuarioServiceTest {
         // act
         PageDTO<RelatorioPersonalizadoDevDTO> relatorioDeUsuario = usuarioService
                 .relatorioStack("java", 1,10);
+
+        // assert
+        assertNotNull(relatorioDeUsuario);
+        assertEquals(1, relatorioDeUsuario.getContent().size());
+    }
+
+    @Test
+    public void deveTestarGerarRelatorioGeneroComSucesso() {
+        // setup
+        List<RelatorioPersonalizadoDevDTO> usuarioEntities = List.of(getRelatorioPersonalizado());
+        Page<RelatorioPersonalizadoDevDTO> pageUsuarioEntity = new PageImpl<>(usuarioEntities);
+
+        when(usuarioRepository.relatorioPersonalizadoDevGeneroDTO(any(Genero.class),any(Pageable.class)))
+                .thenReturn(pageUsuarioEntity);
+
+        // act
+        PageDTO<RelatorioPersonalizadoDevDTO> relatorioDeUsuario = usuarioService
+                .relatorioGenero(Genero.FEMININO, 1,10);
 
         // assert
         assertNotNull(relatorioDeUsuario);
