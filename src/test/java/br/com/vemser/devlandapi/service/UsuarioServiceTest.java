@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,16 +27,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import javax.persistence.GeneratedValue;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -50,6 +44,7 @@ public class UsuarioServiceTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+
     @Mock
     private UsuarioRepository usuarioRepository;
 
@@ -60,17 +55,7 @@ public class UsuarioServiceTest {
     private UserLoginService userLoginService;
 
     @Mock
-    private SecurityContextHolder securityContextHolder;
-
-    @Mock
     private EmailService emailService;
-
-    @Mock
-    private UsuarioService.ValidaCPF validaCPF;
-
-    @Mock
-    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken;
-
 
     @Before
     public void init() {
@@ -82,7 +67,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void deveTestarUsuarioCreateComSucesso() throws RegraDeNegocioException {
+    public void deveTestarUsuarioDevCreateComSucesso() throws RegraDeNegocioException {
 
         UserLoginCreateDTO userLoginCreateDTO = getUserLoginCreateDTO();
 
@@ -113,17 +98,12 @@ public class UsuarioServiceTest {
 
         UsuarioEntity usuarioEntity = getUsuarioEntity();
 
-        UserLoginEntity userLoginEntity = new UserLoginEntity();
-
         usuarioEntity.setTipoUsuario(TipoUsuario.ADMIN);
         userLoginCreateDTO.getUsuarioCreateDTO().setTipoUsuario(TipoUsuario.ADMIN);
         usuarioEntity.setCpfCnpj("11111111111");
         userLoginCreateDTO.getUsuarioCreateDTO().setCpfCnpj("11111111111");
-
-        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
-
-        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
-
+//        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
+//        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
         UsuarioDTO usuarioDTO = usuarioService.adicionar(userLoginCreateDTO);
 
         assertNotNull(usuarioDTO);
@@ -139,20 +119,17 @@ public class UsuarioServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void deveTestarUsuarioCreateSemSucesso() throws RegraDeNegocioException {
+    public void deveTestarUsuarioDevCreateSemSucesso() throws RegraDeNegocioException {
 
         UserLoginCreateDTO userLoginCreateDTO = getUserLoginCreateDTO();
 
         UsuarioEntity usuarioEntity = getUsuarioEntity();
 
-        UserLoginEntity userLoginEntity = new UserLoginEntity();
-
         usuarioEntity.setCpfCnpj("11111111111");
         userLoginCreateDTO.getUsuarioCreateDTO().setCpfCnpj("11111111111");
 
-        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
-
-        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
+//        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
+//        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
 
         UsuarioDTO usuarioDTO = usuarioService.adicionar(userLoginCreateDTO);
 
@@ -210,9 +187,9 @@ public class UsuarioServiceTest {
         usuarioEntity.setCpfCnpj("06526400000146");
         userLoginCreateDTO.getUsuarioCreateDTO().setCpfCnpj("06526400000146");
 
-        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
+//        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 
-        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
+//        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
 
         UsuarioDTO usuarioDTO = usuarioService.adicionar(userLoginCreateDTO);
 
@@ -292,30 +269,22 @@ public class UsuarioServiceTest {
 
     @Test
     public void deveTestarListarProprioComSucesso() throws RegraDeNegocioException {
-        // setup
-        usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                123,
-                "senha"
-        );
 
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        UserLoginEntity userLoginEntity;
+        Integer teste = 1;
+        List<UsuarioEntity> usuarioEntities = new ArrayList<>();
+        userLoginEntity = getUsuarioEntity().getUserLoginEntity();
+        userLoginEntity.setUsuarioEntity(getUsuarioEntity());
+        userLoginEntity.setIdUsuario(teste);
+        usuarioEntities.add(userLoginEntity.getUsuarioEntity());
+        when(userLoginService.getIdLoggedUser()).thenReturn(teste);
+        when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
+//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
+        when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
 
-        UserLoginEntity usuarioLogadoEntity = new UserLoginEntity();
-
-        when(userLoginService.getIdLoggedUser()).thenReturn((Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioLogadoEntity.getUsuarioEntity()));
-
-        Integer idLoggedUser = userLoginService.getIdLoggedUser();
-        usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
-
-        usuarioLogadoEntity.setUsuarioEntity(getUsuarioEntity());
-
-        UserLoginEntity userLoginEntity = new UserLoginEntity();
-        userLoginEntity.setIdUserLogin(idLoggedUser);
-
-        // act
         List<UsuarioDTO> usuarioDTOS = usuarioService.listarProprio();
-        // assert
+
         assertNotNull(usuarioDTOS);
         assertTrue(!usuarioDTOS.isEmpty());
     }
@@ -329,7 +298,7 @@ public class UsuarioServiceTest {
         List<UsuarioEntity> usuarioEntities2 = List.of(getUsuarioEntity());
 
         when(usuarioRepository.findAll()).thenReturn(usuarioEntities2);
-        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
+//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
         doNothing().when(usuarioRepository).delete(any(UsuarioEntity.class));
 
         // act
@@ -339,42 +308,210 @@ public class UsuarioServiceTest {
         verify(usuarioRepository, times(1)).delete(any(UsuarioEntity.class));
     }
 
-    /*@Test
-    public void deveTestarUpdateComSucesso() throws RegraDeNegocioException {
-        // setup
-        UserLoginCreateDTO userLoginCreateDTO = getUserLoginCreateDTO();
-        UsuarioEntity usuarioEntity = getUsuarioEntity();
+    @Test
+    public void deveTestarUpdateDevComSucesso() throws RegraDeNegocioException {
 
-        //when(userLoginService.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
-        //when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
-        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
+        UserLoginEntity userLoginEntity;
+        UsuarioCreateDTO usuarioCreateDTO = getUsuarioCreateDTO();
+        Integer teste = 1;
+        List<UsuarioEntity> usuarioEntities = new ArrayList<>();
+        userLoginEntity = getUsuarioEntity().getUserLoginEntity();
+        userLoginEntity.setUsuarioEntity(getUsuarioEntity());
+        userLoginEntity.setIdUsuario(teste);
+        usuarioEntities.add(userLoginEntity.getUsuarioEntity());
+        when(userLoginService.getIdLoggedUser()).thenReturn(teste);
+        when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
+//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
+        when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
+//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
 
-        // act
-        UsuarioDTO usuarioDTO = usuarioService.editarProprio(userLoginCreateDTO.getUsuarioCreateDTO());
+        UsuarioDTO usuarioDTO = usuarioService.editarProprio(usuarioCreateDTO);
 
         // assert
         assertNotNull(usuarioDTO);
-        assertEquals(1, usuarioDTO.getIdUsuario().intValue());
         assertEquals("35351148293", usuarioDTO.getCpfCnpj());
         assertEquals("cesar@teste.com.br", usuarioDTO.getEmail());
         assertEquals("cesar", usuarioDTO.getNome());
-    }*/
+        assertEquals("foto", usuarioDTO.getFoto());
+        assertEquals(Genero.MASCULINO, usuarioDTO.getGenero());
+        assertEquals("Java", usuarioDTO.getAreaAtuacao());
+        assertEquals(TipoUsuario.DEV, usuarioDTO.getTipoUsuario());
+        assertNotNull(usuarioDTO);
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void deveTestarUpdateDevSemSucesso() throws RegraDeNegocioException {
+
+        UserLoginEntity userLoginEntity;
+        UsuarioCreateDTO usuarioCreateDTO = getUsuarioCreateDTO();
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
+        Integer teste = 1;
+        List<UsuarioEntity> usuarioEntities = new ArrayList<>();
+        userLoginEntity = getUsuarioEntity().getUserLoginEntity();
+        userLoginEntity.setUsuarioEntity(getUsuarioEntity());
+        userLoginEntity.setIdUsuario(teste);
+        usuarioEntities.add(userLoginEntity.getUsuarioEntity());
+        when(userLoginService.getIdLoggedUser()).thenReturn(teste);
+        when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
+//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
+//        when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
+//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
+
+        usuarioCreateDTO.setCpfCnpj("123");
+        usuarioEntity.setCpfCnpj("123");
+
+        UsuarioDTO usuarioDTO = usuarioService.editarProprio(usuarioCreateDTO);
+
+        // assert
+        assertNotNull(usuarioDTO);
+        assertEquals("35351148293", usuarioDTO.getCpfCnpj());
+        assertEquals("cesar@teste.com.br", usuarioDTO.getEmail());
+        assertEquals("cesar", usuarioDTO.getNome());
+        assertEquals("foto", usuarioDTO.getFoto());
+        assertEquals(Genero.MASCULINO, usuarioDTO.getGenero());
+        assertEquals("Java", usuarioDTO.getAreaAtuacao());
+        assertEquals(TipoUsuario.DEV, usuarioDTO.getTipoUsuario());
+        assertNotNull(usuarioDTO);
+    }
 
     @Test
-    public void deveTestarValidaCPF() {
-//        UsuarioDTO usuarioDTO = new UsuarioDTO();
-//        UsuarioEntity usuarioEntity = new UsuarioEntity();
-//
-//        usuarioDTO = getUsuarioCreateDTO();
-//        usuarioEntity = getUsuarioEntity();
+    public void deveTestarUpdateEmpresaComSucesso() throws RegraDeNegocioException {
 
-        UsuarioEntity usuarioEntity= getUsuarioEntity();
+        UserLoginEntity userLoginEntity;
+        UsuarioCreateDTO usuarioCreateDTO = getUsuarioCreateDTO();
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
+        Integer teste = 1;
+        List<UsuarioEntity> usuarioEntities = new ArrayList<>();
+        userLoginEntity = getUsuarioEntity().getUserLoginEntity();
+        userLoginEntity.setUsuarioEntity(getUsuarioEntity());
+        userLoginEntity.setIdUsuario(teste);
+        usuarioEntities.add(userLoginEntity.getUsuarioEntity());
+        when(userLoginService.getIdLoggedUser()).thenReturn(teste);
+        when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
+//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
+        when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
+//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
 
-        when(UsuarioService.ValidaCPF.isCPF(any(String.class))).thenReturn(any(Boolean.class));
+        usuarioCreateDTO.setTipoUsuario(TipoUsuario.EMPRESA);
+        usuarioEntity.setTipoUsuario(TipoUsuario.EMPRESA);
+        usuarioCreateDTO.setCpfCnpj("06526412000146");
+        usuarioEntity.setCpfCnpj("06526412000146");
+
+        UsuarioDTO usuarioDTO = usuarioService.editarProprio(usuarioCreateDTO);
+
+        // assert
+        assertNotNull(usuarioDTO);
+        assertEquals("06526412000146", usuarioDTO.getCpfCnpj());
+        assertEquals("cesar@teste.com.br", usuarioDTO.getEmail());
+        assertEquals("cesar", usuarioDTO.getNome());
+        assertEquals("foto", usuarioDTO.getFoto());
+        assertEquals(Genero.MASCULINO, usuarioDTO.getGenero());
+        assertEquals("Java", usuarioDTO.getAreaAtuacao());
+        assertEquals(TipoUsuario.DEV, usuarioDTO.getTipoUsuario());
+        assertNotNull(usuarioDTO);
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void deveTestarUpdateEmpresaSemSucesso() throws RegraDeNegocioException {
+
+        UserLoginEntity userLoginEntity;
+        UsuarioCreateDTO usuarioCreateDTO = getUsuarioCreateDTO();
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
+        Integer teste = 1;
+        List<UsuarioEntity> usuarioEntities = new ArrayList<>();
+        userLoginEntity = getUsuarioEntity().getUserLoginEntity();
+        userLoginEntity.setUsuarioEntity(getUsuarioEntity());
+        userLoginEntity.setIdUsuario(teste);
+        usuarioEntities.add(userLoginEntity.getUsuarioEntity());
+        when(userLoginService.getIdLoggedUser()).thenReturn(teste);
+        when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
+//        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity));
+//        when(usuarioRepository.findAll()).thenReturn(usuarioEntities);
+//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.ofNullable(userLoginEntity.getUsuarioEntity()));
+
+        usuarioCreateDTO.setTipoUsuario(TipoUsuario.EMPRESA);
+        usuarioEntity.setTipoUsuario(TipoUsuario.EMPRESA);
+        usuarioCreateDTO.setCpfCnpj("526412000146");
+        usuarioEntity.setCpfCnpj("526412000146");
+
+        UsuarioDTO usuarioDTO = usuarioService.editarProprio(usuarioCreateDTO);
+
+        // assert
+        assertNotNull(usuarioDTO);
+        assertEquals("06526412000146", usuarioDTO.getCpfCnpj());
+        assertEquals("cesar@teste.com.br", usuarioDTO.getEmail());
+        assertEquals("cesar", usuarioDTO.getNome());
+        assertEquals("foto", usuarioDTO.getFoto());
+        assertEquals(Genero.MASCULINO, usuarioDTO.getGenero());
+        assertEquals("Java", usuarioDTO.getAreaAtuacao());
+        assertEquals(TipoUsuario.DEV, usuarioDTO.getTipoUsuario());
+        assertNotNull(usuarioDTO);
+    }
+
+    @Test
+    public void deveTestarValidaCpf() {
+
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
 
         Boolean teste = UsuarioService.ValidaCPF.isCPF(usuarioEntity.getCpfCnpj());
 
-        assertFalse("123456", teste);
+        String cpf = UsuarioService.ValidaCPF.imprimeCPF(usuarioEntity.getCpfCnpj());
+
+        Assertions.assertTrue(teste);
+        Assertions.assertEquals("353.511.482-93", cpf);
+    }
+
+    @Test
+    public void deveTestarValidaCpfErro() {
+
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
+        usuarioEntity.setCpfCnpj("123");
+        Boolean teste = UsuarioService.ValidaCPF.isCPF(usuarioEntity.getCpfCnpj());
+
+        usuarioEntity.setCpfCnpj("12345678912");
+        UsuarioService.ValidaCPF.isCPF(usuarioEntity.getCpfCnpj());
+
+        usuarioEntity.setCpfCnpj("10000000000");
+        UsuarioService.ValidaCPF.isCPF(usuarioEntity.getCpfCnpj());
+
+        Assertions.assertFalse(teste);
+    }
+
+    @Test
+    public void deveTestarValidaCnpj() {
+
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
+        usuarioEntity.setCpfCnpj("06526412000146");
+
+        Boolean teste = UsuarioService.ValidaCNPJ.isCNPJ(usuarioEntity.getCpfCnpj());
+
+        String cnpj = UsuarioService.ValidaCNPJ.imprimeCNPJ(usuarioEntity.getCpfCnpj());
+
+        Assertions.assertTrue(teste);
+        Assertions.assertEquals("06.526.412.0001-46", cnpj);
+    }
+
+    @Test
+    public void deveTestarValidaCnpjErro() {
+
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
+        usuarioEntity.setCpfCnpj("12345678912345");
+
+        Boolean teste = UsuarioService.ValidaCNPJ.isCNPJ(usuarioEntity.getCpfCnpj());
+
+        usuarioEntity.setCpfCnpj("1234567891234");
+
+        UsuarioService.ValidaCNPJ.isCNPJ(usuarioEntity.getCpfCnpj());
+
+        usuarioEntity.setCpfCnpj("98765432000000");
+
+        UsuarioService.ValidaCNPJ.isCNPJ(usuarioEntity.getCpfCnpj());
+
+        usuarioEntity.setCpfCnpj("98765432190000");
+
+        UsuarioService.ValidaCNPJ.isCNPJ(usuarioEntity.getCpfCnpj());
+
+        Assertions.assertFalse(teste);
     }
 
     private static UserLoginCreateDTO getUserLoginCreateDTO() {
@@ -393,19 +530,19 @@ public class UsuarioServiceTest {
         return userLoginCreateDTO;
     }
 
-    private static UsuarioDTO getUsuarioCreateDTO() {
+    private static UsuarioCreateDTO getUsuarioCreateDTO() {
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        UsuarioCreateDTO usuarioCreateDTO = new UsuarioCreateDTO();
 
-        usuarioDTO.setCpfCnpj("35351148293");
-        usuarioDTO.setEmail("cesar@teste.com.br");
-        usuarioDTO.setNome("cesar");
-        usuarioDTO.setFoto("foto");
-        usuarioDTO.setGenero(Genero.MASCULINO);
-        usuarioDTO.setAreaAtuacao("Java");
-        usuarioDTO.setTipoUsuario(TipoUsuario.DEV);
+        usuarioCreateDTO.setCpfCnpj("35351148293");
+        usuarioCreateDTO.setEmail("cesar@teste.com.br");
+        usuarioCreateDTO.setNome("cesar");
+        usuarioCreateDTO.setFoto("foto");
+        usuarioCreateDTO.setGenero(Genero.MASCULINO);
+        usuarioCreateDTO.setAreaAtuacao("Java");
+        usuarioCreateDTO.setTipoUsuario(TipoUsuario.DEV);
 
-        return usuarioDTO;
+        return usuarioCreateDTO;
     }
 
     private static UsuarioEntity getUsuarioEntity() {
