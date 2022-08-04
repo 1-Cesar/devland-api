@@ -78,20 +78,6 @@ public class EnderecoService {
         enderecoRepository.delete(enderecoEntity);
     }
 
-    /*
-    public EnderecoDTO editar(Integer id, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
-
-        EnderecoEntity enderecoEntity = localizarEndereco(id);
-
-        enderecoEntity = validaAlteracoes(enderecoEntity, enderecoCreateDTO);
-
-        enderecoRepository.save(enderecoEntity);
-
-        return retornarDTO(enderecoEntity);
-    }
-    */
-
-
     public EnderecoDTO adicionar(Integer id, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
 
         UsuarioEntity usuarioEntity = usuarioService.localizarUsuario(id);
@@ -277,7 +263,6 @@ public class EnderecoService {
     public EnderecoEntity convertEnderecoOptionalToEntity(Optional enderecoOptional) {
         return objectMapper.convertValue(enderecoOptional, EnderecoEntity.class);
     }
-
 
 }
 

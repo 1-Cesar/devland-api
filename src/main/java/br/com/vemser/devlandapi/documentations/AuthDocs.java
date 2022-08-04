@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.annotations.AuthNotas;
 import br.com.vemser.devlandapi.annotations.UsuarioNotas;
 import br.com.vemser.devlandapi.dto.userlogin.UserLoginAuthDTO;
 import br.com.vemser.devlandapi.dto.userlogin.UserLoginCreateDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
 import br.com.vemser.devlandapi.enums.TipoStatus;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +36,7 @@ public interface AuthDocs {
 
     @AuthNotas
     @Operation(summary = "Criar um usuário com login e senha", description = "Cria um usuário completo login e senha.")
-    public ResponseEntity<String> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException;
+    public ResponseEntity<UsuarioDTO> adicionar(@Valid @RequestBody UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException;
 
     @AuthNotas
     @Operation(summary = "Alterar o status", description = "Permite ao ADMIN trocar o status do usuario.")

@@ -170,7 +170,6 @@ public class PostagemServiceTest {
         assertNotNull(byTipo);
         assertEquals(2, byTipo.getTotalElements().intValue());
         assertEquals(2, byTipo.getContent().size());
-
     }
 
     @Test
