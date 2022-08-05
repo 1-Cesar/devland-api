@@ -13,5 +13,5 @@ public class MongoDB {
     MongoDatabase mongoDatabase = mongoClient.getDatabase("vemserdbc");
 
     MongoCollection<Document> logPostagem = mongoDatabase.getCollection("log_postagem");
-    //MongoCollection<Document> logUsuario = mongoDatabase.getCollection("log_usuario");
+    MongoCollection<Document> logUsuario = mongoDatabase.getCollection("log_usuario");
 }
