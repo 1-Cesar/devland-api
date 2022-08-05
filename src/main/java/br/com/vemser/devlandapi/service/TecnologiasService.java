@@ -51,9 +51,7 @@ public class TecnologiasService {
 
         tecnologiasEntity.setUsuario(usuarioEntity);
 
-        tecnologiasRepository.save(tecnologiasEntity);
-
-        return retornarDTO(tecnologiasEntity);
+        return retornarDTO(tecnologiasRepository.save(tecnologiasEntity));
     }
 
     public TecnologiasEntity localizarTecnologiaById(Integer id) throws RegraDeNegocioException {
