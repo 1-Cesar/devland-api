@@ -35,5 +35,4 @@ public class TecnologiasController  {
     public void delete(@PathVariable("idTecnologia") Integer idTecnologia) throws RegraDeNegocioException {
         tecnologiasService.delete(idTecnologia);
     }
-
 }

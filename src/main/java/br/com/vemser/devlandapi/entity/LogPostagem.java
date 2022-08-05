@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 
-@Document(collection = "alunos")
+@Document(collection = "log_postagem")
 @Getter
 @Setter
 public class LogPostagem {
