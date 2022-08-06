@@ -60,7 +60,7 @@ public class UsuarioServiceTest {
     private LogUsuarioRepository logUsuarioRepository;
 
     @Mock
-    private EmailServiceTest emailService;
+    private EmailService emailService;
 
     @Before
     public void init() {
