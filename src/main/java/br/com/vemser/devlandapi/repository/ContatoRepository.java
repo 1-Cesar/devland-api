@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ContatoRepository extends JpaRepository<ContatoEntity, Integer> {
+
+    public ContatoEntity findByIdContatoAndIdUsuario(Integer idContato, Integer idUsuario);
 }

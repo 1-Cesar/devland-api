@@ -30,7 +30,7 @@ public interface ContatoDocs {
 
     @ContatoNotas
     @Operation(summary = "criar contato atraves do usuário logado", description = "cria um contato dentro do banco de dados com base no usuário logado")
-    public ResponseEntity<ContatoCreateDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException;
+    public ResponseEntity<ContatoDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException;
 
     @ContatoNotas
     @Operation(summary = "altera um contato de usuário logado por id", description = "altera os registros de um contato de usuário logado atraves do seu id de contato")

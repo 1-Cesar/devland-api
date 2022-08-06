@@ -10,6 +10,7 @@ import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.TecnologiasRepository;
+import br.com.vemser.devlandapi.repository.UserLoginRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,8 +25,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -90,6 +93,74 @@ public class TecnologiasServiceTest {
         assertEquals(1, tecnologiasDTO.getIdTecnologias().intValue());
         assertEquals("Java", tecnologiasDTO.getNomeTecnologia());
     }
+
+    @Test
+    public void deveTestarDeleteComSucesso() throws RegraDeNegocioException {
+        Integer idTecnologia = 1;
+
+        TecnologiasEntity tecnologiasEntityRecuperada = getTecnologiaEntity();
+        when(tecnologiasRepository.findById(anyInt())).thenReturn(Optional.of(tecnologiasEntityRecuperada));
+
+        Integer idLoggedUser = 1;
+        when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
+
+        UserLoginEntity usuarioLogadoEntity = getUserLoginEntity();
+        usuarioLogadoEntity.setIdUsuario(idLoggedUser);
+        when(userLoginService.findById(anyInt())).thenReturn(usuarioLogadoEntity);
+
+        List<TecnologiasEntity> tecnologiasEntities = List.of(tecnologiasEntityRecuperada);
+        when(tecnologiasRepository.findAll()).thenReturn(tecnologiasEntities);
+
+        doNothing().when(tecnologiasRepository).delete(any(TecnologiasEntity.class));
+
+
+        tecnologiasService.delete(idTecnologia);
+
+
+        verify(tecnologiasRepository, times(1)).delete(any(TecnologiasEntity.class));
+    }
+
+    @Test
+    public void deveTestarLocalizarTecnologiaByIdComSucesso() throws RegraDeNegocioException {
+        TecnologiasEntity tecnologiasEntity = getTecnologiaEntity();
+        Integer id = 1;
+
+        when(tecnologiasRepository.findById(anyInt())).thenReturn(Optional.of(tecnologiasEntity));
+
+
+        TecnologiasEntity tecnologiasEntityRecuperada = tecnologiasService.localizarTecnologiaById(id);
+
+        assertNotNull(tecnologiasEntityRecuperada);
+        assertNotNull(tecnologiasEntityRecuperada.getUsuario());
+        assertEquals(1, tecnologiasEntityRecuperada.getIdTecnologias().intValue());
+        assertEquals("Java", tecnologiasEntityRecuperada.getNomeTecnologia());
+        assertEquals(1, tecnologiasEntityRecuperada.getIdUsuario().intValue());
+
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void deveTestarLocalizarTecnologiaByIdSemSucesso() throws RegraDeNegocioException {
+        Integer idTecnologia = 10;
+
+        TecnologiasEntity tecnologiasEntityRecuperado = tecnologiasService.localizarTecnologiaById(idTecnologia);
+    }
+
+    @Test
+    public void deveTestarListarProprioComSucesso() throws RegraDeNegocioException {
+
+        Integer idLoggedUser = 1;
+        when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
+
+        UserLoginEntity usuarioLogadoEntity = getUserLoginEntity();
+        usuarioLogadoEntity.setIdUsuario(idLoggedUser);
+        when(userLoginService.findById(anyInt())).thenReturn(usuarioLogadoEntity);
+
+        List<TecnologiasDTO> tecnologiasDTOS = tecnologiasService.listarProprio();
+
+        assertNotNull(tecnologiasDTOS);
+    }
+
+
 
 
     // util

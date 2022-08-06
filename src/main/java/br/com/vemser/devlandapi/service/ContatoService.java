@@ -97,7 +97,7 @@ public class ContatoService {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public ContatoCreateDTO adicionar(ContatoCreateDTO contatoDTO) throws RegraDeNegocioException {
+    public ContatoDTO adicionar(ContatoCreateDTO contatoDTO) throws RegraDeNegocioException {
 
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
@@ -112,9 +112,8 @@ public class ContatoService {
         //seta no usuário
         contatoEntity.setUsuario(usuarioRecuperado);
 
-        ContatoEntity contatoCriado = contatoRepository.save(contatoEntity);
 
-        return retornarContatoDTO(contatoCriado);
+        return retornarContatoDTO(contatoRepository.save(contatoEntity));
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -171,11 +170,8 @@ public class ContatoService {
 
     //LOCALIZAR CONTATO
     public ContatoEntity localizarContato(Integer idContato) throws RegraDeNegocioException {
-        ContatoEntity contatoRecuperado = contatoRepository.findById(idContato).stream()
-                .filter(contato -> contato.getIdContato().equals(idContato))
-                .findFirst()
+        return contatoRepository.findById(idContato)
                 .orElseThrow(() -> new RegraDeNegocioException("Contato não encontrado"));
-        return contatoRecuperado;
     }
 
     //DTO PARA ENTITY
@@ -189,11 +185,7 @@ public class ContatoService {
     }
 
     public ContatoEntity localizarContatoUsuarioLogado(Integer idContato, Integer idUsuario) throws RegraDeNegocioException {
-        ContatoEntity contatoRecuperado = contatoRepository.findAll().stream()
-                .filter(contato -> contato.getIdContato().equals(idContato) && contato.getIdUsuario().equals(idUsuario))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Esse contato não existe em seus registros."));
-        return contatoRecuperado;
+        return contatoRepository.findByIdContatoAndIdUsuario(idContato, idUsuario);
     }
 
 }

@@ -54,28 +54,23 @@ public class TecnologiasService {
         return retornarDTO(tecnologiasRepository.save(tecnologiasEntity));
     }
 
+    public void delete(Integer idTecnologia) throws RegraDeNegocioException {
+        TecnologiasEntity tecnologiaRecuperada = localizarTecnologiaById(idTecnologia);
+
+        Integer idLoggedUser = userLoginService.getIdLoggedUser();
+        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
+
+        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+
+        TecnologiasEntity tecnologia = localizarTecnologiaUsuarioLogado(id, tecnologiaRecuperada.getIdUsuario());
+
+        tecnologiasRepository.delete(tecnologia);
+    }
+
     public TecnologiasEntity localizarTecnologiaById(Integer id) throws RegraDeNegocioException {
-        TecnologiasEntity tecnologiaRecuperada = tecnologiasRepository.findAll().stream()
-                .filter(tecnologiasEntity -> tecnologiasEntity.getIdTecnologias().equals(id))
-                .findFirst()
+        TecnologiasEntity tecnologiaRecuperada = tecnologiasRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Valores inválidos"));
         return tecnologiaRecuperada;
-    }
-
-    public TecnologiasDTO retornarDTO(TecnologiasEntity tecnologiasEntity) {
-        return objectMapper.convertValue(tecnologiasEntity, TecnologiasDTO.class);
-    }
-
-    public TecnologiasEntity retornarTecnologiaEntity(TecnologiasCreateDTO tecnologiasCreateDTO) {
-        return objectMapper.convertValue(tecnologiasCreateDTO, TecnologiasEntity.class);
-    }
-
-    public UsuarioEntity localizarUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioEntity usuarioRecuperado = usuarioRepository.findAll().stream()
-                .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
-        return usuarioRecuperado;
     }
 
     public List<TecnologiasDTO> listarProprio() throws RegraDeNegocioException {
@@ -90,17 +85,12 @@ public class TecnologiasService {
                 .collect(Collectors.toList());
     }
 
-    public void delete(Integer idTecnologia) throws RegraDeNegocioException {
-        TecnologiasEntity tecnologiaRecuperada = localizarTecnologiaById(idTecnologia);
-
-        Integer idLoggedUser = userLoginService.getIdLoggedUser();
-        UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
-
-        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
-
-        TecnologiasEntity tecnologia = localizarTecnologiaUsuarioLogado(id, tecnologiaRecuperada.getIdUsuario());
-
-        tecnologiasRepository.delete(tecnologia);
+    public UsuarioEntity localizarUsuario(Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioRecuperado = usuarioRepository.findAll().stream()
+                .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+        return usuarioRecuperado;
     }
 
     public TecnologiasEntity localizarTecnologiaUsuarioLogado(Integer idContato, Integer idUsuario) throws RegraDeNegocioException {
@@ -109,5 +99,13 @@ public class TecnologiasService {
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Id não localizado."));
         return tecnologiaRecuperada;
+    }
+
+    public TecnologiasDTO retornarDTO(TecnologiasEntity tecnologiasEntity) {
+        return objectMapper.convertValue(tecnologiasEntity, TecnologiasDTO.class);
+    }
+
+    public TecnologiasEntity retornarTecnologiaEntity(TecnologiasCreateDTO tecnologiasCreateDTO) {
+        return objectMapper.convertValue(tecnologiasCreateDTO, TecnologiasEntity.class);
     }
 }
