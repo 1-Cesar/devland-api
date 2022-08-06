@@ -21,7 +21,7 @@ public class UserLoginService {
     @Autowired
     private UserLoginRepository userLoginRepository;
 
-    public String criptografia(String senha) {
+    public String criptografarSenha(String senha) {
 
         LdapShaPasswordEncoder ldapShaPasswordEncoder = new LdapShaPasswordEncoder();
 
@@ -32,7 +32,7 @@ public class UserLoginService {
 
     public String trocarSenha (UserLoginAuthDTO userLoginAuthDTO, UserLoginEntity usuarioLogadoEntity) throws RegraDeNegocioException {
         if (userLoginAuthDTO.getLogin().equals(usuarioLogadoEntity.getLogin())) {
-            usuarioLogadoEntity.setSenha(criptografia(userLoginAuthDTO.getSenha()));
+            usuarioLogadoEntity.setSenha(criptografarSenha(userLoginAuthDTO.getSenha()));
             userLoginRepository.save(usuarioLogadoEntity);
         } else {
             throw new RegraDeNegocioException("Usuário ou senha inválidos");

@@ -2,9 +2,11 @@ package br.com.vemser.devlandapi.service;
 
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
+import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -28,10 +31,9 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
 
-    public void sendEmailUsuario(UsuarioEntity usuario, String tipo) {
-        MimeMessage mimeMessage = emailSender.createMimeMessage();
+    public void sendEmailUsuario(UsuarioEntity usuario, String tipo)  {
         try {
-
+            MimeMessage mimeMessage = emailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(from);
@@ -40,17 +42,19 @@ public class EmailService {
                 mimeMessageHelper.setSubject("Olá, " + usuario.getNome() + "! Seja bem-vindo(a) na DevLand!");
             } else if (tipo.equals(TipoMensagem.UPDATE.getTipo())) {
                 mimeMessageHelper.setSubject(usuario.getNome() + ", seus dados foram atualizados!");
-            } else {
+            } else if (tipo.equals(TipoMensagem.DELETE.getTipo())) {
                 mimeMessageHelper.setSubject(usuario.getNome() + ", sentiremos sua falta na DevLand!");
+            } else {
+                throw new RegraDeNegocioException("Falha no envio de e-mail");
             }
             mimeMessageHelper.setText(getContentFromTemplatePessoa(usuario, tipo), true);
             emailSender.send(mimeMessageHelper.getMimeMessage());
-        } catch (MessagingException | IOException | TemplateException e) {
-            e.printStackTrace();
+        } catch (RegraDeNegocioException | MessagingException | IOException | TemplateException e) {
+            System.out.println("erro no envio de email");
         }
     }
 
-    public String getContentFromTemplatePessoa(UsuarioEntity usuario, String tipo) throws IOException, TemplateException {
+    public String getContentFromTemplatePessoa(UsuarioEntity usuario, @NotNull String tipo) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
 
         Template template;

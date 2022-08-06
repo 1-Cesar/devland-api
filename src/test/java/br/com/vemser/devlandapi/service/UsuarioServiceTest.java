@@ -60,7 +60,7 @@ public class UsuarioServiceTest {
     private LogUsuarioRepository logUsuarioRepository;
 
     @Mock
-    private EmailService emailService;
+    private EmailServiceTest emailService;
 
     @Before
     public void init() {
@@ -80,7 +80,7 @@ public class UsuarioServiceTest {
 
         LogUsuario logUsuario = getLogUsuarioEntity();
 
-        when(userLoginService.criptografia(anyString())).thenReturn(userLoginCreateDTO.getSenha());
+        when(userLoginService.criptografarSenha(anyString())).thenReturn(userLoginCreateDTO.getSenha());
 
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 
@@ -167,7 +167,7 @@ public class UsuarioServiceTest {
         usuarioEntity.setCpfCnpj("06526412000146");
         userLoginCreateDTO.getUsuarioCreateDTO().setCpfCnpj("06526412000146");
 
-        when(userLoginService.criptografia(anyString())).thenReturn(userLoginCreateDTO.getSenha());
+        when(userLoginService.criptografarSenha(anyString())).thenReturn(userLoginCreateDTO.getSenha());
 
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 

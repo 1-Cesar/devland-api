@@ -86,7 +86,7 @@ public class UsuarioService {
 
         if (userLoginCreateDTO.getUsuarioCreateDTO().getTipoUsuario() == TipoUsuario.DEV) {
             if (userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj().length() == 11 && ValidaCPF.isCPF(userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj())) {
-                userLoginCreateDTO.setSenha(userLoginService.criptografia(userLoginCreateDTO.getSenha()));
+                userLoginCreateDTO.setSenha(userLoginService.criptografarSenha(userLoginCreateDTO.getSenha()));
 
                 UserLoginEntity userLoginEntity = getUserLoginEntity(userLoginCreateDTO);
 
@@ -97,7 +97,7 @@ public class UsuarioService {
         }
 
         if (userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj())) {
-            userLoginCreateDTO.setSenha(userLoginService.criptografia(userLoginCreateDTO.getSenha()));
+            userLoginCreateDTO.setSenha(userLoginService.criptografarSenha(userLoginCreateDTO.getSenha()));
 
             UserLoginEntity userLoginEntity = getUserLoginEntity(userLoginCreateDTO);
 
@@ -108,7 +108,7 @@ public class UsuarioService {
     }
 
     @NotNull
-    private UserLoginEntity getUserLoginEntity(UserLoginCreateDTO userLoginCreateDTO) {
+    private UserLoginEntity getUserLoginEntity(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = objectMapper.convertValue(userLoginCreateDTO.getUsuarioCreateDTO(), UsuarioEntity.class);
         UsuarioEntity usuario = usuarioRepository.save(usuarioEntity);
 

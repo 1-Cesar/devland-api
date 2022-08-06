@@ -46,7 +46,7 @@ public class TecnologiasServiceTest {
     private UsuarioRepository usuarioRepository;
 
     @Mock
-    private EmailService emailService;
+    private EmailServiceTest emailService;
 
     @Mock
     private UserLoginService userLoginService;
