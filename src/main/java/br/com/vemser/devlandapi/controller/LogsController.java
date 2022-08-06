@@ -23,21 +23,15 @@ public class LogsController {
     @Autowired
     private QuantidadeUsuarioService quantidadeUsuarioService;
 
-    /*@GetMapping
-    public ResponseEntity<String> listarQtdDevs() {
-        log.info("exibindo qtd de devs");
-        return ResponseEntity.ok(quantidadeUsuarioService.retornarQtdDevs());
-    }*/
-
-    /*@GetMapping
-    public ResponseEntity<String> listarQtdEmpresas() {
-        log.info("exibindo qtd de empresas");
-        return ResponseEntity.ok(quantidadeUsuarioService.retornarQtdEmpresas());
-    }*/
-
     @GetMapping("Log-Quantidade-Usuario")
-    public String logQuantidade(TipoUsuario tipoUsuario) throws RegraDeNegocioException {
+    public String logQuantidade(TipoUsuario tipoUsuario) {
         log.info("exibindo qtd de usuario");
         return quantidadeUsuarioService.retornarQtdUsuario(tipoUsuario);
+    }
+
+    @GetMapping("Log-Quantidade-Todos-Usuarios")
+    public String retornarTodosUsuarios() {
+        log.info("exibindo qtd de todos os usuarios");
+        return quantidadeUsuarioService.retornarTodosUsuarios();
     }
 }
