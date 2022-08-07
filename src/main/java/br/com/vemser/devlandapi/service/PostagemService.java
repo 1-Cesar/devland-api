@@ -48,73 +48,54 @@ public class PostagemService {
     @Autowired
     private ObjectMapper objectMapper;
 
-//    private String strLocalDateTime;
-
     public PageDTO<PostagemDTO> list(Integer pagina, Integer quantRegistros) throws RegraDeNegocioException {
         PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
         Page<PostagemEntity> page = postagemRepository.findAll(pageRequest);
         List<PostagemDTO> postagensDTO = page.getContent().stream()
                 .map(comentario -> objectMapper.convertValue(comentario, PostagemDTO.class))
                 .toList();
-
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, postagensDTO);
-    }
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, postagensDTO);}
 
     public PageDTO<RelatorioPostagemDTO> relatorioPostagem(TipoPostagem tipoPostagem, Integer pagina, Integer quantRegistros) {
         Pageable pageable = PageRequest.of(pagina, quantRegistros);
         Page<RelatorioPostagemDTO> page = postagemRepository.relatorioPostagem(tipoPostagem, pageable);
         List<RelatorioPostagemDTO> relatorioPostagemDTOS = page.getContent().stream()
                 .toList();
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, relatorioPostagemDTOS);
-    }
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, relatorioPostagemDTOS);    }
 
     public PostagemDTO findByIdPostagem(Integer idPostagem) throws RegraDeNegocioException {
-        return objectMapper.convertValue(postagemRepository.findById(idPostagem).get(), PostagemDTO.class);
-    }
+        return objectMapper.convertValue(postagemRepository.findById(idPostagem).get(), PostagemDTO.class);}
 
     public List<PostagemDTO> findByTitulo(String titulo) {
         return postagemRepository.findAll().stream()
                 .filter(postagem -> postagem.getTitulo().toLowerCase()
                         .contains(titulo.toLowerCase()))
                 .map(this::convertToDTO)
-                .toList();
-    }
+                .toList();}
 
 
     public PageDTO<PostagemDTO> findByTipo(TipoPostagem tipoPostagem, Integer pagina, Integer quantRegistros) throws RegraDeNegocioException {
         PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);
-
         Page<PostagemEntity> page = postagemRepository.filtrarPorTipo(tipoPostagem, pageRequest);
-
         List<PostagemDTO> postagensDTO = page.getContent().stream()
                 .map(postagem -> objectMapper.convertValue(postagem, PostagemDTO.class))
                 .toList();
-
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, postagensDTO);
-    }
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantRegistros, postagensDTO);}
 
     public PostagemDTO post(Integer idUsuario, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
         UsuarioEntity usuarioValid = objectMapper.convertValue(usuarioRepository.findById(idUsuario), UsuarioEntity.class);
-
         PostagemEntity postagemEntity = convertToEntity(postagemCreateDTO);
-
         postagemEntity.setIdUsuario(idUsuario);
         postagemEntity.setCurtidas(0);
         postagemEntity.setData(LocalDateTime.now());
         postagemEntity.setUsuario(usuarioValid);
-
         postagemRepository.save(postagemEntity);
-
         LogPostagem logPostagem = new LogPostagem();
         logPostagem.setIdPostagem(postagemEntity.getIdPostagem());
         logPostagem.setTipoPostagem(postagemEntity.getTipoPostagem());
         logPostagem.setData(postagemEntity.getData());
-
         logPostagemRepository.save(logPostagem);
-
-
-        return convertToDTO(postagemEntity);
-    }
+        return convertToDTO(postagemEntity);}
 
     public PostagemDTO curtir(Integer idPostagem) throws RegraDeNegocioException {
         PostagemEntity postagemEntityValid = postagemRepository.findById(idPostagem).get();
