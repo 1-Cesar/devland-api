@@ -14,6 +14,7 @@ import br.com.vemser.devlandapi.repository.LogPostagemRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PostagemService {
 
     @Autowired
@@ -36,18 +37,18 @@ public class PostagemService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private ComentarioService comentarioService;
-
-    @Autowired
-    private ComentarioRepository comentarioRepository;
+//    @Autowired
+//    private ComentarioService comentarioService;
+//
+//    @Autowired
+//    private ComentarioRepository comentarioRepository;
 
     private final LogPostagemRepository logPostagemRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    private String strLocalDateTime;
+//    private String strLocalDateTime;
 
     public PageDTO<PostagemDTO> list(Integer pagina, Integer quantRegistros) throws RegraDeNegocioException {
         PageRequest pageRequest = PageRequest.of(pagina, quantRegistros);

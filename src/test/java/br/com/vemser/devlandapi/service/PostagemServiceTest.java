@@ -122,8 +122,6 @@ public class PostagemServiceTest {
 
     @Test
     public void deveTestarFindByIdPostagemComSucesso() throws RegraDeNegocioException {
-//        PostagemDTO findByIdPostagem
-        PostagemCreateDTO postagemCreateDTO = getPostagemCreateDTO();
         PostagemEntity postagemEntity = getPostagemEntity();
         Integer idPostagem = 1;
 
