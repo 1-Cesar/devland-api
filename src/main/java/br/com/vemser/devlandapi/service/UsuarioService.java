@@ -5,13 +5,12 @@ import br.com.vemser.devlandapi.dto.relatorios.RelatorioPersonalizadoDevDTO;
 import br.com.vemser.devlandapi.dto.userlogin.UserLoginCreateDTO;
 import br.com.vemser.devlandapi.dto.usuario.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
-import br.com.vemser.devlandapi.entity.CargoEntity;
-import br.com.vemser.devlandapi.entity.UserLoginEntity;
-import br.com.vemser.devlandapi.entity.UsuarioEntity;
+import br.com.vemser.devlandapi.entity.*;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoMensagem;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
+import br.com.vemser.devlandapi.repository.LogUsuarioRepository;
 import br.com.vemser.devlandapi.repository.UserLoginRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,6 +43,9 @@ public class UsuarioService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private LogUsuarioRepository logUsuarioRepository;
+
     public List<UsuarioDTO> listar() throws RegraDeNegocioException {
         if (usuarioRepository.findAll().size() == 0) {
             throw new RegraDeNegocioException("Nenhum usuario encontrado");
@@ -72,7 +74,6 @@ public class UsuarioService {
     public void delete(Integer id) throws RegraDeNegocioException {
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
         usuarioRepository.delete(usuarioRecuperado);
-
         String tipoMensagem = TipoMensagem.DELETE.getTipo();
         emailService.sendEmailUsuario(usuarioRecuperado, tipoMensagem);
     }
@@ -85,37 +86,9 @@ public class UsuarioService {
 
         if (userLoginCreateDTO.getUsuarioCreateDTO().getTipoUsuario() == TipoUsuario.DEV) {
             if (userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj().length() == 11 && ValidaCPF.isCPF(userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj())) {
+                userLoginCreateDTO.setSenha(userLoginService.criptografarSenha(userLoginCreateDTO.getSenha()));
 
-                userLoginCreateDTO.setSenha(userLoginService.criptografia(userLoginCreateDTO.getSenha()));
-
-                UsuarioEntity usuarioEntity = objectMapper.convertValue(userLoginCreateDTO.getUsuarioCreateDTO(), UsuarioEntity.class);
-
-                UsuarioEntity usuario = usuarioRepository.save(usuarioEntity);
-
-                CargoEntity cargoEntity = new CargoEntity();
-
-                List<CargoEntity> cargoEntities = new ArrayList<>();
-
-                UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class);
-
-
-                userLoginEntity.setUsuarioEntity(usuario);
-                userLoginEntity.setStatus(true);
-
-                if (usuario.getTipoUsuario().toString().equals("DEV")) {
-
-                    cargoEntity.setIdCargo(2);
-
-                }
-
-                cargoEntities.add(cargoEntity);
-
-                userLoginEntity.setCargos(cargoEntities);
-
-                userLoginRepository.save(userLoginEntity);
-
-                String tipoMensagem = TipoMensagem.CREATE.getTipo();
-                emailService.sendEmailUsuario(usuario, tipoMensagem);
+                UserLoginEntity userLoginEntity = getUserLoginEntity(userLoginCreateDTO);
 
                 return objectMapper.convertValue(userLoginEntity.getUsuarioEntity(), UsuarioDTO.class);
             } else {
@@ -124,36 +97,9 @@ public class UsuarioService {
         }
 
         if (userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj().length() == 14 && ValidaCNPJ.isCNPJ(userLoginCreateDTO.getUsuarioCreateDTO().getCpfCnpj())) {
+            userLoginCreateDTO.setSenha(userLoginService.criptografarSenha(userLoginCreateDTO.getSenha()));
 
-            userLoginCreateDTO.setSenha(userLoginService.criptografia(userLoginCreateDTO.getSenha()));
-
-            UsuarioEntity usuarioEntity = objectMapper.convertValue(userLoginCreateDTO.getUsuarioCreateDTO(), UsuarioEntity.class);
-
-            UsuarioEntity usuario = usuarioRepository.save(usuarioEntity);
-
-            CargoEntity cargoEntity = new CargoEntity();
-
-            List<CargoEntity> cargoEntities = new ArrayList<>();
-
-            UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class);
-
-            userLoginEntity.setUsuarioEntity(usuario);
-            userLoginEntity.setStatus(true);
-
-            if (usuario.getTipoUsuario().toString().equals("EMPRESA")) {
-
-                cargoEntity.setIdCargo(2);
-
-            }
-
-            cargoEntities.add(cargoEntity);
-
-            userLoginEntity.setCargos(cargoEntities);
-
-            userLoginRepository.save(userLoginEntity);
-
-            String tipoMensagem = TipoMensagem.CREATE.getTipo();
-            emailService.sendEmailUsuario(usuario, tipoMensagem);
+            UserLoginEntity userLoginEntity = getUserLoginEntity(userLoginCreateDTO);
 
             return objectMapper.convertValue(userLoginEntity.getUsuarioEntity(), UsuarioDTO.class);
         } else {
@@ -161,12 +107,54 @@ public class UsuarioService {
         }
     }
 
+    @NotNull
+    private UserLoginEntity getUserLoginEntity(UserLoginCreateDTO userLoginCreateDTO) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = objectMapper.convertValue(userLoginCreateDTO.getUsuarioCreateDTO(), UsuarioEntity.class);
+        UsuarioEntity usuario = usuarioRepository.save(usuarioEntity);
+
+        CargoEntity cargoEntity = new CargoEntity();
+
+        List<CargoEntity> cargoEntities = new ArrayList<>();
+
+        UserLoginEntity userLoginEntity = objectMapper.convertValue(userLoginCreateDTO, UserLoginEntity.class);
+
+
+        userLoginEntity.setUsuarioEntity(usuario);
+        userLoginEntity.setStatus(true);
+
+        if (usuario.getTipoUsuario().toString().equals("DEV")) {
+
+            cargoEntity.setIdCargo(2);
+
+        } else if (usuario.getTipoUsuario().toString().equals("EMPRESA")) {
+
+            cargoEntity.setIdCargo(3);
+
+        }
+
+        cargoEntities.add(cargoEntity);
+
+        userLoginEntity.setCargos(cargoEntities);
+
+        userLoginRepository.save(userLoginEntity);
+
+        LogUsuario logUsuario = new LogUsuario();
+        logUsuario.setIdUsuario(usuarioEntity.getIdUsuario());
+        logUsuario.setNome(usuarioEntity.getNome());
+        logUsuario.setAreaAtuacao(usuarioEntity.getAreaAtuacao());
+        logUsuario.setTipoUsuario(usuarioEntity.getTipoUsuario());
+        logUsuario.setGenero(usuarioEntity.getGenero());
+
+        logUsuarioRepository.save(logUsuario);
+        String tipoMensagem = TipoMensagem.CREATE.getTipo();
+        emailService.sendEmailUsuario(usuario, tipoMensagem);
+
+        return userLoginEntity;
+    }
+
     public UsuarioEntity localizarUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioEntity usuarioRecuperado = usuarioRepository.findAll().stream()
-                .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
-                .findFirst()
+        return usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
-        return usuarioRecuperado;
     }
 
     public PageDTO<RelatorioPersonalizadoDevDTO> relatorioStack(String stack, Integer pagina, Integer quantidadeRegistros) {

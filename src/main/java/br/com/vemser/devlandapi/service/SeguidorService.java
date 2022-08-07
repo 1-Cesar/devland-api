@@ -81,7 +81,7 @@ public class SeguidorService {
         //Armazenando os dados do usuário logado em usuarioREcuperado
         UsuarioEntity usuarioRecuperado = localizarUsuario(id);
 
-        //Arazenando os dados do cara que quero seguir
+        //Armazenando os dados do cara que quero seguir
         UsuarioEntity seguidorRecuperado = localizarUsuario(seguidorCreateDTO.getIdSeguidor());
 
         //-------------------------------------------------------------------------------------------------------------
@@ -142,11 +142,6 @@ public class SeguidorService {
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
         return usuarioRecuperado;
-    }
-
-    //DTO PARA ENTITY
-    public SeguidorEntity retornarSeguidorEntity(SeguidorCreateDTO seguidorCreateDTO) {
-        return objectMapper.convertValue(seguidorCreateDTO, SeguidorEntity.class);
     }
 
     //ENTITY PARA DTO

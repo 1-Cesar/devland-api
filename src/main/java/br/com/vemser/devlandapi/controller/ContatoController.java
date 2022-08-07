@@ -52,7 +52,7 @@ public class ContatoController implements ContatoDocs {
     }
 
     @PostMapping("/adicionar-se")
-    public ResponseEntity<ContatoCreateDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
+    public ResponseEntity<ContatoDTO> adicionar(@Valid @RequestBody ContatoCreateDTO contato) throws RegraDeNegocioException {
         log.info("Criando um contato com base no usuário logado");
         return ResponseEntity.ok(contatoService.adicionar(contato));
     }
