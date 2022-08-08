@@ -78,9 +78,11 @@ public class UsuarioServiceTest {
 
         UsuarioEntity usuarioEntity = getUsuarioEntity();
 
+
         LogUsuario logUsuario = getLogUsuarioEntity();
 
         when(userLoginService.criptografarSenha(anyString())).thenReturn(userLoginCreateDTO.getSenha());
+
 
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 
