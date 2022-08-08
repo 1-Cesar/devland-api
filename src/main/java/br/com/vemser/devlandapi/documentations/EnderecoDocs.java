@@ -26,7 +26,7 @@ public interface EnderecoDocs {
 
     @EnderecoNotas
     @Operation(summary = "Listar endereço por id do usuario", description = "Recupera um endereço do banco de dados atraves do id do usuario")
-    public ResponseEntity<List<UsuarioDTO>> listarEnderecoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
+    public ResponseEntity<List<EnderecoDTO>> listarEnderecoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
 
     @EnderecoNotas
     @Operation(summary = "Exibir um relatório paginado de endereços filtrados por Pais", description = "Relatório paginado de endereços filtrados por Pais")

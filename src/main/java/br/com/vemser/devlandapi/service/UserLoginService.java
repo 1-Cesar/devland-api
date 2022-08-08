@@ -6,6 +6,7 @@ import br.com.vemser.devlandapi.enums.TipoStatus;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.UserLoginRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserLoginService {
     private final ObjectMapper objectMapper;
     @Autowired
@@ -56,11 +57,10 @@ public class UserLoginService {
     }
 
     public UserLoginEntity getLoggedUser() throws RegraDeNegocioException {
-        return findById(getIdLoggedUser());
+        return this.findById(getIdLoggedUser());
     }
 
     public UserLoginEntity findById(Integer idAutenticacao) throws RegraDeNegocioException {
-
         return userLoginRepository.findById(idAutenticacao)
                 .orElseThrow((() -> new RegraDeNegocioException("Usuario nao encontrado")));
     }
