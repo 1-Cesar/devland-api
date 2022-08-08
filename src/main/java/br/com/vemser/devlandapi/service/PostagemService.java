@@ -4,14 +4,17 @@ import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.postagem.PostagemDTO;
 import br.com.vemser.devlandapi.dto.relatorios.RelatorioPostagemDTO;
+import br.com.vemser.devlandapi.entity.LogPostagem;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
+import br.com.vemser.devlandapi.repository.LogPostagemRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +28,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PostagemService {
 
     @Autowired
@@ -37,6 +41,8 @@ public class PostagemService {
 
     @Autowired
     private ComentarioRepository comentarioRepository;
+
+    private final LogPostagemRepository logPostagemRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -98,23 +104,25 @@ public class PostagemService {
 
         postagemRepository.save(postagemEntity);
 
+        LogPostagem logPostagem = new LogPostagem();
+        logPostagem.setIdPostagem(postagemEntity.getIdPostagem());
+        logPostagem.setTipoPostagem(postagemEntity.getTipoPostagem());
+        logPostagem.setData(postagemEntity.getData());
+
+        logPostagemRepository.save(logPostagem);
+
+
         return convertToDTO(postagemEntity);
     }
 
     public PostagemDTO curtir(Integer idPostagem) throws RegraDeNegocioException {
-
         PostagemEntity postagemEntityValid = postagemRepository.findById(idPostagem).get();
 
-        if (postagemEntityValid == null) {
-            throw new RegraDeNegocioException("Postagem não encontrada");
-        } else {
+        postagemEntityValid.setCurtidas(postagemEntityValid.getCurtidas() + 1);
 
-            postagemEntityValid.setCurtidas(postagemEntityValid.getCurtidas() + 1);
+        postagemRepository.save(postagemEntityValid);
 
-            postagemRepository.save(postagemEntityValid);
-
-            return convertToDTO(postagemEntityValid);
-        }
+        return convertToDTO(postagemEntityValid);
     }
 
     public PostagemDTO update(Integer idPostagem, PostagemCreateDTO postagemCreateDTO) throws RegraDeNegocioException {
@@ -140,10 +148,6 @@ public class PostagemService {
 
     private PostagemEntity convertOptionalToEntity(Optional postagemCreateDTO) {
         return objectMapper.convertValue(postagemCreateDTO.get(), PostagemEntity.class);
-    }
-
-    private PostagemDTO convertOptionalToDTO(Optional postagemCreateDTO) {
-        return objectMapper.convertValue(postagemCreateDTO, PostagemDTO.class);
     }
 
     private PostagemEntity convertToEntity(PostagemCreateDTO postagemCreateDTO) {

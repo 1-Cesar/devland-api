@@ -5,12 +5,14 @@ import br.com.vemser.devlandapi.dto.relatorios.RelatorioPersonalizadoDevDTO;
 import br.com.vemser.devlandapi.dto.userlogin.UserLoginCreateDTO;
 import br.com.vemser.devlandapi.dto.usuario.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.dto.usuario.UsuarioDTO;
+import br.com.vemser.devlandapi.entity.LogUsuario;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.Genero;
 import br.com.vemser.devlandapi.enums.TipoClassificacao;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
+import br.com.vemser.devlandapi.repository.LogUsuarioRepository;
 import br.com.vemser.devlandapi.repository.UserLoginRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -55,6 +57,9 @@ public class UsuarioServiceTest {
     private UserLoginService userLoginService;
 
     @Mock
+    private LogUsuarioRepository logUsuarioRepository;
+
+    @Mock
     private EmailService emailService;
 
     @Before
@@ -73,11 +78,17 @@ public class UsuarioServiceTest {
 
         UsuarioEntity usuarioEntity = getUsuarioEntity();
 
-        when(userLoginService.criptografia(anyString())).thenReturn(userLoginCreateDTO.getSenha());
+
+        LogUsuario logUsuario = getLogUsuarioEntity();
+
+        when(userLoginService.criptografarSenha(anyString())).thenReturn(userLoginCreateDTO.getSenha());
+
 
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 
         when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(usuarioEntity.getUserLoginEntity());
+
+        when(logUsuarioRepository.save(any(LogUsuario.class))).thenReturn(logUsuario);
 
         UsuarioDTO usuarioDTO = usuarioService.adicionar(userLoginCreateDTO);
 
@@ -158,7 +169,7 @@ public class UsuarioServiceTest {
         usuarioEntity.setCpfCnpj("06526412000146");
         userLoginCreateDTO.getUsuarioCreateDTO().setCpfCnpj("06526412000146");
 
-        when(userLoginService.criptografia(anyString())).thenReturn(userLoginCreateDTO.getSenha());
+        when(userLoginService.criptografarSenha(anyString())).thenReturn(userLoginCreateDTO.getSenha());
 
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 
@@ -588,6 +599,18 @@ public class UsuarioServiceTest {
         usuarioEntity.getUserLoginEntity().setLogin("cesar");
         usuarioEntity.getUserLoginEntity().setSenha("123");
         return usuarioEntity;
+    }
+
+    private static LogUsuario getLogUsuarioEntity() {
+        LogUsuario logUsuario = new LogUsuario();
+
+        logUsuario.setNome("cesar");
+        logUsuario.setGenero(Genero.MASCULINO);
+        logUsuario.setAreaAtuacao("Java");
+        logUsuario.setTipoUsuario(TipoUsuario.DEV);
+        logUsuario.setIdUsuario(1);
+
+        return logUsuario;
     }
 
     private static RelatorioPersonalizadoDevDTO getRelatorioPersonalizado() {

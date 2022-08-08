@@ -64,7 +64,7 @@ public class SecurityConfiguration {
                                         "/comentario/**").hasAnyRole("DEV", "EMPRESA")
                                 .antMatchers(HttpMethod.DELETE, "/contato/deletar-se/", "/endereco/", "/seguidor/", "/tecnologia/", "/postagem/deletar/", "/comentario/delete/", "usuario/deletar-se").hasAnyRole("DEV", "EMPRESA")
                                 .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-                                .antMatchers(HttpMethod.GET, "/**").hasRole("ADMIN")
+                                .antMatchers(HttpMethod.GET, "/**", "/logs/**").hasRole("ADMIN")
                                 .antMatchers(HttpMethod.PUT, "/auth/alterar-status/").hasRole("ADMIN")
                                 .anyRequest().authenticated());
         // Adicionar filtro do token

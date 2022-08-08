@@ -3,6 +3,7 @@ package br.com.vemser.devlandapi.service;
 import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.postagem.PostagemDTO;
+import br.com.vemser.devlandapi.dto.relatorios.RelatorioPostagemDTO;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
@@ -26,6 +27,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -86,8 +89,35 @@ public class PostagemServiceTest {
     }
 
     @Test
-    public void deveTestarRelatorioPostagemPaginadoComSucesso() {
+    public void deveTestarRelatorioPostagemPaginadoComSucesso() throws RegraDeNegocioException {
 //      PageDTO<RelatorioPostagemDTO> relatorioPostagem
+        // setup
+        RelatorioPostagemDTO relatorioPostagemDTO = new RelatorioPostagemDTO();
+        relatorioPostagemDTO.setTipoPostagem(TipoPostagem.PENSAMENTOS);
+        relatorioPostagemDTO.setCurtidas(4);
+        relatorioPostagemDTO.setNome("Postagem exemplar");
+        relatorioPostagemDTO.setDescricao("Postagem passada como exemplo");
+        relatorioPostagemDTO.setData(LocalDateTime.now());
+        relatorioPostagemDTO.setTitulo("Relatorio");
+
+        List<RelatorioPostagemDTO> listRelatorio = new ArrayList<>();
+        listRelatorio.add(relatorioPostagemDTO);
+
+        Page<RelatorioPostagemDTO> page = new PageImpl<>(listRelatorio);
+
+        TipoPostagem tp = TipoPostagem.PENSAMENTOS;
+
+
+        when(postagemRepository.relatorioPostagem(any(TipoPostagem.class),
+                any(PageRequest.class))).thenReturn(page);
+
+        //act
+        PageDTO<RelatorioPostagemDTO> relatorioPostagem = postagemService.relatorioPostagem(tp, 0, 10);
+
+        //assert
+        assertNotNull(relatorioPostagem);
+        assertEquals(1, relatorioPostagem.getTotalElements().intValue());
+        assertEquals(1, relatorioPostagem.getContent().size());
     }
 
     @Test
@@ -147,29 +177,31 @@ public class PostagemServiceTest {
 
     @Test
     public void deveTestarPaginadoFindByTipoComSucesso() throws RegraDeNegocioException {
+//        PageDTO<RelatorioPostagemDTO> relatorioPostagem(TipoPostagem tipoPostagem, Integer pagina, Integer quantRegistros)
+        // setup
 
         PostagemEntity postagemEntity = getPostagemEntity();
-        PostagemEntity postagemEntity1 = getPostagemEntity();
 
-        List<PostagemEntity> lista = new ArrayList<>();
 
-        lista.add(postagemEntity);
-        lista.add(postagemEntity1);
+        List<PostagemEntity> listEnt = new ArrayList<>();
+        listEnt.add(postagemEntity);
 
-        TipoPostagem tp = TipoPostagem.PROGRAMAS;
+        Page<PostagemEntity> page = new PageImpl<>(listEnt);
 
-        Page<PostagemEntity> page = new PageImpl<>(lista);
+        TipoPostagem tp = TipoPostagem.VAGAS;
+
 
         when(postagemRepository.filtrarPorTipo(any(TipoPostagem.class),
                 any(PageRequest.class))).thenReturn(page);
 
         //act
-        PageDTO<PostagemDTO> byTipo = postagemService.findByTipo(tp, 0, 10);
+        PageDTO<PostagemDTO> dtoPageDTO = postagemService.findByTipo(tp, 0, 10);
 
         //assert
-        assertNotNull(byTipo);
-        assertEquals(2, byTipo.getTotalElements().intValue());
-        assertEquals(2, byTipo.getContent().size());
+        assertNotNull(dtoPageDTO);
+        assertEquals(1, dtoPageDTO.getTotalElements().intValue());
+        assertEquals(1, dtoPageDTO.getContent().size());
+
     }
 
     @Test
@@ -226,6 +258,20 @@ public class PostagemServiceTest {
 
     }
 
+    @Test(expected = RegraDeNegocioException.class)
+    public void deveTestarCurtirPostagemInexistente()throws RegraDeNegocioException{
+        PostagemEntity postagemEntity = getPostagemEntity();
+        Integer idPostagem = 50;
+
+        when(postagemRepository.findById(anyInt())).thenReturn(Optional.of(postagemEntity));
+
+        PostagemDTO postagemDTO = postagemService.curtir(idPostagem);
+        // act
+        if(idPostagem != postagemEntity.getIdPostagem()){
+            throw new RegraDeNegocioException("Postagem não encontrada");
+        }
+    }
+
     @Test
     public void deveTestarUpdateComSucesso() throws RegraDeNegocioException {
 //        PostagemDTO update
@@ -268,6 +314,9 @@ public class PostagemServiceTest {
         verify(postagemRepository, times(1)).delete(any(PostagemEntity.class));
     }
 
+    // testar a exception linha 109 PostagemService
+
+
     //    =================== METODOS AUXILIARES =================================
     private static PostagemCreateDTO getPostagemCreateDTO() {
         PostagemCreateDTO postagemCreateDTO = new PostagemCreateDTO();
@@ -289,6 +338,7 @@ public class PostagemServiceTest {
         postagemEntity.setDescricao("Excelente oportunidade.");
         postagemEntity.setFoto("http...");
         postagemEntity.setTitulo("Unica");
+        postagemEntity.setData(LocalDateTime.now());
         postagemEntity.setCurtidas(0);
         postagemEntity.setComentarios(null);
         postagemEntity.setUsuario(null);
