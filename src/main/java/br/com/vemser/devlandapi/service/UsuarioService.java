@@ -153,8 +153,11 @@ public class UsuarioService {
     }
 
     public UsuarioEntity localizarUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        return usuarioRepository.findById(idUsuario)
+        UsuarioEntity usuarioRecuperado = usuarioRepository.findAll().stream()
+                .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
+                .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+        return usuarioRecuperado;
     }
 
     public PageDTO<RelatorioPersonalizadoDevDTO> relatorioStack(String stack, Integer pagina, Integer quantidadeRegistros) {
