@@ -164,19 +164,15 @@ public class EnderecoServiceTest {
     // EXCLUSIVO DEV EMPRESA
     @Test
     public void deveTestarListarEnderecosUsuarioLogado() throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = getUsuarioEntity();
-        EnderecoEntity enderecoEntity = getEnderecoEntity();
-
-        UserLoginEntity userLoginEntity = new UserLoginEntity();
-        userLoginEntity.setUsuarioEntity(usuarioEntity);
-
         Integer idLoggedUser = 1;
-        EnderecoCreateDTO enderecoCreateDTO = getEnderecoCreateDTO();
-
-        when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
         when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
-//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
 
+        UserLoginEntity usuarioLogadoEntity = new UserLoginEntity();
+        usuarioLogadoEntity.setIdUsuario(idLoggedUser);
+        when(userLoginService.findById(anyInt())).thenReturn(usuarioLogadoEntity);
+
+        UsuarioEntity usuarioEntity = getUsuarioEntity();
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
 
         List<UsuarioDTO> usuarioDTOList = enderecoService.listarEnderecosUsuarioLogado();
 
