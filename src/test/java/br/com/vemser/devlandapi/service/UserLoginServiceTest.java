@@ -1,5 +1,8 @@
 package br.com.vemser.devlandapi.service;
 
+import br.com.vemser.devlandapi.dto.userlogin.UserLoginAuthDTO;
+import br.com.vemser.devlandapi.dto.userlogin.UserLoginCreateDTO;
+import br.com.vemser.devlandapi.dto.usuario.UsuarioCreateDTO;
 import br.com.vemser.devlandapi.entity.CargoEntity;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
@@ -51,7 +54,45 @@ public class UserLoginServiceTest {
         ReflectionTestUtils.setField(userLoginService, "objectMapper", objectMapper);
     }
 
+    @Test
+    public void deveTestarCriptografarSenhaComSucesso() {
 
+    }
+
+    @Test
+    public void deveTestarTrocarSenhaComSucesso() throws RegraDeNegocioException {
+        UserLoginEntity userLoginEntity = getUserLoginEntity();
+        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(userLoginEntity);
+
+        UserLoginAuthDTO userLoginAuthDTO = new UserLoginAuthDTO();
+
+        userLoginAuthDTO.setLogin("Joao");
+        userLoginAuthDTO.setSenha("123");
+
+        String trocarsenha = userLoginService.trocarSenha(userLoginAuthDTO, userLoginEntity);
+
+        assertEquals("Senha Alterada com Sucesso !", trocarsenha);
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void deveTestarTrocarSenhaComFalha() throws RegraDeNegocioException {
+        UserLoginEntity userLoginEntity = getUserLoginEntity();
+        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(userLoginEntity);
+
+        UserLoginAuthDTO userLoginAuthDTO = new UserLoginAuthDTO();
+
+        userLoginAuthDTO.setLogin("Joao");
+        userLoginAuthDTO.setSenha("123");
+
+        //trocando os Login p ver o erro
+        userLoginEntity.setLogin("Rafael");
+
+        String trocarsenha = userLoginService.trocarSenha(userLoginAuthDTO, userLoginEntity);
+
+        if (!userLoginAuthDTO.getLogin().equals(userLoginEntity.getLogin())){
+            throw new RegraDeNegocioException("Usuário ou senha inválidos");
+        }
+    }
     @Test
     public void deveTestarFindByLoginAndSenha() {
 
@@ -203,5 +244,17 @@ public class UserLoginServiceTest {
         usuario.setUserLoginEntity(null);
 
         return usuario;
+    }
+
+    private static UserLoginCreateDTO getUserLoginCreateDTO(){
+        UserLoginCreateDTO userLoginCreateDTO = new UserLoginCreateDTO();
+
+        userLoginCreateDTO.setLogin("Joao");
+        userLoginCreateDTO.setSenha("123");
+        UsuarioCreateDTO usuarioCreateDTO = new UsuarioCreateDTO();
+        usuarioCreateDTO.setNome("Joao");
+        userLoginCreateDTO.setUsuarioCreateDTO(usuarioCreateDTO);
+
+        return userLoginCreateDTO;
     }
 }
