@@ -1,5 +1,10 @@
 package br.com.vemser.devlandapi.service;
 
+import br.com.vemser.devlandapi.entity.CargoEntity;
+import br.com.vemser.devlandapi.entity.UserLoginEntity;
+import br.com.vemser.devlandapi.entity.UsuarioEntity;
+import br.com.vemser.devlandapi.enums.Genero;
+import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.repository.UserLoginRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,4 +50,47 @@ public class UserLoginServiceTest {
     }
 
 
+    private static UserLoginEntity getUserLoginEntity() {
+        UserLoginEntity userLoginEntity = new UserLoginEntity();
+
+        userLoginEntity.setIdUserLogin(1);
+        userLoginEntity.setIdUsuario(1);
+        userLoginEntity.setLogin("Joao");
+        userLoginEntity.setSenha("123");
+        userLoginEntity.setStatus(true);
+        userLoginEntity.setUsuarioEntity(getUsuarioEntity());
+
+        CargoEntity cargoEntity = new CargoEntity();
+        cargoEntity.setIdCargo(1);
+        List<UserLoginEntity> userLoginEntities = List.of(userLoginEntity);
+        cargoEntity.setUserLogins(userLoginEntities);
+        cargoEntity.setNome("admin");
+        List<CargoEntity> cargoEntities = List.of(cargoEntity);
+
+        userLoginEntity.setCargos(cargoEntities);
+
+        return userLoginEntity;
+    }
+
+    private static UsuarioEntity getUsuarioEntity() {
+        UsuarioEntity usuario = new UsuarioEntity();
+
+        usuario.setIdUsuario(1);
+        usuario.setNome("Joao");
+        usuario.setEmail("joao@email.com");
+        usuario.setAreaAtuacao("java");
+        usuario.setCpfCnpj("15441774145");
+        usuario.setFoto("minha foto");
+        usuario.setGenero(Genero.MASCULINO);
+        usuario.setTipoUsuario(TipoUsuario.DEV);
+        usuario.setContatos(null);
+        usuario.setSeguidores(null);
+        usuario.setEnderecos(null);
+        usuario.setTecnologias(null);
+        usuario.setPostagens(null);
+        usuario.setComentarios(null);
+        usuario.setUserLoginEntity(null);
+
+        return usuario;
+    }
 }
