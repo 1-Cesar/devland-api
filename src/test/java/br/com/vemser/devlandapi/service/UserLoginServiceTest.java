@@ -50,6 +50,34 @@ public class UserLoginServiceTest {
     }
 
 
+    @Test
+    public void deveTestarFindByLoginAndSenha() {
+
+        UserLoginEntity userLoginEntity = getUserLoginEntity();
+        when(userLoginRepository.findByLoginAndSenha(anyString(), anyString())).thenReturn(Optional.of(userLoginEntity));
+
+        Optional<UserLoginEntity> userLogin = userLoginService.findByLoginAndSenha(userLoginEntity.getLogin(), userLoginEntity.getSenha());
+
+        assertNotNull(userLogin);
+        assertEquals("Joao", userLogin.get().getLogin());
+        assertEquals("123", userLogin.get().getSenha());
+    }
+
+    @Test
+    public void deveTestarFindByLogin() {
+
+        UserLoginEntity userLoginEntity = getUserLoginEntity();
+        when(userLoginRepository.findByLogin(anyString())).thenReturn(Optional.of(userLoginEntity));
+
+        Optional<UserLoginEntity> userLogin = userLoginService.findByLogin(userLoginEntity.getLogin());
+
+        assertNotNull(userLogin);
+        assertEquals("Joao", userLogin.get().getLogin());
+        assertEquals("123", userLogin.get().getSenha());
+    }
+
+    // util
+
     private static UserLoginEntity getUserLoginEntity() {
         UserLoginEntity userLoginEntity = new UserLoginEntity();
 
