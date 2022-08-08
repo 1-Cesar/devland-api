@@ -4,11 +4,13 @@ import br.com.vemser.devlandapi.dto.PageDTO;
 import br.com.vemser.devlandapi.dto.postagem.PostagemCreateDTO;
 import br.com.vemser.devlandapi.dto.postagem.PostagemDTO;
 import br.com.vemser.devlandapi.dto.relatorios.RelatorioPostagemDTO;
+import br.com.vemser.devlandapi.entity.LogPostagem;
 import br.com.vemser.devlandapi.entity.PostagemEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.TipoPostagem;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.ComentarioRepository;
+import br.com.vemser.devlandapi.repository.LogPostagemRepository;
 import br.com.vemser.devlandapi.repository.PostagemRepository;
 import br.com.vemser.devlandapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -48,6 +50,9 @@ public class PostagemServiceTest {
 
     @Mock
     private PostagemRepository postagemRepository;
+
+    @Mock
+    private LogPostagemRepository logPostagemRepository;
 
     @Mock
     private UsuarioRepository usuarioRepository;
@@ -122,8 +127,6 @@ public class PostagemServiceTest {
 
     @Test
     public void deveTestarFindByIdPostagemComSucesso() throws RegraDeNegocioException {
-//        PostagemDTO findByIdPostagem
-        PostagemCreateDTO postagemCreateDTO = getPostagemCreateDTO();
         PostagemEntity postagemEntity = getPostagemEntity();
         Integer idPostagem = 1;
 
@@ -211,10 +214,12 @@ public class PostagemServiceTest {
         PostagemCreateDTO postagemCreateDTO = getPostagemCreateDTO();
         PostagemEntity postagemEntity = getPostagemEntity();
         UsuarioEntity usuarioEntity = new UsuarioEntity();
+        LogPostagem logPostagem = new LogPostagem();
         Integer idUsuario = 2;
 
         when(postagemRepository.save(any(PostagemEntity.class))).thenReturn(postagemEntity);
         when(usuarioRepository.findById(any(Integer.class))).thenReturn(Optional.of(usuarioEntity));
+        when(logPostagemRepository.save(any(LogPostagem.class))).thenReturn(logPostagem);
         //act
         PostagemDTO postagemDTO = postagemService.post(1,postagemCreateDTO);
         postagemDTO.setIdPostagem(postagemEntity.getIdPostagem());

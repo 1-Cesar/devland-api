@@ -86,7 +86,7 @@ public class ContatoService {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
 
-        Integer id = (Integer) usuarioLogadoEntity.getIdUsuario();
+        Integer id = usuarioLogadoEntity.getIdUsuario();
 
         usuarioService.localizarUsuario(id);
         return contatoRepository.findAll().stream()

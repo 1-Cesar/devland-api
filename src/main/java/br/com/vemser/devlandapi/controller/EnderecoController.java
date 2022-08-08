@@ -9,7 +9,6 @@ import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.service.EnderecoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +38,9 @@ public class EnderecoController implements EnderecoDocs {
     }
 
     @GetMapping("usuario/{idUsuario}")
-    public ResponseEntity<List<UsuarioDTO>> listarEnderecoUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
-        log.info("Recuperando um endereço com base no id do usuário");
-        return ResponseEntity.ok(enderecoService.listarEnderecoUsuario(id));
+    public ResponseEntity<List<EnderecoDTO>> listarEnderecoUsuario(@PathVariable("idUsuario") Integer idUsuario) throws RegraDeNegocioException {
+        log.info("Recuperando uma lista de endereços com base no id do usuário");
+        return ResponseEntity.ok(enderecoService.listarEnderecoUsuario(idUsuario));
     }
 
     @DeleteMapping("/{idEndereco}")
@@ -79,6 +78,6 @@ public class EnderecoController implements EnderecoDocs {
     @PostMapping("/adicionar-meu-endereco")
     public ResponseEntity<EnderecoDTO> adicionar(@Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando um endereço com base no usuário logado");
-        return ResponseEntity.ok(enderecoService.adicionar(enderecoCreateDTO));
+        return ResponseEntity.ok(enderecoService.adicionarProprio(enderecoCreateDTO));
     }
 }
