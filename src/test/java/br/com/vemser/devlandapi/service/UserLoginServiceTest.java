@@ -24,6 +24,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -77,7 +79,7 @@ public class UserLoginServiceTest {
     @Test(expected = RegraDeNegocioException.class)
     public void deveTestarTrocarSenhaComFalha() throws RegraDeNegocioException {
         UserLoginEntity userLoginEntity = getUserLoginEntity();
-        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(userLoginEntity);
+//        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(userLoginEntity);
 
         UserLoginAuthDTO userLoginAuthDTO = new UserLoginAuthDTO();
 
@@ -119,32 +121,37 @@ public class UserLoginServiceTest {
         assertEquals("123", userLogin.get().getSenha());
     }
 
-    @Test
-    public void deveTestarGetIdLoggedUser() {
-        Integer idLoggedUser = 1;
-
-        when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
-
-        Integer findUserId = userLoginService.getIdLoggedUser();
-
-        assertNotNull(findUserId);
-        assertEquals(1, findUserId.intValue());
-    }
+//    @Test
+//    public void deveTestarGetIdLoggedUser() {
+//        Integer idLoggedUser = 1;
+//
+//        when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
+//
+//        Integer findUserId = userLoginService.getIdLoggedUser();
+//
+//        assertNotNull(findUserId);
+//        assertEquals(1, findUserId.intValue());
+//    }
 
     @Test
     public void deveTestarGetLoggedUser() throws RegraDeNegocioException {
-        Integer idLoggedUser = 1;
-        when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
+        UserLoginEntity userLoginEntity = getUserLoginEntity();
 
-        UserLoginEntity usuarioLogadoEntity = getUserLoginEntity();
-        usuarioLogadoEntity.setIdUsuario(idLoggedUser);
-        when(userLoginService.findById(anyInt())).thenReturn(usuarioLogadoEntity);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        1,
+                        null
+                );
 
-        UserLoginEntity userLoginEntity = userLoginService.getLoggedUser();
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
-        assertNotNull(userLoginEntity);
-        assertEquals("Joao", userLoginEntity.getLogin());
-        assertEquals("123", userLoginEntity.getSenha());
+        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.of(userLoginEntity));
+
+        UserLoginEntity userLogin = userLoginService.getLoggedUser();
+
+        assertNotNull(userLogin);
+        assertEquals(1, userLogin.getIdUserLogin().intValue());
+        assertEquals("Joao", userLogin.getLogin());
     }
 
     @Test
