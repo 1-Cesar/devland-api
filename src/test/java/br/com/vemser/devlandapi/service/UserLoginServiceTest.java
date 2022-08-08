@@ -4,6 +4,7 @@ import br.com.vemser.devlandapi.entity.CargoEntity;
 import br.com.vemser.devlandapi.entity.UserLoginEntity;
 import br.com.vemser.devlandapi.entity.UsuarioEntity;
 import br.com.vemser.devlandapi.enums.Genero;
+import br.com.vemser.devlandapi.enums.TipoStatus;
 import br.com.vemser.devlandapi.enums.TipoUsuario;
 import br.com.vemser.devlandapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.devlandapi.repository.UserLoginRepository;
@@ -135,12 +136,26 @@ public class UserLoginServiceTest {
         assertEquals("123", userLoginEntity.getSenha());
     }
 
-    public void deveTestarDesativar() {
+    @Test
+    public void deveTestarDesativar() throws RegraDeNegocioException {
+        Integer id = 1;
+        TipoStatus opcao = TipoStatus.DESATIVAR;
+        TipoStatus opcao2 = TipoStatus.ATIVAR;
+
         UserLoginEntity userLoginRecuperado = getUserLoginEntity();
         List<UserLoginEntity> userLoginEntities = List.of(userLoginRecuperado);
         when(userLoginRepository.findAll()).thenReturn(userLoginEntities);
 
-        when(userLoginRepository.save(any(UserLoginEntity.class)))
+        when(userLoginRepository.save(any(UserLoginEntity.class))).thenReturn(userLoginRecuperado);
+
+        String status = userLoginService.desativar(id, opcao);
+        String status2 = userLoginService.desativar(id, opcao2);
+
+        assertNotNull(status);
+        assertEquals("login Desativado!", status);
+
+        assertNotNull(status2);
+        assertEquals("login Ativado!", status2);
 
     }
 
