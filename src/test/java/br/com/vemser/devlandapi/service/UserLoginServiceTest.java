@@ -118,6 +118,72 @@ public class UserLoginServiceTest {
         assertEquals("123", userLogin.get().getSenha());
     }
 
+    @Test
+    public void deveTestarGetIdLoggedUser() {
+        Integer idLoggedUser = 1;
+
+        when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
+
+        Integer findUserId = userLoginService.getIdLoggedUser();
+
+        assertNotNull(findUserId);
+        assertEquals(1, findUserId.intValue());
+    }
+
+    @Test
+    public void deveTestarGetLoggedUser() throws RegraDeNegocioException {
+        Integer idLoggedUser = 1;
+        when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
+
+        UserLoginEntity usuarioLogadoEntity = getUserLoginEntity();
+        usuarioLogadoEntity.setIdUsuario(idLoggedUser);
+        when(userLoginService.findById(anyInt())).thenReturn(usuarioLogadoEntity);
+
+        UserLoginEntity userLoginEntity = userLoginService.getLoggedUser();
+
+        assertNotNull(userLoginEntity);
+        assertEquals("Joao", userLoginEntity.getLogin());
+        assertEquals("123", userLoginEntity.getSenha());
+    }
+
+    @Test
+    public void deveTestarFindById() throws RegraDeNegocioException {
+        Integer id = 1;
+
+        UserLoginEntity userLoginEntity = getUserLoginEntity();
+        when(userLoginRepository.findById(anyInt())).thenReturn(Optional.of(userLoginEntity));
+
+        UserLoginEntity userLogin = userLoginService.findById(id);
+
+        assertNotNull(userLogin);
+        assertEquals("Joao", userLogin.getLogin());
+        assertEquals("123", userLogin.getSenha());
+
+    }
+
+    @Test
+    public void deveTestarFindByIdUsuario() throws RegraDeNegocioException {
+        Integer id = 1;
+
+        UserLoginEntity userLoginRecuperado = getUserLoginEntity();
+        List<UserLoginEntity> userLoginEntities = List.of(userLoginRecuperado);
+        when(userLoginRepository.findAll()).thenReturn(userLoginEntities);
+
+        UserLoginEntity userLoginEntity = userLoginService.findByIdUsuario(id);
+
+        assertNotNull(userLoginEntity);
+        assertEquals("Joao", userLoginEntity.getLogin());
+        assertEquals("123", userLoginEntity.getSenha());
+    }
+
+    public void deveTestarDesativar() {
+        UserLoginEntity userLoginRecuperado = getUserLoginEntity();
+        List<UserLoginEntity> userLoginEntities = List.of(userLoginRecuperado);
+        when(userLoginRepository.findAll()).thenReturn(userLoginEntities);
+
+        when(userLoginRepository.save(any(UserLoginEntity.class)))
+
+    }
 
     // util
 
