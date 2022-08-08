@@ -80,6 +80,24 @@ public class EnderecoServiceTest {
         assertEquals(2, listar.size());
     }
 
+    @Test(expected = RegraDeNegocioException.class)
+    public void deveTestarListarComFalha() throws RegraDeNegocioException {
+        EnderecoEntity enderecoEnt = getEnderecoEntity();
+        EnderecoEntity enderecoEnt1 = getEnderecoEntity();
+
+        List<EnderecoEntity> listaEnt = new ArrayList<>();
+//        deixando a lista zerada
+//        listaEnt.add(enderecoEnt);
+//        listaEnt.add(enderecoEnt1);
+
+        when(enderecoRepository.findAll()).thenReturn(listaEnt);
+        List<EnderecoDTO> listar = enderecoService.listar();
+
+        if (listar.isEmpty()) {
+            throw new RegraDeNegocioException("Nenhum endereço encontrado");
+        }
+    }
+
     @Test
     public void deveTestarListarEndereco() throws RegraDeNegocioException {
         EnderecoEntity enderecoEnt = getEnderecoEntity();
@@ -157,6 +175,7 @@ public class EnderecoServiceTest {
 
         when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
         when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
+//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
 
 
         List<UsuarioDTO> usuarioDTOList = enderecoService.listarEnderecosUsuarioLogado();
@@ -184,6 +203,7 @@ public class EnderecoServiceTest {
         assertNotNull(enderecoDTO);
         assertEquals(TipoClassificacao.RESIDENCIAL, enderecoDTO.getTipo());
     }
+
     @Test
     public void deveTestarEditarProprioComSucesso() throws RegraDeNegocioException {
         // EXCLUSIVO DEV EMPRESA
@@ -218,6 +238,7 @@ public class EnderecoServiceTest {
         assertNotNull(enderecoDTO);
         assertEquals(TipoClassificacao.RESIDENCIAL, enderecoDTO.getTipo());
     }
+
     @Test(expected = RegraDeNegocioException.class)
     public void deveTestarEditarProprioComFalha() throws RegraDeNegocioException {
         // EXCLUSIVO DEV EMPRESA
@@ -241,13 +262,13 @@ public class EnderecoServiceTest {
 
         EnderecoCreateDTO enderecoCreateDTO = getEnderecoCreateDTO();
 
-
-
-        when(enderecoRepository.findById(anyInt())).thenReturn(Optional.of(enderecoEntity));
+        when(userLoginService.getIdLoggedUser()).thenReturn(idLoggedUser);
+        when(userLoginService.findById(anyInt())).thenReturn(userLoginEntity);
+        when(usuarioService.localizarUsuario(anyInt())).thenReturn(usuarioEntity);
 
         EnderecoDTO enderecoDTO = enderecoService.editarProprio(idEndereco, enderecoCreateDTO);
-        if(!usuarioEntity.getEnderecos().contains(enderecoRepository.findById(idEndereco))){
-            throw new RegraDeNegocioException("Endereco nao lhe pertence.");
+        if (!usuarioEntity.getEnderecos().contains(enderecoRepository.findById(idEndereco))) {
+            throw new RegraDeNegocioException("Endereco nao pertence ao usuario logado.");
         }
     }
 
@@ -274,6 +295,7 @@ public class EnderecoServiceTest {
         enderecoService.deletarProprio(idEndereco);
         verify(enderecoRepository, times(1)).delete(any(EnderecoEntity.class));
     }
+
     @Test(expected = RegraDeNegocioException.class)
     public void deveTestarDeletarProprioComFalha() throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = getUsuarioEntity();
@@ -285,18 +307,19 @@ public class EnderecoServiceTest {
         usuarioLogadoEntity.setIdUsuario(1);
         usuarioLogadoEntity.setUsuarioEntity(usuarioEntity);
         Integer id = usuarioLogadoEntity.getIdUsuario();
-
         usuarioEntity.setUserLoginEntity(usuarioLogadoEntity);
 
+        when(userLoginService.getIdLoggedUser()).thenReturn(id);
+        when(userLoginService.findById(anyInt())).thenReturn(usuarioLogadoEntity);
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuarioEntity));
 
+        enderecoService.deletarProprio(idEndereco);
 
-        when(enderecoRepository.findById(anyInt())).thenReturn(Optional.of(enderecoEntity));
-
-
-        if(!usuarioEntity.getEnderecos().contains(enderecoRepository.findById(idEndereco))){
-            throw new RegraDeNegocioException("Nao pertence a voce.");
+        if (!usuarioEntity.getEnderecos().contains(enderecoRepository.findById(idEndereco))) {
+            throw new RegraDeNegocioException("Endereco nao pertence ao usuario logado.");
         }
     }
+
     @Test
     public void deveTestarListarEnderecoUsuario() throws RegraDeNegocioException {
         Integer idUsuario = 1;

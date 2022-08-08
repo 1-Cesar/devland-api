@@ -50,7 +50,6 @@ public class EnderecoService {
     public List<EnderecoDTO> listar() throws RegraDeNegocioException {
         if (enderecoRepository.findAll().size() == 0) {
             throw new RegraDeNegocioException("Nenhum endereço encontrado");
-            // FIXME - testar lançando a exceção
         } else {
             return enderecoRepository.findAll().stream()
                     .map(enderecoEntity -> {
@@ -74,12 +73,14 @@ public class EnderecoService {
                     return enderecoDTO;
                 }).toList();
     }
-//=========================================================================================
+
+    //=========================================================================================
     //OBS método alterado para retornar somente a lista de endereços do usuario informado, sem retornar o proprio usuario
     public List<EnderecoDTO> listarEnderecoUsuario(Integer idUsuario) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = usuarioRepository.findById(idUsuario).get();
         List<EnderecoDTO> enderecoDTOS = usuarioEntity.getEnderecos().stream().map(this::retornarDTO).toList();
-        return enderecoDTOS;}
+        return enderecoDTOS;
+    }
 //=========================================================================================
 
     public void delete(Integer id) throws RegraDeNegocioException {
@@ -127,7 +128,6 @@ public class EnderecoService {
     //==================================================================================================================
 
     public List<UsuarioDTO> listarEnderecosUsuarioLogado() throws RegraDeNegocioException {
-//FIXME - ainda faz sentido manter esse metodo? Verificar esse retorno de UsuarioDTO...
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
         Integer id = usuarioLogadoEntity.getIdUsuario();
@@ -141,8 +141,6 @@ public class EnderecoService {
                 }).toList();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-
     public EnderecoDTO adicionarProprio(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
@@ -155,6 +153,7 @@ public class EnderecoService {
         enderecoRepository.save(enderecoEntity);
         return retornarDTO(enderecoEntity);
     }
+
     public EnderecoDTO editarProprio(Integer idEndereco, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         Integer idLoggedUser = userLoginService.getIdLoggedUser();
         UserLoginEntity usuarioLogadoEntity = userLoginService.findById(idLoggedUser);
@@ -165,7 +164,9 @@ public class EnderecoService {
         List<EnderecoEntity> enderecos = usuarioEntity.getEnderecos();
         int contador = 0;
         for (EnderecoEntity end : enderecos) {
-            if (end.getIdEndereco().equals(idEndereco)) {contador += 1;}
+            if (end.getIdEndereco().equals(idEndereco)) {
+                contador += 1;
+            }
         }
         if (contador > 0) {
             EnderecoEntity enderecoEntity = enderecoRepository.findById(idEndereco).get();
@@ -175,10 +176,8 @@ public class EnderecoService {
             return retornarDTO(enderecoRepository.save(enderecoEntity));
         } else {
             throw new RegraDeNegocioException("Endereco nao pertence ao usuario logado.");
-        } // FIXME - testar lançando a exceção
+        }
     }
-
-
     //------------------------------------------------------------------------------------------------------------------
 
     public String deletarProprio(Integer idEndereco) throws RegraDeNegocioException {
@@ -193,7 +192,9 @@ public class EnderecoService {
         List<EnderecoEntity> enderecos = usuarioEntity.getEnderecos().stream().toList();
         int contador = 0;
         for (EnderecoEntity end : enderecos) {
-            if (end.getIdEndereco().equals(idEndereco)) {contador += 1;}
+            if (end.getIdEndereco().equals(idEndereco)) {
+                contador += 1;
+            }
         }
         if (contador > 0) {
             EnderecoEntity enderecoEntity = enderecoRepository.findById(idEndereco).get();
@@ -204,29 +205,14 @@ public class EnderecoService {
         }
     }
 
-
     //==================================================================================================================
     //                                             MÉTODOS AUXILIARES
     //==================================================================================================================
+    private EnderecoDTO retornarDTO(EnderecoEntity enderecoEntity) {
+        return objectMapper.convertValue(enderecoEntity, EnderecoDTO.class);
+    }
 
-//    public EnderecoEntity localizarEndereco(Integer idEndereco) throws RegraDeNegocioException {
-//        return enderecoRepository.findAll().stream()
-//                .filter(endereco -> endereco.getIdEndereco().equals(idEndereco))
-//                .findFirst()
-//                .orElseThrow(() -> new RegraDeNegocioException("Endereço não localizado"));
-//    }
-
-//    public List<UsuarioDTO> listarEnderecoUsuario(Integer idUsuario) throws RegraDeNegocioException {
-//        return usuarioRepository.findById(idUsuario).stream()
-//                .map(pessoaEntity -> {
-//                    UsuarioDTO usuarioDTO = objectMapper.convertValue(pessoaEntity, UsuarioDTO.class);
-//                    usuarioDTO.setEnderecoDTOS(pessoaEntity.getEnderecos().stream()
-//                            .map(enderecoEntity -> retornarDTO(enderecoEntity))
-//                            .toList());
-//                    return usuarioDTO;
-//                }).toList();
-//    }
-    private EnderecoDTO retornarDTO(EnderecoEntity enderecoEntity) {return objectMapper.convertValue(enderecoEntity, EnderecoDTO.class);}
-
-    private EnderecoEntity retornarEnderecoEntity(EnderecoCreateDTO enderecoDTO) {return objectMapper.convertValue(enderecoDTO, EnderecoEntity.class);}
+    private EnderecoEntity retornarEnderecoEntity(EnderecoCreateDTO enderecoDTO) {
+        return objectMapper.convertValue(enderecoDTO, EnderecoEntity.class);
+    }
 }
